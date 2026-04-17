@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Network Recon",
+    "delay": 0.1,
+    "events": [
+      {
+        "source": "firewall",
+        "event_type": "network_connection",
+        "action": "blocked",
+        "protocol": "TCP",
+        "source_port": 44552,
+        "dest_port": 445,
+        "source_ip": "1.2.3.4",
+        "dest_ip": "10.0.0.5",
+        "severity": "medium",
+        "is_malicious": true
+      }
+    ]
+  }
+]

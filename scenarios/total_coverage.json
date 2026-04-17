@@ -1,0 +1,34 @@
+[
+  {
+    "name": "Total Sentinel Coverage Simulation",
+    "delay": 0.01,
+    "events": [
+      { "source": "incident", "event_type": "security_incident", "severity": "High", "IncidentNumber": "9001", "Title": "Data Exfiltration", "Status": "New" },
+      { "source": "alert", "event_type": "security_alert", "severity": "Medium", "AlertName": "Nmap Scan", "ProviderName": "Sentinel", "Tactics": "Discovery" },
+      { "source": "sentinel_audit", "event_type": "audit", "severity": "informational", "Action": "Workspace-Config-Changed" },
+      { "source": "firewall", "event_type": "network_connection", "DeviceAction": "blocked", "Protocol": "TCP", "IPAddress": "1.1.1.1", "SourcePort": 1234, "DestinationIP": "10.0.0.1", "DestinationPort": 80, "severity": "medium", "mitre": { "tactic": "Command and Control", "technique_id": "T1071", "technique_name": "Application Layer Protocol" } },
+      { "source": "proxy", "event_type": "web_proxy", "RequestURL": "https://google.com", "Method": "GET", "Status": 200, "UserAgent": "Mozilla/5.0", "IPAddress": "10.0.0.5", "SourcePort": 54321, "DestinationIP": "google.com", "DestinationPort": 443, "severity": "informational" },
+      { "source": "vpn", "event_type": "vpn_session", "DeviceAction": "connect", "SourceIP": "99.99.99.99", "DeviceCustomString1": "10.50.0.1", "severity": "informational" },
+      { "source": "endpoint_process", "event_type": "process_creation", "FileName": "whoami.exe", "ProcessId": 100, "ProcessCommandLine": "whoami /priv", "FolderPath": "C:\\Windows\\System32", "AccountName": "victim", "DeviceName": "PC-01", "mitre": { "tactic": "Discovery", "technique_id": "T1033", "technique_name": "System Owner/User Discovery" } },
+      { "source": "endpoint_file", "event_type": "file_system", "ActionType": "FileCreated", "FileName": "passwords.txt", "FolderPath": "C:\\temp", "AccountName": "victim", "DeviceName": "PC-01" },
+      { "source": "endpoint_network", "event_type": "network_connection", "DeviceAction": "allowed", "Protocol": "TCP", "IPAddress": "10.0.0.10", "SourcePort": 50000, "DestinationIP": "attacker.com", "DestinationPort": 8080, "DeviceName": "PC-01", "severity": "high" },
+      { "source": "endpoint_registry", "event_type": "registry", "ActionType": "RegistryValueSet", "RegistryKey": "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", "RegistryValueName": "malicious", "RegistryValueData": "malicious.exe", "DeviceName": "PC-01", "mitre": { "tactic": "Persistence", "technique_id": "T1547.001", "technique_name": "Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder" } },
+      { "source": "endpoint_logon", "event_type": "authentication", "ActionType": "Login", "ResultType": "0", "AccountName": "victim", "DeviceName": "PC-01" },
+      { "source": "endpoint_event", "event_type": "device_event", "ActionType": "UsbPlugged", "severity": "medium", "DeviceName": "PC-01" },
+      { "event_type": "authentication", "ResultType": "4625", "UserPrincipalName": "root", "ResultDescription": "Failed Login", "source": "Azure AD" },
+      { "source": "signin", "event_type": "authentication", "ResultType": "0", "UserPrincipalName": "admin@tenant.com", "AppDisplayName": "Azure Portal", "Location": "US" },
+      { "source": "signin_non_interactive", "event_type": "authentication", "ResultType": "0", "UserPrincipalName": "service-principal", "AppDisplayName": "Automation-App" },
+      { "source": "audit", "event_type": "directory_audit", "OperationName": "UserDeleted", "severity": "medium" },
+      { "source": "identity_logon", "event_type": "authentication", "ResultType": "0", "UserPrincipalName": "user@onprem.local", "ClientAppUsed": "Kerberos" },
+      { "source": "office365", "event_type": "office_activity", "Workload": "SharePoint", "Operation": "FileDownloaded", "ItemType": "File", "UserId": "user@tenant.com", "ClientIP": "1.2.3.4" },
+      { "source": "mdo_email", "event_type": "email_event", "severity": "high", "Sender": "pish@scam.com", "Subject": "FREE MONEY", "Action": "Delivered" },
+      { "source": "mdo_attachment", "event_type": "email_attachment", "severity": "high", "FileName": "invoice.zip", "Verdict": "Malicious" },
+      { "source": "cloud_activity", "event_type": "cloud_activity", "OperationName": "ReadSecret", "ResourceId": "/subscriptions/xxx/KeyVault/vault-01", "Caller": "attacker@tenant.com", "severity": "medium" },
+      { "source": "cloud_app", "event_type": "cloud_app_event", "AppName": "Salesforce", "ActionType": "RecordExport", "severity": "low" },
+      { "source": "dns", "event_type": "dns_query", "Name": "dga-malware.com", "QueryType": "A", "ResultCode": "3", "IPAddresses": "NXDOMAIN" },
+      { "source": "syslog", "event_type": "system_event", "severity": "warning", "Message": "Too many failures", "Facility": "Auth" },
+      { "source": "web", "event_type": "web_server_event", "Method": "GET", "RequestURL": "/login", "Status": 200, "severity": "informational" },
+      { "source": "db", "event_type": "database_event", "Query": "SELECT * FROM credit_cards", "User": "app_user", "severity": "medium" }
+    ]
+  }
+]

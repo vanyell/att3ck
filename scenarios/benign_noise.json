@@ -1,0 +1,49 @@
+[
+  {
+    "name": "Background Corporate Activity",
+    "delay": 0.05,
+    "events": [
+      {
+        "source": "endpoint_process",
+        "event_type": "process_creation",
+        "FileName": "Outlook.exe",
+        "FolderPath": "C:\\Program Files\\Microsoft Office\\root\\Office16",
+        "ProcessCommandLine": "outlook.exe /recycle",
+        "ProcessId": "{{RANDOM_PID}}",
+        "AccountName": "{{RANDOM_USER}}",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "multiply": 5
+      },
+      {
+        "source": "endpoint_process",
+        "event_type": "process_creation",
+        "FileName": "Teams.exe",
+        "FolderPath": "C:\\users\\{{RANDOM_USER}}\\AppData\\Local\\Microsoft\\Teams\\current",
+        "ProcessCommandLine": "Teams.exe --autostart",
+        "ProcessId": "{{RANDOM_PID}}",
+        "AccountName": "{{RANDOM_USER}}",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "multiply": 5
+      },
+      {
+        "source": "dns",
+        "event_type": "dns_query",
+        "Name": "outlook.office365.com",
+        "QueryType": "A",
+        "ResultCode": "0",
+        "multiply": 20
+      },
+      {
+        "source": "endpoint_network",
+        "event_type": "network_connection",
+        "DeviceAction": "allowed",
+        "Protocol": "TCP",
+        "SourcePort": "{{RANDOM_PORT}}",
+        "DestinationIP": "13.107.42.12",
+        "DestinationPort": 443,
+        "DeviceName": "{{RANDOM_HOST}}",
+        "multiply": 30
+      }
+    ]
+  }
+]

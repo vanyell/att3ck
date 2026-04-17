@@ -1,0 +1,66 @@
+[
+  {
+    "name": "Initial Compromise - Sign-in from New Location",
+    "delay": 0.1,
+    "events": [
+      {
+        "source": "auth",
+        "event_type": "authentication",
+        "UserPrincipalName": "finance_dir@company.com",
+        "ResultType": "0",
+        "Location": "NG",
+        "City": "Lagos",
+        "UserAgent": "Python-requests/2.25.1",
+        "mitre": {
+          "tactic": "Initial Access",
+          "technique_id": "T1078.004",
+          "technique_name": "Valid Accounts: Cloud Accounts"
+        }
+      }
+    ]
+  },
+  {
+    "name": "Persistence - Malicious Office Rules",
+    "delay": 5.0,
+    "events": [
+      {
+        "source": "office365",
+        "event_type": "office_activity",
+        "Workload": "Exchange",
+        "Operation": "New-InboxRule",
+        "UserId": "finance_dir@company.com",
+        "ItemType": "Rule",
+        "data": {
+          "RuleName": "RSS Feed Sync",
+          "RuleConditions": "Subject contains 'Invoice' or 'Payment'",
+          "RuleActions": "Move to RSS Feeds; Mark as Read"
+        },
+        "mitre": {
+          "tactic": "Persistence",
+          "technique_id": "T1137.005",
+          "technique_name": "Office Application Startup: Outlook Rules"
+        }
+      }
+    ]
+  },
+  {
+    "name": "Collection - Large Scale Mail Access",
+    "delay": 2.0,
+    "events": [
+      {
+        "source": "office365",
+        "event_type": "office_activity",
+        "Workload": "Exchange",
+        "Operation": "MailItemsAccessed",
+        "UserId": "finance_dir@company.com",
+        "ItemType": "Mail",
+        "multiply": 100,
+        "mitre": {
+          "tactic": "Collection",
+          "technique_id": "T1114.002",
+          "technique_name": "Email Collection: Remote Email Collection"
+        }
+      }
+    ]
+  }
+]

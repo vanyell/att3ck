@@ -1,0 +1,70 @@
+[
+  {
+    "name": "MFA Fatigue Attack",
+    "delay": 0.1,
+    "events": [
+      {
+        "source": "auth",
+        "event_type": "authentication",
+        "UserPrincipalName": "it_admin@company.com",
+        "ResultType": "50126",
+        "ResultDescription": "Locked/Wrong Password",
+        "IPAddress": "{{CNC_IP}}",
+        "multiply": 20
+      },
+      {
+        "source": "auth",
+        "event_type": "authentication",
+        "UserPrincipalName": "it_admin@company.com",
+        "ResultType": "0",
+        "ResultDescription": "Success after MFA",
+        "IPAddress": "{{CNC_IP}}",
+        "mitre": {
+          "tactic": "Credential Access",
+          "technique_id": "T1621",
+          "technique_name": "Multi-Factor Authentication Request Generation"
+        }
+      }
+    ]
+  },
+  {
+    "name": "Cloud Persistence - New Service Principal",
+    "delay": 5.0,
+    "events": [
+      {
+        "source": "audit",
+        "event_type": "directory_audit",
+        "data": {
+          "OperationName": "Add service principal",
+          "Target": "Azure-Backdoor-Sync",
+          "InitiatedBy": "it_admin@company.com"
+        },
+        "mitre": {
+          "tactic": "Persistence",
+          "technique_id": "T1136.003",
+          "technique_name": "Create Account: Cloud Account"
+        }
+      }
+    ]
+  },
+  {
+    "name": "Exfiltration - KeyVault Secret Access",
+    "delay": 2.0,
+    "events": [
+      {
+        "source": "cloud_activity",
+        "event_type": "cloud_activity",
+        "data": {
+          "OperationName": "Get Secret",
+          "ResourceId": "/subscriptions/prod/providers/Microsoft.KeyVault/vaults/PROD-VAULT",
+          "Caller": "Azure-Backdoor-Sync"
+        },
+        "mitre": {
+          "tactic": "Credential Access",
+          "technique_id": "T1528",
+          "technique_name": "Steal or Forge Cloud Tokens"
+        }
+      }
+    ]
+  }
+]

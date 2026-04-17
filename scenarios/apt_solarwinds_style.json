@@ -1,0 +1,83 @@
+[
+  {
+    "name": "Initial Signal - Component Update",
+    "delay": 0.1,
+    "events": [
+      {
+        "source": "endpoint_process",
+        "event_type": "process_creation",
+        "FileName": "SolarWinds.BusinessLayerHost.exe",
+        "FolderPath": "C:\\Program Files (x86)\\SolarWinds\\Orion",
+        "ProcessCommandLine": "SolarWinds.BusinessLayerHost.exe /service",
+        "ProcessId": "{{RANDOM_PID}}",
+        "AccountName": "SYSTEM",
+        "DeviceName": "SRV-MONITOR-01",
+        "mitre": {
+          "tactic": "Initial Access",
+          "technique_id": "T1195.002",
+          "technique_name": "Supply Chain Compromise: Compromise Software Supply Chain"
+        }
+      }
+    ]
+  },
+  {
+    "name": "Beaconing to C2",
+    "delay": 2.0,
+    "events": [
+      {
+        "source": "dns",
+        "event_type": "dns_query",
+        "Name": "avsvmcloud.com",
+        "QueryType": "A",
+        "ResultCode": "0",
+        "IPAddresses": "{{CNC_IP}}",
+        "multiply": 10,
+        "mitre": {
+          "tactic": "Command and Control",
+          "technique_id": "T1071.001",
+          "technique_name": "Application Layer Protocol: Web Protocols"
+        }
+      },
+      {
+        "source": "endpoint_network",
+        "event_type": "network_connection",
+        "DeviceAction": "allowed",
+        "Protocol": "TCP",
+        "SourcePort": "{{RANDOM_PORT}}",
+        "DestinationIP": "{{CNC_IP}}",
+        "DestinationPort": 443,
+        "DeviceName": "SRV-MONITOR-01",
+        "multiply": 5
+      }
+    ]
+  },
+  {
+    "name": "Internal Discovery",
+    "delay": 5.0,
+    "events": [
+      {
+        "source": "endpoint_process",
+        "event_type": "process_creation",
+        "FileName": "cmd.exe",
+        "ProcessCommandLine": "cmd.exe /c ipconfig /all",
+        "ProcessId": "{{RANDOM_PID}}",
+        "AccountName": "SYSTEM",
+        "DeviceName": "SRV-MONITOR-01"
+      },
+      {
+        "source": "endpoint_process",
+        "event_type": "process_creation",
+        "FileName": "adfind.exe",
+        "ProcessCommandLine": "adfind.exe -f (objectcategory=person) > users.txt",
+        "ProcessId": "{{RANDOM_PID}}",
+        "AccountName": "SYSTEM",
+        "DeviceName": "SRV-MONITOR-01",
+        "mitre": {
+          "tactic": "Discovery",
+          "technique_id": "T1087.002",
+          "technique_name": "Account Discovery: Domain Account"
+        }
+      }
+    ]
+  }
+]

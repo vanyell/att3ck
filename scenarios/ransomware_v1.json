@@ -1,0 +1,86 @@
+[
+  {
+    "name": "Initial Access",
+    "delay": 0.5,
+    "events": [
+      {
+        "source": "auth",
+        "event_type": "authentication",
+        "action": "login",
+        "ResultType": "0",
+        "UserPrincipalName": "{{RANDOM_USER}}@litware.com",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "ClientAppUsed": "Interactive",
+        "mitre": {
+          "tactic": "Initial Access",
+          "technique_id": "T1078.002",
+          "technique_name": "Valid Accounts: Domain Accounts"
+        }
+      }
+    ]
+  },
+  {
+    "name": "Staging - Ransomware Execution",
+    "delay": 1.0,
+    "events": [
+      {
+        "source": "endpoint",
+        "event_type": "process_creation",
+        "ActionType": "ProcessCreated",
+        "FileName": "locker.exe",
+        "FolderPath": "C:\\Windows\\Temp",
+        "ProcessId": "{{RANDOM_PID}}",
+        "ProcessCommandLine": "locker.exe /path:C:\\Users\\{{RANDOM_USER}}\\Documents /key:12345",
+        "AccountName": "{{RANDOM_USER}}",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "mitre": {
+          "tactic": "Execution",
+          "technique_id": "T1204.002",
+          "technique_name": "User Execution: Malicious File"
+        },
+        "is_malicious": true
+      }
+    ]
+  },
+  {
+    "name": "Impact - Data Encryption",
+    "delay": 2.0,
+    "events": [
+      {
+        "source": "endpoint",
+        "event_type": "file_system",
+        "ActionType": "FileModified",
+        "FolderPath": "C:\\Users\\{{RANDOM_USER}}\\Documents",
+        "FileName": "Budget.xlsx.enc",
+        "SHA1": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+        "AccountName": "{{RANDOM_USER}}",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "mitre": {
+          "tactic": "Impact",
+          "technique_id": "T1486",
+          "technique_name": "Data Encrypted for Impact"
+        },
+        "d3fend": {
+          "id": "d3f:FileAnalysis",
+          "description": "Detect encryption patterns"
+        },
+        "is_malicious": true
+      },
+      {
+        "source": "endpoint",
+        "event_type": "registry",
+        "ActionType": "RegistryValueSet",
+        "RegistryKey": "HKCU\\Software\\Locker",
+        "RegistryValueName": "Status",
+        "RegistryValueData": "Encrypted",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "mitre": {
+          "tactic": "Impact",
+          "technique_id": "T1486",
+          "technique_name": "Data Encrypted for Impact"
+        },
+        "is_malicious": true
+      }
+    ]
+  }
+]

