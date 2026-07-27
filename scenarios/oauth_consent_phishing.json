@@ -1,0 +1,204 @@
+[
+  {
+    "name": "Stage 1 - Recon: User Targets & App Registration",
+    "delay": 0.2,
+    "events": [
+      {
+        "source": "cloud_app",
+        "event_type": "cloud_app",
+        "app_name": "Azure Portal",
+        "activity_type": "AdminOperation",
+        "action_type": "Add service principal",
+        "risk_level": "Medium",
+        "app_id": "{{RANDOM_GUID}}",
+        "object_id": "{{RANDOM_GUID}}",
+        "app_permissions": "Application.ReadWrite.All, User.Read.All",
+        "is_admin_operation": true,
+        "is_third_party_app": false,
+        "AccountName": "app_admin@litware.com",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "mitre": {
+          "tactic": "Persistence",
+          "technique_id": "T1136.003",
+          "technique_name": "Create Account: Cloud Account"
+        },
+        "killchain_phase": "persistence"
+      }
+    ]
+  },
+  {
+    "name": "Stage 2 - Malicious OAuth App Registration",
+    "delay": 1.0,
+    "events": [
+      {
+        "source": "cloud_app",
+        "event_type": "cloud_app",
+        "app_name": "DocumentSync Pro",
+        "activity_type": "ConsentGrant",
+        "action_type": "Consent to application",
+        "risk_level": "High",
+        "app_id": "{{RANDOM_GUID}}",
+        "oauth_consent_scope": "Mail.ReadWrite, Files.ReadWrite.All, offline_access, User.Read",
+        "app_permissions": "Mail.ReadWrite, Files.ReadWrite.All, offline_access",
+        "is_admin_operation": false,
+        "is_third_party_app": true,
+        "AccountName": "{{RANDOM_USER}}@litware.com",
+        "IPAddress": "{{CNC_IP}}",
+        "mitre": {
+          "tactic": "Credential Access",
+          "technique_id": "T1525",
+          "technique_name": "Steal or Forge Authentication Tokens: OAuth App Consent"
+        },
+        "is_malicious": true,
+        "killchain_phase": "credential-access"
+      },
+      {
+        "source": "auth",
+        "event_type": "authentication",
+        "UserPrincipalName": "{{RANDOM_USER}}@litware.com",
+        "ClientAppUsed": "Browser",
+        "ResultType": "0",
+        "ResultDescription": "Success",
+        "IPAddress": "{{CNC_IP}}",
+        "risk_level": "Low",
+        "location": "US",
+        "city": "New York",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "app_display_name": "DocumentSync Pro",
+        "mfa_method": "Push",
+        "conditional_access_status": "success",
+        "mitre": {
+          "tactic": "Credential Access",
+          "technique_id": "T1525",
+          "technique_name": "Steal or Forge Authentication Tokens: OAuth App Consent"
+        },
+        "is_malicious": true,
+        "killchain_phase": "credential-access"
+      }
+    ]
+  },
+  {
+    "name": "Stage 3 - Mailbox Enumeration via Graph API",
+    "delay": 2.0,
+    "events": [
+      {
+        "source": "non_interactive",
+        "event_type": "non_interactive_signin",
+        "service_principal_name": "DocumentSync Pro",
+        "app_id": "{{RANDOM_GUID}}",
+        "resource_id": "https://graph.microsoft.com",
+        "resource_display_name": "Microsoft Graph",
+        "ResultType": "0",
+        "user_agent": "MicrosoftGraph/1.0",
+        "IPAddress": "{{CNC_IP}}",
+        "is_service_principal": true,
+        "client_app": "Mobile",
+        "mitre": {
+          "tactic": "Collection",
+          "technique_id": "T1114.002",
+          "technique_name": "Email Collection: Remote Email Collection"
+        },
+        "is_malicious": true,
+        "killchain_phase": "collection"
+      },
+      {
+        "source": "office_activity",
+        "event_type": "office_activity",
+        "workload": "Exchange",
+        "operation": "MailItemsAccessed",
+        "item_type": "Mail",
+        "user_key": "{{RANDOM_EMAIL}}",
+        "ClientIP": "{{CNC_IP}}",
+        "data": {
+          "AccessType": "Delegated (OAuth)",
+          "AppUsed": "DocumentSync Pro",
+          "MailboxFoldersAccessed": 15,
+          "TotalItemsRead": 347
+        },
+        "mitre": {
+          "tactic": "Collection",
+          "technique_id": "T1114.002",
+          "technique_name": "Email Collection: Remote Email Collection"
+        },
+        "is_malicious": true,
+        "killchain_phase": "collection"
+      }
+    ]
+  },
+  {
+    "name": "Stage 4 - Data Exfiltration via OAuth App",
+    "delay": 1.5,
+    "events": [
+      {
+        "source": "endpoint",
+        "event_type": "process_creation",
+        "ActionType": "ProcessCreated",
+        "FileName": "powershell.exe",
+        "FolderPath": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0",
+        "ProcessId": "{{RANDOM_PID}}",
+        "ProcessCommandLine": "powershell.exe -Command \"Invoke-RestMethod -Uri 'https://graph.microsoft.com/v1.0/users/{{RANDOM_USER}}@litware.com/messages' -Headers @{Authorization='Bearer [REDACTED_OAUTH_TOKEN]'} | Export-Csv -Path C:\\Users\\{{RANDOM_USER}}\\AppData\\Local\\Temp\\mail_dump.csv\"",
+        "AccountName": "{{RANDOM_USER}}",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "parent_process_name": "explorer.exe",
+        "mitre": {
+          "tactic": "Exfiltration",
+          "technique_id": "T1048.002",
+          "technique_name": "Exfiltration Over Alternative Protocol: Web Services"
+        },
+        "is_malicious": true,
+        "killchain_phase": "exfiltration"
+      },
+      {
+        "source": "cloud_app",
+        "event_type": "cloud_app",
+        "app_name": "DocumentSync Pro",
+        "activity_type": "DataAccess",
+        "action_type": "FileDownload",
+        "risk_level": "High",
+        "app_permissions": "Mail.ReadWrite, Files.ReadWrite.All",
+        "is_third_party_app": true,
+        "AccountName": "{{RANDOM_USER}}@litware.com",
+        "IPAddress": "{{CNC_IP}}",
+        "data": {
+          "DownloadedFileCount": 15,
+          "DownloadedDataSizeMB": 34,
+          "DestinationApp": "Mega.nz"
+        },
+        "mitre": {
+          "tactic": "Exfiltration",
+          "technique_id": "T1567.002",
+          "technique_name": "Exfiltration Over Web Service: Cloud Storage"
+        },
+        "is_malicious": true,
+        "killchain_phase": "exfiltration"
+      }
+    ]
+  },
+  {
+    "name": "Stage 5 - Detection: Malicious OAuth App Alert",
+    "delay": 0.5,
+    "events": [
+      {
+        "source": "security_alert",
+        "event_type": "security_alert",
+        "alert_name": "Malicious OAuth Consent Grant Detected",
+        "alert_type": "OAuth Abuse",
+        "severity": "High",
+        "description": "User {{RANDOM_USER}}@litware.com granted consent to 'DocumentSync Pro' (AppId: {{RANDOM_GUID}}) with Mail.ReadWrite, Files.ReadWrite.All, offline_access scopes. App registered from anomalous IP {{CNC_IP}}. No prior app usage history. Pattern matches known OAuth consent phishing TTPs targeting M365.",
+        "confidence_level": "High",
+        "confidence_score": 0.88,
+        "tactics": "['Credential Access', 'Collection', 'Exfiltration']",
+        "techniques": "['T1525', 'T1114.002', 'T1048.002']",
+        "compromised_entity": "{{RANDOM_USER}}@litware.com",
+        "remediation_steps": "Revoke OAuth consent grant for 'DocumentSync Pro' in Azure AD, rotate affected user credentials, review audit logs for Graph API activity, investigate scope of data access",
+        "mitre": {
+          "tactic": "Credential Access",
+          "technique_id": "T1525",
+          "technique_name": "Steal or Forge Authentication Tokens: OAuth App Consent"
+        },
+        "is_malicious": true,
+        "killchain_phase": "credential-access"
+      }
+    ]
+  }
+]

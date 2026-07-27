@@ -1,29 +1,60 @@
 [
   {
-    "name": "Background Corporate Activity",
+    "name": "Morning Login & Email Activity",
     "delay": 0.05,
     "events": [
       {
-        "source": "endpoint_process",
+        "source": "auth",
+        "event_type": "authentication",
+        "UserPrincipalName": "{{RANDOM_EMAIL}}",
+        "ClientAppUsed": "Browser",
+        "ResultType": "0",
+        "ResultDescription": "Success",
+        "IPAddress": "{{RANDOM_IP}}",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "multiply": 8
+      },
+      {
+        "source": "endpoint",
         "event_type": "process_creation",
+        "ActionType": "ProcessCreated",
         "FileName": "Outlook.exe",
         "FolderPath": "C:\\Program Files\\Microsoft Office\\root\\Office16",
-        "ProcessCommandLine": "outlook.exe /recycle",
+        "ProcessCommandLine": "\"C:\\Program Files\\Microsoft Office\\root\\Office16\\OUTLOOK.EXE\" /recycle",
         "ProcessId": "{{RANDOM_PID}}",
         "AccountName": "{{RANDOM_USER}}",
         "DeviceName": "{{RANDOM_HOST}}",
         "multiply": 5
       },
       {
-        "source": "endpoint_process",
+        "source": "endpoint",
         "event_type": "process_creation",
+        "ActionType": "ProcessCreated",
         "FileName": "Teams.exe",
-        "FolderPath": "C:\\users\\{{RANDOM_USER}}\\AppData\\Local\\Microsoft\\Teams\\current",
-        "ProcessCommandLine": "Teams.exe --autostart",
+        "FolderPath": "C:\\Users\\{{RANDOM_USER}}\\AppData\\Local\\Microsoft\\Teams\\current",
+        "ProcessCommandLine": "\"C:\\Users\\{{RANDOM_USER}}\\AppData\\Local\\Microsoft\\Teams\\current\\Teams.exe\" --autostart",
         "ProcessId": "{{RANDOM_PID}}",
         "AccountName": "{{RANDOM_USER}}",
         "DeviceName": "{{RANDOM_HOST}}",
         "multiply": 5
+      }
+    ]
+  },
+  {
+    "name": "Office Productivity - Web Browsing & DNS",
+    "delay": 0.02,
+    "events": [
+      {
+        "source": "endpoint",
+        "event_type": "process_creation",
+        "ActionType": "ProcessCreated",
+        "FileName": "chrome.exe",
+        "FolderPath": "C:\\Program Files\\Google\\Chrome\\Application",
+        "ProcessCommandLine": "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\" --restore-last-session",
+        "ProcessId": "{{RANDOM_PID}}",
+        "AccountName": "{{RANDOM_USER}}",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "multiply": 3
       },
       {
         "source": "dns",
@@ -31,10 +62,56 @@
         "Name": "outlook.office365.com",
         "QueryType": "A",
         "ResultCode": "0",
-        "multiply": 20
+        "multiply": 15
       },
       {
-        "source": "endpoint_network",
+        "source": "dns",
+        "event_type": "dns_query",
+        "Name": "teams.microsoft.com",
+        "QueryType": "A",
+        "ResultCode": "0",
+        "multiply": 10
+      },
+      {
+        "source": "dns",
+        "event_type": "dns_query",
+        "Name": "www.google.com",
+        "QueryType": "A",
+        "ResultCode": "0",
+        "multiply": 8
+      },
+      {
+        "source": "dns",
+        "event_type": "dns_query",
+        "Name": "login.microsoftonline.com",
+        "QueryType": "A",
+        "ResultCode": "0",
+        "multiply": 6
+      },
+      {
+        "source": "dns",
+        "event_type": "dns_query",
+        "Name": "www.linkedin.com",
+        "QueryType": "A",
+        "ResultCode": "0",
+        "multiply": 3
+      },
+      {
+        "source": "dns",
+        "event_type": "dns_query",
+        "Name": "github.com",
+        "QueryType": "A",
+        "ResultCode": "0",
+        "multiply": 4
+      }
+    ]
+  },
+  {
+    "name": "Network Activity - SaaS & Cloud Services",
+    "delay": 0.02,
+    "events": [
+      {
+        "source": "endpoint",
         "event_type": "network_connection",
         "DeviceAction": "allowed",
         "Protocol": "TCP",
@@ -42,7 +119,147 @@
         "DestinationIP": "13.107.42.12",
         "DestinationPort": 443,
         "DeviceName": "{{RANDOM_HOST}}",
-        "multiply": 30
+        "multiply": 20
+      },
+      {
+        "source": "endpoint",
+        "event_type": "network_connection",
+        "DeviceAction": "allowed",
+        "Protocol": "TCP",
+        "SourcePort": "{{RANDOM_PORT}}",
+        "DestinationIP": "52.96.38.50",
+        "DestinationPort": 443,
+        "DeviceName": "{{RANDOM_HOST}}",
+        "multiply": 10
+      },
+      {
+        "source": "endpoint",
+        "event_type": "network_connection",
+        "DeviceAction": "allowed",
+        "Protocol": "TCP",
+        "SourcePort": "{{RANDOM_PORT}}",
+        "DestinationIP": "40.126.16.160",
+        "DestinationPort": 443,
+        "DeviceName": "{{RANDOM_HOST}}",
+        "multiply": 8
+      }
+    ]
+  },
+  {
+    "name": "System Maintenance & Background Processes",
+    "delay": 0.1,
+    "events": [
+      {
+        "source": "endpoint",
+        "event_type": "process_creation",
+        "ActionType": "ProcessCreated",
+        "FileName": "svchost.exe",
+        "FolderPath": "C:\\Windows\\System32",
+        "ProcessCommandLine": "C:\\Windows\\System32\\svchost.exe -k WindowsUpdate",
+        "ProcessId": "{{RANDOM_PID}}",
+        "AccountName": "SYSTEM",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "multiply": 4
+      },
+      {
+        "source": "endpoint",
+        "event_type": "registry",
+        "ActionType": "RegistryValueSet",
+        "RegistryKey": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate\\Auto Update",
+        "RegistryValueName": "LastCheckTime",
+        "RegistryValueData": "{{RANDOM_INT}}",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "multiply": 2
+      },
+      {
+        "source": "endpoint",
+        "event_type": "file_system",
+        "ActionType": "FileCreated",
+        "FileName": "windows_update.log",
+        "FolderPath": "C:\\Windows\\Logs\\WindowsUpdate",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "multiply": 2
+      }
+    ]
+  },
+  {
+    "name": "SaaS Collaboration - SharePoint & OneDrive Sync",
+    "delay": 0.03,
+    "events": [
+      {
+        "source": "dns",
+        "event_type": "dns_query",
+        "Name": "litware.sharepoint.com",
+        "QueryType": "A",
+        "ResultCode": "0",
+        "multiply": 6
+      },
+      {
+        "source": "dns",
+        "event_type": "dns_query",
+        "Name": "litware-my.sharepoint.com",
+        "QueryType": "A",
+        "ResultCode": "0",
+        "multiply": 4
+      },
+      {
+        "source": "endpoint",
+        "event_type": "network_connection",
+        "DeviceAction": "allowed",
+        "Protocol": "TCP",
+        "SourcePort": "{{RANDOM_PORT}}",
+        "DestinationIP": "13.107.42.14",
+        "DestinationPort": 443,
+        "DeviceName": "{{RANDOM_HOST}}",
+        "multiply": 12
+      },
+      {
+        "source": "endpoint",
+        "event_type": "process_creation",
+        "ActionType": "ProcessCreated",
+        "FileName": "OneDrive.exe",
+        "FolderPath": "C:\\Users\\{{RANDOM_USER}}\\AppData\\Local\\Microsoft\\OneDrive",
+        "ProcessCommandLine": "\"C:\\Users\\{{RANDOM_USER}}\\AppData\\Local\\Microsoft\\OneDrive\\OneDrive.exe\" /sync",
+        "ProcessId": "{{RANDOM_PID}}",
+        "AccountName": "{{RANDOM_USER}}",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "multiply": 3
+      }
+    ]
+  },
+  {
+    "name": "Database & Application Server Activity",
+    "delay": 0.08,
+    "events": [
+      {
+        "source": "endpoint",
+        "event_type": "network_connection",
+        "DeviceAction": "allowed",
+        "Protocol": "TCP",
+        "SourcePort": "{{RANDOM_PORT}}",
+        "DestinationIP": "10.0.0.15",
+        "DestinationPort": 1433,
+        "DeviceName": "{{RANDOM_HOST}}",
+        "multiply": 5
+      },
+      {
+        "source": "endpoint",
+        "event_type": "network_connection",
+        "DeviceAction": "allowed",
+        "Protocol": "TCP",
+        "SourcePort": "{{RANDOM_PORT}}",
+        "DestinationIP": "10.0.0.22",
+        "DestinationPort": 443,
+        "DeviceName": "SRV-APP-01",
+        "multiply": 5
+      },
+      {
+        "source": "dns",
+        "event_type": "dns_query",
+        "Name": "db-cluster.internal.litware.com",
+        "QueryType": "A",
+        "ResultCode": "0",
+        "multiply": 4
       }
     ]
   }

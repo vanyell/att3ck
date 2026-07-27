@@ -38,7 +38,8 @@
           "technique_id": "T1204.002",
           "technique_name": "User Execution: Malicious File"
         },
-        "is_malicious": true
+        "is_malicious": true,
+        "killchain_phase": "execution"
       }
     ]
   },
@@ -64,7 +65,8 @@
           "id": "d3f:FileAnalysis",
           "description": "Detect encryption patterns"
         },
-        "is_malicious": true
+        "is_malicious": true,
+        "killchain_phase": "impact"
       },
       {
         "source": "endpoint",
@@ -79,7 +81,8 @@
           "technique_id": "T1486",
           "technique_name": "Data Encrypted for Impact"
         },
-        "is_malicious": true
+        "is_malicious": true,
+        "killchain_phase": "impact"
       }
     ]
   }

@@ -15,21 +15,31 @@ class TemporalEngine:
         self._set_default_transitions()
 
     def _set_default_transitions(self):
-        # M5 FIX: Use Sentinel table names that match the Literal-enforced event_type values
-        # from our Pydantic models (e.g. ProcessEvent.event_type == "DeviceProcessEvents")
         self.add_transitions([
             MarkovTransition(
                 current_event="SigninLogs",
-                next_event_probabilities={"DeviceProcessEvents": 0.5, "OfficeActivity": 0.3}
+                next_event_probabilities={"DeviceProcessEvents": 0.5, "OfficeActivity": 0.3, "AzureActivity": 0.1}
             ),
             MarkovTransition(
                 current_event="DeviceProcessEvents",
-                next_event_probabilities={"CommonSecurityLog": 0.4, "DeviceFileEvents": 0.3}
+                next_event_probabilities={"CommonSecurityLog": 0.35, "DeviceFileEvents": 0.3, "DnsEvents": 0.15}
             ),
             MarkovTransition(
                 current_event="DeviceFileEvents",
-                next_event_probabilities={"CommonSecurityLog": 0.2, "DeviceRegistryEvents": 0.2}
-            )
+                next_event_probabilities={"CommonSecurityLog": 0.2, "DeviceRegistryEvents": 0.2, "DeviceProcessEvents": 0.1}
+            ),
+            MarkovTransition(
+                current_event="OfficeActivity",
+                next_event_probabilities={"SigninLogs": 0.2, "DeviceProcessEvents": 0.15}
+            ),
+            MarkovTransition(
+                current_event="CommonSecurityLog",
+                next_event_probabilities={"DeviceProcessEvents": 0.3, "DnsEvents": 0.2}
+            ),
+            MarkovTransition(
+                current_event="AzureActivity",
+                next_event_probabilities={"SigninLogs": 0.3, "CloudAppEvents": 0.2}
+            ),
         ])
 
     def add_transitions(self, transitions: list[MarkovTransition]):
@@ -88,7 +98,8 @@ class TemporalEngine:
             "dest_ip": parent_event.dest_ip,
             "severity": parent_event.severity,
             "is_malicious": parent_event.is_malicious,
-            "scenario_id": parent_event.scenario_id
+            "scenario_id": parent_event.scenario_id,
+            "killchain_phase": parent_event.killchain_phase,
         }
         
         try:

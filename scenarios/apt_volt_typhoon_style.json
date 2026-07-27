@@ -15,7 +15,8 @@
           "tactic": "Command and Control",
           "technique_id": "T1090",
           "technique_name": "Proxy: Internal Proxy"
-        }
+        },
+        "killchain_phase": "command-and-control"
       }
     ]
   },
@@ -35,7 +36,8 @@
           "tactic": "Credential Access",
           "technique_id": "T1003.003",
           "technique_name": "OS Credential Dumping: NTDS"
-        }
+        },
+        "killchain_phase": "credential-access"
       }
     ]
   },
@@ -55,7 +57,8 @@
           "tactic": "Execution",
           "technique_id": "T1047",
           "technique_name": "Windows Management Instrumentation"
-        }
+        },
+        "killchain_phase": "execution"
       }
     ]
   }

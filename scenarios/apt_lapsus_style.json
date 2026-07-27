@@ -23,7 +23,8 @@
           "tactic": "Credential Access",
           "technique_id": "T1621",
           "technique_name": "Multi-Factor Authentication Request Generation"
-        }
+        },
+        "killchain_phase": "credential-access"
       }
     ]
   },
@@ -43,7 +44,8 @@
           "tactic": "Persistence",
           "technique_id": "T1136.003",
           "technique_name": "Create Account: Cloud Account"
-        }
+        },
+        "killchain_phase": "persistence"
       }
     ]
   },
@@ -63,7 +65,8 @@
           "tactic": "Credential Access",
           "technique_id": "T1528",
           "technique_name": "Steal or Forge Cloud Tokens"
-        }
+        },
+        "killchain_phase": "credential-access"
       }
     ]
   }

@@ -1,0 +1,175 @@
+[
+  {
+    "name": "Linux - SSH Logins & System Administration",
+    "delay": 0.05,
+    "events": [
+      {
+        "source": "linux",
+        "event_type": "linux_auth",
+        "pid": "{{RANDOM_PID}}",
+        "proc": "sshd",
+        "log_message": "Accepted publickey for {{RANDOM_USER}} from 192.168.1.10 port 22 ssh2: ED25519 SHA256:abc123",
+        "hostname": "{{RANDOM_LINUX_HOST}}",
+        "multiply": 3
+      },
+      {
+        "source": "linux",
+        "event_type": "linux_sudo",
+        "pid": "{{RANDOM_PID}}",
+        "user": "{{RANDOM_USER}}",
+        "target_user": "root",
+        "command": "systemctl restart nginx",
+        "tty": "/dev/pts/0",
+        "hostname": "{{RANDOM_LINUX_HOST}}"
+      },
+      {
+        "source": "linux",
+        "event_type": "linux_cron",
+        "pid": "{{RANDOM_PID}}",
+        "user": "root",
+        "command": "run-parts /etc/cron.hourly",
+        "hostname": "{{RANDOM_LINUX_HOST}}"
+      },
+      {
+        "source": "linux",
+        "event_type": "linux_kernel",
+        "pid": 0,
+        "log_message": "eth0: link up, 1000Mbps, full duplex",
+        "hostname": "{{RANDOM_LINUX_HOST}}"
+      }
+    ]
+  },
+  {
+    "name": "Windows - Corporate Desktop Activity",
+    "delay": 0.05,
+    "events": [
+      {
+        "source": "endpoint",
+        "event_type": "process_creation",
+        "FileName": "chrome.exe",
+        "FolderPath": "C:\\Program Files\\Google\\Chrome\\Application",
+        "ProcessId": "{{RANDOM_PID}}",
+        "ProcessCommandLine": "\"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe\" --restore-last-session",
+        "AccountName": "{{RANDOM_USER}}",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "multiply": 3
+      },
+      {
+        "source": "endpoint",
+        "event_type": "process_creation",
+        "FileName": "Outlook.exe",
+        "FolderPath": "C:\\Program Files\\Microsoft Office\\root\\Office16",
+        "ProcessCommandLine": "\"C:\\Program Files\\Microsoft Office\\root\\Office16\\OUTLOOK.EXE\" /recycle",
+        "ProcessId": "{{RANDOM_PID}}",
+        "AccountName": "{{RANDOM_USER}}",
+        "DeviceName": "{{RANDOM_HOST}}"
+      },
+      {
+        "source": "auth",
+        "event_type": "authentication",
+        "UserPrincipalName": "{{RANDOM_EMAIL}}",
+        "ResultType": "0",
+        "hostname": "{{RANDOM_HOST}}",
+        "IPAddress": "{{RANDOM_IP}}",
+        "multiply": 3
+      },
+      {
+        "source": "dns",
+        "event_type": "dns_query",
+        "Name": "www.google.com",
+        "multiply": 5
+      },
+      {
+        "source": "firewall",
+        "event_type": "network_connection",
+        "DeviceAction": "allowed",
+        "Protocol": "TCP",
+        "SourcePort": "{{RANDOM_PORT}}",
+        "DestinationIP": "13.107.42.12",
+        "DestinationPort": 443,
+        "DeviceName": "{{RANDOM_HOST}}",
+        "multiply": 8
+      }
+    ]
+  },
+  {
+    "name": "macOS - Developer Workstation Activity",
+    "delay": 0.05,
+    "events": [
+      {
+        "source": "macos",
+        "event_type": "macos_log",
+        "pid": "{{RANDOM_PID}}",
+        "proc": "Terminal",
+        "subsystem": "com.apple.Terminal",
+        "category": "default",
+        "log_message": "TTY: /dev/ttys002, User: {{RANDOM_USER}}, Working directory: /Users/{{RANDOM_USER}}/Projects",
+        "hostname": "{{RANDOM_MAC_HOST}}"
+      },
+      {
+        "source": "macos",
+        "event_type": "macos_log",
+        "pid": "{{RANDOM_PID}}",
+        "proc": "code",
+        "subsystem": "com.microsoft.VSCode",
+        "category": "default",
+        "log_message": "VSCode workspace opened: /Users/{{RANDOM_USER}}/Projects/web-app",
+        "hostname": "{{RANDOM_MAC_HOST}}"
+      },
+      {
+        "source": "macos",
+        "event_type": "macos_auth",
+        "pid": "{{RANDOM_PID}}",
+        "proc": "authd",
+        "log_message": "USER_AUTH: user {{RANDOM_USER}} authenticated via TouchID",
+        "user": "{{RANDOM_USER}}",
+        "hostname": "{{RANDOM_MAC_HOST}}"
+      },
+      {
+        "source": "macos",
+        "event_type": "macos_log",
+        "pid": "{{RANDOM_PID}}",
+        "proc": "opendirectoryd",
+        "subsystem": "com.apple.opendirectoryd",
+        "category": "default",
+        "log_message": "ODNodeCreateWithSession: User authenticated via Active Directory realm AD.LITWARE.COM",
+        "hostname": "{{RANDOM_MAC_HOST}}"
+      }
+    ]
+  },
+  {
+    "name": "Linux - Docker & Container Activity",
+    "delay": 0.1,
+    "events": [
+      {
+        "source": "linux",
+        "event_type": "linux_process",
+        "pid": "{{RANDOM_PID}}",
+        "ppid": 1,
+        "exe": "/usr/bin/docker",
+        "args": "docker run -d --name nginx-proxy nginx:alpine",
+        "user": "root",
+        "uid": 0,
+        "gid": 0,
+        "hostname": "{{RANDOM_LINUX_HOST}}"
+      },
+      {
+        "source": "linux",
+        "event_type": "linux_kernel",
+        "pid": 0,
+        "log_message": "docker0: port 1(veth1234) entered blocking state",
+        "hostname": "{{RANDOM_LINUX_HOST}}"
+      },
+      {
+        "source": "linux",
+        "event_type": "linux_audit",
+        "pid": "{{RANDOM_PID}}",
+        "audit_type": "USER_CMD",
+        "audit_msg": "pid={{RANDOM_PID}} uid=0 auid=1000 ses=2 subj=unconfined msg='cwd=/root terminal=pts/0: cmd=docker compose up'",
+        "auid": 1000,
+        "ses": 2,
+        "hostname": "{{RANDOM_LINUX_HOST}}"
+      }
+    ]
+  }
+]

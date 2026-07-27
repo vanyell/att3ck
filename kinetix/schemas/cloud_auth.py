@@ -1,9 +1,8 @@
-from typing import Optional, List, Dict, Any, Literal
+from typing import Optional, Literal
 import uuid
 from pydantic import Field, AliasChoices
-from kinetix.schemas.base import BaseLogEvent
+from kinetix.schemas.base import BaseLogEvent, syslog_priority, format_syslog, format_evt_xml, evt_level
 
-# --- Auth Schemas ---
 class AuthenticationEvent(BaseLogEvent):
     source: Literal["Azure AD"] = Field("Azure AD", alias="SourceSystem")
     event_type: Literal["SigninLogs"] = Field("SigninLogs", alias="Type")
@@ -12,7 +11,6 @@ class AuthenticationEvent(BaseLogEvent):
     app_display_name: str = Field("Office 365", alias="AppDisplayName", validation_alias=AliasChoices("AppDisplayName", "app_name"))
     client_app_used: str = Field("Browser", alias="ClientAppUsed", validation_alias=AliasChoices("ClientAppUsed", "client_app"))
     
-    # --- Analyst Pivot Fields ---
     result_type: str = Field("0", alias="ResultType", validation_alias=AliasChoices("ResultType", "status"))
     result_description: Optional[str] = Field("Success", alias="ResultDescription", validation_alias=AliasChoices("ResultDescription", "failure_reason"))
     
@@ -24,6 +22,21 @@ class AuthenticationEvent(BaseLogEvent):
     city: str = Field("Seattle", alias="City")
     conditional_access_status: str = Field("success", alias="ConditionalAccessStatus")
 
+    def to_syslog(self) -> str:
+        result = "accepted" if self.result_type == "0" else "failed"
+        return format_syslog(syslog_priority("authpriv", "info"), self.timestamp, self.hostname or "SERVER",
+                              "sshd", 0, f"Authentication {result} for {self.user_principal_name} from {self.source_ip}")
+
+    def to_evt(self) -> str:
+        eid = 4624 if self.result_type == "0" else 4625
+        return format_evt_xml(eid, "Microsoft-Windows-Security-Auditing", "Security",
+                              self.hostname or "SERVER", self.timestamp,
+                              evt_level("info" if self.result_type == "0" else "err"),
+                              [("TargetUser", self.user_principal_name),
+                               ("LogonType", self.client_app_used),
+                               ("IpAddress", self.source_ip or ""),
+                               ("MfaMethod", self.mfa_method)])
+
 class VPNEvent(BaseLogEvent):
     source: Literal["Firewall"] = Field("Firewall", alias="SourceSystem")
     event_type: Literal["CommonSecurityLog"] = Field("CommonSecurityLog", alias="Type")
@@ -33,7 +46,17 @@ class VPNEvent(BaseLogEvent):
     assigned_ip: Optional[str] = Field(None, alias="DeviceCustomString1", validation_alias=AliasChoices("DeviceCustomString1", "assigned_ip"))
     session_duration: Optional[int] = Field(3600, alias="DeviceCustomNumber1", validation_alias=AliasChoices("DeviceCustomNumber1", "session_duration"))
 
-# --- Cloud Schemas ---
+    def to_syslog(self) -> str:
+        return format_syslog(syslog_priority("daemon", "info"), self.timestamp, self.hostname or "VPN",
+                              "openvpn", 0, f"client {self.client_ip} -> {self.assigned_ip} action={self.action}")
+
+    def to_evt(self) -> str:
+        return format_evt_xml(20224, "Microsoft-Windows-Security-Auditing", "Security",
+                              self.hostname or "VPN", self.timestamp, evt_level("info"),
+                              [("ClientIP", self.client_ip),
+                               ("AssignedIP", self.assigned_ip or ""),
+                               ("SessionDuration", str(self.session_duration or 0))])
+
 class CloudActivityEvent(BaseLogEvent):
     source: Literal["Azure"] = Field("Azure", alias="SourceSystem")
     event_type: Literal["AzureActivity"] = Field("AzureActivity", alias="Type")

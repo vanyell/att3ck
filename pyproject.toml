@@ -1,8 +1,10 @@
 [project]
 name = "kinetix"
-version = "0.1.0"
-description = "High-performance modular log generator for simulation and validation."
+version = "0.3.0"
+description = "Synthetic log generator for SIEM validation, adversarial simulation (MITRE ATT&CK), AI-powered attack scenarios, and SOC analyst training."
 authors = [{ name = "Kinetix Team" }]
+readme = "README.md"
+requires-python = ">=3.12"
 dependencies = [
     "pydantic>=2.0.0",
     "orjson>=3.9.0",
@@ -12,6 +14,15 @@ dependencies = [
     "pytest>=7.0.0",
 ]
 
+[project.urls]
+Source = "https://github.com/anomalyco/att3ck"
+
+[tool.setuptools]
+packages = ["kinetix", "kinetix.core", "kinetix.schemas", "kinetix.outputs", "kinetix.intelligence"]
+
 [build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

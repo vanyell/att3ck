@@ -27,8 +27,23 @@
       { "source": "cloud_app", "event_type": "cloud_app_event", "AppName": "Salesforce", "ActionType": "RecordExport", "severity": "low" },
       { "source": "dns", "event_type": "dns_query", "Name": "dga-malware.com", "QueryType": "A", "ResultCode": "3", "IPAddresses": "NXDOMAIN" },
       { "source": "syslog", "event_type": "system_event", "severity": "warning", "Message": "Too many failures", "Facility": "Auth" },
-      { "source": "web", "event_type": "web_server_event", "Method": "GET", "RequestURL": "/login", "Status": 200, "severity": "informational" },
-      { "source": "db", "event_type": "database_event", "Query": "SELECT * FROM credit_cards", "User": "app_user", "severity": "medium" }
+      { "source": "web", "event_type": "web_request", "url": "/login", "http_method": "GET", "status_code": 200, "user_agent": "curl/8", "response_time_ms": 45, "severity": "informational" },
+      { "source": "db", "event_type": "db_query", "db_name": "SalesDB", "query_text": "SELECT * FROM credit_cards", "operation": "SELECT", "severity": "medium" }
+    ]
+  },
+  {
+    "name": "Linux & macOS Coverage",
+    "delay": 0.01,
+    "events": [
+      { "source": "linux", "event_type": "linux_auth", "pid": 1234, "proc": "sshd", "log_message": "Failed password for root from 10.0.0.1 port 22 ssh2", "mitre": { "tactic": "Credential Access", "technique_id": "T1110.001", "technique_name": "Brute Force: Password Guessing" }, "is_malicious": true, "killchain_phase": "credential-access" },
+      { "source": "linux", "event_type": "linux_sudo", "pid": 1235, "user": "alice", "command": "whoami", "hostname": "web-01" },
+      { "source": "linux", "event_type": "linux_audit", "pid": 1236, "audit_type": "SYSCALL", "audit_msg": "arch=c000003e syscall=59 success=yes", "auid": 1000, "ses": 1, "hostname": "db-01" },
+      { "source": "linux", "event_type": "linux_kernel", "pid": 0, "log_message": "CPU threshold exceeded", "hostname": "web-02" },
+      { "source": "linux", "event_type": "linux_cron", "pid": 1237, "user": "root", "command": "run-parts /etc/cron.hourly", "hostname": "worker-01" },
+      { "source": "linux", "event_type": "linux_process", "pid": 1238, "exe": "/usr/bin/ssh", "args": "ssh root@10.0.0.5", "user": "root", "uid": 0, "gid": 0, "hostname": "app-01" },
+      { "source": "macos", "event_type": "macos_log", "pid": 5678, "proc": "installer", "log_message": "Install will request elevated privileges", "hostname": "MBP-Jsmith" },
+      { "source": "macos", "event_type": "macos_auth", "pid": 5679, "proc": "authd", "log_message": "USER_AUTH: user jsmith authenticated via TouchID", "user": "jsmith", "hostname": "MBP-Jsmith" },
+      { "source": "macos", "event_type": "macos_exec", "pid": 5680, "proc": "kernel", "bundle_id": "com.example.trojan", "app_path": "/Applications/Evil.app", "signer": "Not signed", "log_message": "execution of untrusted app", "hostname": "MBP-Jsmith" }
     ]
   }
 ]

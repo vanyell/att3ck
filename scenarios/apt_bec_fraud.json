@@ -15,7 +15,8 @@
           "tactic": "Initial Access",
           "technique_id": "T1078.004",
           "technique_name": "Valid Accounts: Cloud Accounts"
-        }
+        },
+        "killchain_phase": "initial-access"
       }
     ]
   },
@@ -39,7 +40,8 @@
           "tactic": "Persistence",
           "technique_id": "T1137.005",
           "technique_name": "Office Application Startup: Outlook Rules"
-        }
+        },
+        "killchain_phase": "persistence"
       }
     ]
   },
@@ -59,7 +61,8 @@
           "tactic": "Collection",
           "technique_id": "T1114.002",
           "technique_name": "Email Collection: Remote Email Collection"
-        }
+        },
+        "killchain_phase": "collection"
       }
     ]
   }

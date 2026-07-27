@@ -1,0 +1,221 @@
+[
+  {
+    "name": "Stage 1 - Device Code Phishing Lure Delivery",
+    "delay": 0.3,
+    "events": [
+      {
+        "source": "mdo_email",
+        "event_type": "email_event",
+        "sender": "noreply@security-portal-verify.com",
+        "recipient": "{{RANDOM_EMAIL}}",
+        "subject": "Action Required: Verify your Microsoft 365 account to retain access",
+        "attachment_verdict": "NoAttachment",
+        "detection_method": "None",
+        "delivery_location": "Inbox",
+        "direction": "Inbound",
+        "spf_pass": false,
+        "dkim_pass": false,
+        "dmarc_pass": false,
+        "sender_ip": "{{CNC_IP}}",
+        "AccountName": "{{RANDOM_USER}}",
+        "threat_types": "Phish",
+        "mitre": {
+          "tactic": "Initial Access",
+          "technique_id": "T1566.002",
+          "technique_name": "Spearphishing Link"
+        },
+        "is_malicious": true,
+        "killchain_phase": "initial-access"
+      },
+      {
+        "source": "proxy",
+        "event_type": "proxy",
+        "url": "https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=ab1c2d3e-0000-0000-0000-000000000000&response_type=code&scope=Mail.ReadWrite+Files.ReadWrite.All+offline_access&redirect_uri=https://evil-cnc.net/callback&response_mode=query&prompt=consent",
+        "http_method": "GET",
+        "http_status": 200,
+        "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36",
+        "content_type": "text/html",
+        "AccountName": "{{RANDOM_USER}}",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "SourceIP": "{{RANDOM_IP}}",
+        "is_malicious": true,
+        "mitre": {
+          "tactic": "Initial Access",
+          "technique_id": "T1566.002",
+          "technique_name": "Spearphishing Link"
+        },
+        "killchain_phase": "initial-access"
+      }
+    ]
+  },
+  {
+    "name": "Stage 2 - Device Code Authentication Flow",
+    "delay": 1.0,
+    "events": [
+      {
+        "source": "auth",
+        "event_type": "authentication",
+        "UserPrincipalName": "{{RANDOM_EMAIL}}",
+        "ClientAppUsed": "Mobile",
+        "ResultType": "0",
+        "ResultDescription": "Success via Device Code flow",
+        "IPAddress": "{{RANDOM_IP}}",
+        "risk_level": "Low",
+        "location": "{{RANDOM_LOCATION}}",
+        "city": "{{RANDOM_CITY}}",
+        "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 18_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "mfa_method": "Push",
+        "app_display_name": "Microsoft Authenticator",
+        "conditional_access_status": "success",
+        "data": {
+          "AuthFlow": "DeviceCode",
+          "DeviceCodeExpiresIn": 900,
+          "ClientId": "ab1c2d3e-0000-0000-0000-000000000000"
+        },
+        "mitre": {
+          "tactic": "Credential Access",
+          "technique_id": "T1525",
+          "technique_name": "Steal or Forge Authentication Tokens: Device Code Phishing"
+        },
+        "is_malicious": true,
+        "killchain_phase": "credential-access"
+      }
+    ]
+  },
+  {
+    "name": "Stage 3 - Token Theft & Refresh Token Harvesting",
+    "delay": 0.5,
+    "events": [
+      {
+        "source": "endpoint",
+        "event_type": "process_creation",
+        "ActionType": "ProcessCreated",
+        "FileName": "python.exe",
+        "FolderPath": "C:\\Users\\{{RANDOM_USER}}\\AppData\\Local\\Programs\\Python\\Python313",
+        "ProcessId": "{{RANDOM_PID}}",
+        "ProcessCommandLine": "python.exe -c \"import requests; r = requests.post('https://login.microsoftonline.com/common/oauth2/v2.0/token', data={'client_id':'ab1c2d3e','device_code':'...','grant_type':'urn:ietf:params:oauth:grant-type:device_code'}); open('tokencache.dat','w').write(r.text)\"",
+        "AccountName": "{{RANDOM_USER}}",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "mitre": {
+          "tactic": "Credential Access",
+          "technique_id": "T1528",
+          "technique_name": "Steal or Forge Authentication Tokens"
+        },
+        "is_malicious": true,
+        "killchain_phase": "credential-access"
+      },
+      {
+        "source": "non_interactive",
+        "event_type": "non_interactive_signin",
+        "service_principal_name": "Microsoft Authenticator (Device Code)",
+        "app_id": "ab1c2d3e-0000-0000-0000-000000000000",
+        "resource_id": "https://graph.microsoft.com",
+        "ResultType": "0",
+        "user_agent": "Python-requests/2.32.0",
+        "IPAddress": "{{CNC_IP}}",
+        "is_service_principal": false,
+        "client_app": "Mobile",
+        "conditional_access_status": "notApplied",
+        "mitre": {
+          "tactic": "Credential Access",
+          "technique_id": "T1528",
+          "technique_name": "Steal or Forge Authentication Tokens"
+        },
+        "is_malicious": true,
+        "killchain_phase": "credential-access"
+      }
+    ]
+  },
+  {
+    "name": "Stage 4 - Persistence via Malicious App Registration",
+    "delay": 2.0,
+    "events": [
+      {
+        "source": "cloud_app",
+        "event_type": "cloud_app",
+        "app_name": "SecureSync Connector",
+        "activity_type": "ConsentGrant",
+        "action_type": "Consent to application",
+        "risk_level": "High",
+        "app_id": "{{RANDOM_GUID}}",
+        "oauth_consent_scope": "Mail.ReadWrite, Files.ReadWrite.All, User.Read.All, Notes.ReadWrite.All",
+        "app_permissions": "Mail.ReadWrite, Files.ReadWrite.All, User.Read.All",
+        "is_admin_operation": false,
+        "is_third_party_app": true,
+        "AccountName": "{{RANDOM_EMAIL}}",
+        "IPAddress": "{{CNC_IP}}",
+        "mitre": {
+          "tactic": "Persistence",
+          "technique_id": "T1136.003",
+          "technique_name": "Create Account: Cloud Account"
+        },
+        "is_malicious": true,
+        "killchain_phase": "persistence"
+      },
+      {
+        "source": "cloud_activity",
+        "event_type": "cloud_activity",
+        "OperationName": "Add service principal",
+        "ResourceId": "/subscriptions/providers/Microsoft.AzureAD",
+        "Caller": "{{RANDOM_EMAIL}}",
+        "IPAddress": "{{CNC_IP}}",
+        "data": {
+          "ServicePrincipal": "SecureSync Connector",
+          "AppPermissions": "Mail.ReadWrite, Files.ReadWrite.All"
+        },
+        "mitre": {
+          "tactic": "Persistence",
+          "technique_id": "T1136.003",
+          "technique_name": "Create Account: Cloud Account"
+        },
+        "is_malicious": true,
+        "killchain_phase": "persistence"
+      }
+    ]
+  },
+  {
+    "name": "Stage 5 - Data Exfiltration & Detection Alert",
+    "delay": 1.5,
+    "events": [
+      {
+        "source": "office_activity",
+        "event_type": "office_activity",
+        "workload": "Exchange",
+        "operation": "MailItemsAccessed",
+        "item_type": "Mail",
+        "user_key": "{{RANDOM_EMAIL}}",
+        "ClientIP": "{{CNC_IP}}",
+        "multiply": 100,
+        "is_malicious": true,
+        "mitre": {
+          "tactic": "Collection",
+          "technique_id": "T1114.002",
+          "technique_name": "Email Collection: Remote Email Collection"
+        },
+        "killchain_phase": "collection"
+      },
+      {
+        "source": "security_alert",
+        "event_type": "security_alert",
+        "alert_name": "Device Code Authentication Phishing Detected",
+        "alert_type": "OAuth Abuse",
+        "severity": "High",
+        "description": "User {{RANDOM_USER}}@litware.com completed device code authentication from unknown app. Refresh token with Mail.ReadWrite and Files.ReadWrite.All scopes issued to client ID starting with ab1c2d3e. Source IP {{CNC_IP}} is associated with known phishing infrastructure. Subsequent Graph API calls detected from same IP with 100+ mailbox reads.",
+        "confidence_level": "High",
+        "confidence_score": 0.92,
+        "tactics": "['Initial Access', 'Credential Access', 'Collection', 'Persistence']",
+        "techniques": "['T1566.002', 'T1525', 'T1528', 'T1114.002', 'T1136.003']",
+        "compromised_entity": "{{RANDOM_USER}}@litware.com",
+        "remediation_steps": "Revoke all refresh tokens issued to the malicious app, disable device code authentication for non-admin users, investigate Azure AD audit logs for service principal creation, rotate affected credentials",
+        "mitre": {
+          "tactic": "Credential Access",
+          "technique_id": "T1525",
+          "technique_name": "Steal or Forge Authentication Tokens: Device Code Phishing"
+        },
+        "is_malicious": true,
+        "killchain_phase": "credential-access"
+      }
+    ]
+  }
+]

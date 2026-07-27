@@ -39,7 +39,11 @@ class LogWorker(threading.Thread):
                 # 2. Temporal Enrichment - Spacing out events realistically
                 if self.temporal_engine:
                     delay = self.temporal_engine.calculate_delay(event.timestamp)
-                    time.sleep(delay)
+                    # Sleep in short increments so we can be interrupted by stop_event
+                    slept = 0.0
+                    while slept < delay and not self.stop_event.is_set():
+                        time.sleep(min(0.1, delay - slept))
+                        slept += 0.1
                 
                 # 3. Markov Branching - Generate follow-up noisy events
                 MAX_MARKOV_DEPTH = 3

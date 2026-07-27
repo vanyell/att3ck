@@ -1,0 +1,136 @@
+[
+  {
+    "name": "AI Recon - Executive Voice & Video Cloning via Social Media Mining",
+    "delay": 0.2,
+    "events": [
+      {
+        "source": "proxy",
+        "event_type": "proxy",
+        "url": "https://www.linkedin.com/in/ceo-litware",
+        "http_method": "GET",
+        "http_status": 200,
+        "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36",
+        "content_type": "text/html",
+        "AccountName": "{{RANDOM_USER}}",
+        "SourceIP": "{{RANDOM_IP}}",
+        "data": {
+          "TargetProfile": "CEO - Litware Inc",
+          "DataExtracted": "public_audio_samples, profile_picture, org_chart"
+        },
+        "mitre": {
+          "tactic": "Reconnaissance",
+          "technique_id": "T1593.001",
+          "technique_name": "Search Open Websites/Domains: Social Media"
+        },
+        "is_malicious": false,
+        "killchain_phase": "reconnaissance"
+      }
+    ]
+  },
+  {
+    "name": "Deepfake Vishing - Phone Call from AI-Cloned CFO Voice",
+    "delay": 2.0,
+    "events": [
+      {
+        "source": "auth",
+        "event_type": "authentication",
+        "UserPrincipalName": "cfo@litware.com",
+        "ClientAppUsed": "Mobile",
+        "ResultType": "0",
+        "ResultDescription": "Success",
+        "IPAddress": "{{RANDOM_IP}}",
+        "risk_level": "Low",
+        "location": "US",
+        "city": "New York",
+        "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 18_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148",
+        "conditional_access_status": "success",
+        "mfa_method": "Phone",
+        "DeviceName": "CFO-iPhone",
+        "mitre": {
+          "tactic": "Initial Access",
+          "technique_id": "T1566.004",
+          "technique_name": "Spearphishing: Deepfake Social Engineering"
+        },
+        "is_malicious": true,
+        "killchain_phase": "initial-access"
+      },
+      {
+        "source": "office_activity",
+        "event_type": "office_activity",
+        "workload": "Exchange",
+        "operation": "MailCompose",
+        "item_type": "Email",
+        "user_key": "cfo@litware.com",
+        "ClientIP": "{{CNC_IP}}",
+        "DeviceName": "CFO-iPhone",
+        "data": {
+          "Subject": "Urgent: Wire Transfer Approval for Q2 Acquisition",
+          "Recipients": 1,
+          "Recipient": "accounts.payable@litware.com",
+          "Attachments": 1,
+          "AttachmentName": "Wire_Authorization_Q2.pdf"
+        },
+        "mitre": {
+          "tactic": "Initial Access",
+          "technique_id": "T1566.004",
+          "technique_name": "Spearphishing: Deepfake Social Engineering"
+        },
+        "is_malicious": true,
+        "killchain_phase": "initial-access"
+      }
+    ]
+  },
+  {
+    "name": "BEC Execution - Fraudulent Wire Transfer (Deepfake-Prompted)",
+    "delay": 0.5,
+    "events": [
+      {
+        "source": "office_activity",
+        "event_type": "office_activity",
+        "workload": "Exchange",
+        "operation": "MailCompose",
+        "item_type": "Email",
+        "user_key": "accounts.payable@litware.com",
+        "ClientIP": "{{RANDOM_IP}}",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "data": {
+          "Subject": "RE: Urgent: Wire Transfer Approval for Q2 Acquisition",
+          "Recipients": 1,
+          "Recipient": "fraud-bank@nefarious-bank.com",
+          "ConversationId": "deepfake-bec-chain-{{RANDOM_INT}}",
+          "Attachments": 0,
+          "PIIAlert": "ACH Routing Number included in body",
+          "SensitivityLabel": "Confidential"
+        },
+        "mitre": {
+          "tactic": "Impact",
+          "technique_id": "T1565.001",
+          "technique_name": "Data Manipulation: Stored Data Manipulation"
+        },
+        "is_malicious": true,
+        "killchain_phase": "impact"
+      },
+      {
+        "source": "security_alert",
+        "event_type": "security_alert",
+        "alert_name": "Suspicious Wire Transfer - Deepfake BEC Pattern Detected",
+        "alert_type": "BEC-Fraud",
+        "severity": "Critical",
+        "description": "Accounts payable initiated wire transfer following email from CFO (cfo@litware.com). Email was sent from external domain with CFO's display name spoofed. Deepfake voice call confirmed by AP staff. Pattern matches known AI-enabled BEC TTPs.",
+        "confidence_level": "High",
+        "confidence_score": 0.94,
+        "tactics": "['Initial Access', 'Impact']",
+        "techniques": "['T1566.004', 'T1565.001']",
+        "compromised_entity": "accounts.payable@litware.com",
+        "remediation_steps": "Reverse wire transfer, reset CFO accounts, enforce out-of-band verification for transfers >$10K, deploy deepfake detection tools",
+        "mitre": {
+          "tactic": "Impact",
+          "technique_id": "T1565.001",
+          "technique_name": "Data Manipulation: Stored Data Manipulation"
+        },
+        "is_malicious": true,
+        "killchain_phase": "impact"
+      }
+    ]
+  }
+]

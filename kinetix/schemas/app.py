@@ -1,24 +1,49 @@
-from typing import Optional, List, Dict, Any
+from typing import Optional, Literal
 from pydantic import Field
-from kinetix.schemas.base import BaseLogEvent
+from kinetix.schemas.base import BaseLogEvent, syslog_priority, format_syslog, format_evt_xml, evt_level
 
 class webServerEvent(BaseLogEvent):
-    source: str = "web_server"
-    event_type: str = "http_request"
+    source: Literal["Web"] = Field("Web", alias="SourceSystem")
+    event_type: Literal["W3CIISLog"] = Field("W3CIISLog", alias="Type")
     
-    url: str
-    http_method: str
-    status_code: int
-    user_agent: str
-    referrer: Optional[str] = None
-    response_time_ms: int
+    url: str = Field(..., alias="RequestURL")
+    http_method: str = Field(..., alias="Method")
+    status_code: int = Field(..., alias="Status")
+    user_agent: str = Field(..., alias="UserAgent")
+    referrer: Optional[str] = Field(None, alias="Referrer")
+    response_time_ms: int = Field(..., alias="TimeTaken")
+
+    def to_syslog(self) -> str:
+        sev = "err" if self.status_code >= 500 else "warning" if self.status_code >= 400 else "info"
+        return format_syslog(syslog_priority("daemon", sev), self.timestamp, self.hostname or "WEB",
+                              "httpd", 0, f"{self.source_ip} - \"{self.http_method} {self.url}\" {self.status_code} {self.response_time_ms}ms")
+
+    def to_evt(self) -> str:
+        return format_evt_xml(1, "Microsoft-Windows-W3CIISLog", "W3CIISLog",
+                              self.hostname or "WEB", self.timestamp,
+                              evt_level("err" if self.status_code >= 500 else "warning" if self.status_code >= 400 else "info"),
+                              [("cs-uri-stem", self.url), ("cs-method", self.http_method),
+                               ("sc-status", str(self.status_code)), ("cs-user-agent", self.user_agent),
+                               ("time-taken", str(self.response_time_ms))])
 
 class DatabaseEvent(BaseLogEvent):
-    source: str = "database"
-    event_type: str = "db_query"
+    source: Literal["Azure"] = Field("Azure", alias="SourceSystem")
+    event_type: Literal["AzureDiagnostics"] = Field("AzureDiagnostics", alias="Type")
     
-    db_name: str
-    query_text: str
-    operation: str  # SELECT, INSERT, UPDATE, DELETE, DROP
-    rows_affected: Optional[int] = None
-    status: str = "success"
+    db_name: str = Field(..., alias="LogicalServerName")
+    query_text: str = Field(..., alias="QueryText")
+    operation: str = Field(..., alias="OperationName")  # SELECT, INSERT, UPDATE, DELETE, DROP
+    rows_affected: Optional[int] = Field(None, alias="NumAffectedRows")
+    status: str = Field("success", alias="ResultType")
+
+    def to_syslog(self) -> str:
+        sev = "err" if self.status != "success" else "info"
+        return format_syslog(syslog_priority("daemon", sev), self.timestamp, self.hostname or "DB",
+                              "postgres", 0, f"{self.operation} on {self.db_name}: {self.query_text[:120]} [{self.status}]")
+
+    def to_evt(self) -> str:
+        return format_evt_xml(33205, "MSSQLSERVER", "Application",
+                              self.hostname or "DB", self.timestamp,
+                              evt_level("err" if self.status != "success" else "info"),
+                              [("Database", self.db_name), ("Query", self.query_text),
+                               ("Operation", self.operation), ("Status", self.status)])

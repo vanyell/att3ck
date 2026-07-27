@@ -1,0 +1,221 @@
+[
+  {
+    "name": "Stage 1 - AiTM Phishing Proxy Setup & Session Cookie Harvest",
+    "delay": 0.3,
+    "events": [
+      {
+        "source": "mdo_email",
+        "event_type": "email_event",
+        "sender": "notifications@docuverify.com",
+        "recipient": "{{RANDOM_EMAIL}}",
+        "subject": "DocuSign: Document Ready for Your Signature — Project Proposal Q3",
+        "attachment_verdict": "NoAttachment",
+        "detection_method": "None",
+        "delivery_location": "Inbox",
+        "direction": "Inbound",
+        "spf_pass": true,
+        "dkim_pass": true,
+        "dmarc_pass": true,
+        "sender_ip": "{{RANDOM_IP}}",
+        "AccountName": "{{RANDOM_USER}}",
+        "mitre": {
+          "tactic": "Initial Access",
+          "technique_id": "T1566.002",
+          "technique_name": "Spearphishing Link"
+        },
+        "is_malicious": true,
+        "killchain_phase": "initial-access"
+      },
+      {
+        "source": "proxy",
+        "event_type": "proxy",
+        "url": "https://secure-docusign-verify.com/sign/NDA2026",
+        "http_method": "GET",
+        "http_status": 200,
+        "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36",
+        "content_type": "text/html",
+        "AccountName": "{{RANDOM_USER}}",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "SourceIP": "{{RANDOM_IP}}",
+        "data": {
+          "RedirectChain": "https://secure-docusign-verify.com -> https://login.microsoftonline.com/common/oauth2/authorize (AiTM proxy)",
+          "PhishingKitType": "EvilProxy-as-a-Service"
+        },
+        "is_malicious": true,
+        "mitre": {
+          "tactic": "Initial Access",
+          "technique_id": "T1566.002",
+          "technique_name": "Spearphishing Link"
+        },
+        "killchain_phase": "initial-access"
+      }
+    ]
+  },
+  {
+    "name": "Stage 2 - SSO Session Cookie Theft via AiTM Proxy",
+    "delay": 1.0,
+    "events": [
+      {
+        "source": "auth",
+        "event_type": "authentication",
+        "UserPrincipalName": "{{RANDOM_EMAIL}}",
+        "ClientAppUsed": "Browser",
+        "ResultType": "0",
+        "ResultDescription": "Success (via adversary-in-the-middle proxy)",
+        "IPAddress": "{{RANDOM_IP}}",
+        "risk_level": "Low",
+        "location": "{{RANDOM_LOCATION}}",
+        "city": "{{RANDOM_CITY}}",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "app_display_name": "Office 365",
+        "mfa_method": "Push",
+        "conditional_access_status": "success",
+        "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36",
+        "mitre": {
+          "tactic": "Credential Access",
+          "technique_id": "T1557",
+          "technique_name": "Adversary-in-the-Middle: AiTM Phishing"
+        },
+        "is_malicious": true,
+        "killchain_phase": "credential-access"
+      },
+      {
+        "source": "dns",
+        "event_type": "dns_query",
+        "Name": "evil-cnc.net",
+        "QueryType": "A",
+        "ResultCode": "0",
+        "IPAddresses": "{{CNC_IP}}",
+        "mitre": {
+          "tactic": "Credential Access",
+          "technique_id": "T1557",
+          "technique_name": "Adversary-in-the-Middle: AiTM Phishing"
+        },
+        "is_malicious": true,
+        "killchain_phase": "credential-access"
+      }
+    ]
+  },
+  {
+    "name": "Stage 3 - Session Replay from Attacker Infrastructure",
+    "delay": 0.5,
+    "events": [
+      {
+        "source": "auth",
+        "event_type": "authentication",
+        "UserPrincipalName": "{{RANDOM_EMAIL}}",
+        "ClientAppUsed": "Browser",
+        "ResultType": "0",
+        "ResultDescription": "Success (session cookie replay from attacker IP)",
+        "IPAddress": "{{CNC_IP}}",
+        "risk_level": "High",
+        "location": "RU",
+        "city": "Moscow",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "app_display_name": "Office 365",
+        "conditional_access_status": "success",
+        "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36",
+        "mitre": {
+          "tactic": "Credential Access",
+          "technique_id": "T1539",
+          "technique_name": "Steal Web Session Cookie"
+        },
+        "is_malicious": true,
+        "killchain_phase": "credential-access"
+      }
+    ]
+  },
+  {
+    "name": "Stage 4 - Privilege Escalation & Lateral Access via Stolen Session",
+    "delay": 2.0,
+    "events": [
+      {
+        "source": "cloud_activity",
+        "event_type": "cloud_activity",
+        "OperationName": "Add member to role",
+        "ResourceId": "/subscriptions/prod/providers/Microsoft.Authorization",
+        "Caller": "{{RANDOM_EMAIL}}",
+        "IPAddress": "{{CNC_IP}}",
+        "data": {
+          "RoleAssigned": "Global Administrator",
+          "TargetUser": "attacker_backup@evil-cnc.net"
+        },
+        "mitre": {
+          "tactic": "Persistence",
+          "technique_id": "T1098.002",
+          "technique_name": "Account Manipulation: Additional Cloud Roles"
+        },
+        "is_malicious": true,
+        "killchain_phase": "persistence"
+      },
+      {
+        "source": "identity_logon",
+        "event_type": "identity_logon",
+        "logon_type": "RemoteInteractive",
+        "protocol": "OAuth",
+        "logon_result": "Success",
+        "is_admin_logon": true,
+        "account_domain": "litware.com",
+        "AccountName": "{{RANDOM_USER}}",
+        "IPAddress": "{{CNC_IP}}",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "is_malicious": true,
+        "mitre": {
+          "tactic": "Persistence",
+          "technique_id": "T1098.002",
+          "technique_name": "Account Manipulation: Additional Cloud Roles"
+        },
+        "killchain_phase": "persistence"
+      }
+    ]
+  },
+  {
+    "name": "Stage 5 - Data Exfiltration & Incident Summary",
+    "delay": 3.0,
+    "events": [
+      {
+        "source": "cloud_app",
+        "event_type": "cloud_app",
+        "app_name": "SharePoint Online",
+        "activity_type": "DataAccess",
+        "action_type": "FileDownload",
+        "risk_level": "High",
+        "is_admin_operation": false,
+        "is_third_party_app": false,
+        "AccountName": "{{RANDOM_EMAIL}}",
+        "IPAddress": "{{CNC_IP}}",
+        "data": {
+          "DownloadedSites": 4,
+          "DownloadedFiles": 1230,
+          "TotalSizeMB": 890,
+          "TargetSites": "Executive, Finance, M&A, R&D"
+        },
+        "is_malicious": true,
+        "mitre": {
+          "tactic": "Exfiltration",
+          "technique_id": "T1567.002",
+          "technique_name": "Exfiltration Over Web Service: Cloud Storage"
+        },
+        "killchain_phase": "exfiltration"
+      },
+      {
+        "source": "security_incident",
+        "event_type": "security_incident",
+        "title": "SSO Session Token Theft & Cloud Tenant Takeover via AiTM Phishing",
+        "severity": "Critical",
+        "description": "Complete attack chain: (1) AiTM phishing email bypassing MFA via EvilProxy, (2) SSO session cookie stolen at proxy, (3) Session replayed from attacker infrastructure (RU), (4) Global Administrator role assigned to attacker-controlled account, (5) Bulk SharePoint data exfiltration (890MB). No passwords were compromised — session token theft defeated MFA entirely.",
+        "status": "New",
+        "owner": "SOC-Tier3",
+        "tactics": "['Initial Access', 'Credential Access', 'Persistence', 'Exfiltration']",
+        "techniques": "['T1566.002', 'T1557', 'T1539', 'T1098.002', 'T1567.002']",
+        "mitre": {
+          "tactic": "Credential Access",
+          "technique_id": "T1539",
+          "technique_name": "Steal Web Session Cookie"
+        },
+        "is_malicious": true,
+        "killchain_phase": "credential-access"
+      }
+    ]
+  }
+]

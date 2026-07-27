@@ -66,6 +66,23 @@ class KinetixEngine:
         except queue.Full:
             logger.warning("Event queue full, dropping event!")
 
-    def wait_for_completion(self):
-        """Block until all events in the queue have been processed."""
-        self.event_queue.join()
+    def wait_for_completion(self, timeout: float = 0):
+        """Block until all events in the queue have been processed.
+        
+        If timeout > 0, raises queue.Empty if queue is not empty after timeout seconds.
+        """
+        if timeout > 0:
+            deadline = time.monotonic() + timeout
+            while not self.event_queue.empty():
+                if time.monotonic() > deadline:
+                    remaining = self.event_queue.qsize()
+                    logger.warning(f"Drain timeout after {timeout}s — {remaining} events remaining in queue.")
+                    break
+                try:
+                    self.event_queue.get(timeout=min(0.5, timeout))
+                    self.event_queue.task_done()
+                except queue.Empty:
+                    if self.event_queue.empty():
+                        break
+        else:
+            self.event_queue.join()

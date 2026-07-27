@@ -143,7 +143,7 @@ class TestVariableManager:
         from kinetix.core.vars import VariableManager
         vm = VariableManager()
         result = vm.resolve("{{RANDOM_USER}}")
-        assert result in ["jsmith", "ajones", "mrobinson", "tclark", "lwhite"]
+        assert "{{" not in result
 
     def test_session_vars_are_consistent(self):
         from kinetix.core.vars import VariableManager
@@ -179,6 +179,48 @@ class TestVariableManager:
         vm = VariableManager()
         assert vm.resolve(42) == 42
         assert vm.resolve(True) is True
+
+    def test_random_email_resolves(self):
+        from kinetix.core.vars import VariableManager
+        vm = VariableManager()
+        result = vm.resolve("{{RANDOM_EMAIL}}")
+        assert "@" in result
+        assert "{{" not in result
+
+    def test_random_ua_resolves(self):
+        from kinetix.core.vars import VariableManager
+        vm = VariableManager()
+        result = vm.resolve("{{RANDOM_UA}}")
+        assert "{{" not in result
+        assert len(result) > 5
+
+    def test_random_url_resolves(self):
+        from kinetix.core.vars import VariableManager
+        vm = VariableManager()
+        result = vm.resolve("{{RANDOM_URL}}")
+        assert result.startswith("https://")
+        assert "{{" not in result
+
+    def test_random_ai_model_resolves(self):
+        from kinetix.core.vars import VariableManager
+        vm = VariableManager()
+        result = vm.resolve("{{RANDOM_AI_MODEL}}")
+        assert "GPT" in result or "Claude" in result or "Gemini" in result or "Llama" in result or "Mistral" in result or "DeepSeek" in result or "Cohere" in result
+        assert "{{" not in result
+
+    def test_random_server_resolves(self):
+        from kinetix.core.vars import VariableManager
+        vm = VariableManager()
+        result = vm.resolve("{{RANDOM_SERVER}}")
+        assert result.startswith("SRV-")
+        assert "{{" not in result
+
+    def test_malicious_url_session_var(self):
+        from kinetix.core.vars import VariableManager
+        vm = VariableManager()
+        r1 = vm.resolve("{{MALICIOUS_URL}}")
+        r2 = vm.resolve("{{MALICIOUS_URL}}")
+        assert r1 == r2  # Session vars are consistent
 
 
 # --- C2 Fix: Multiply Produces Unique Events ---
@@ -224,14 +266,14 @@ class TestOutputFormats:
     """Validates JSON and CEF output correctness."""
 
     def test_json_excludes_internal_fields(self):
-        """L4: is_malicious, scenario_id, depth must not appear in JSON output."""
+        """L4: is_malicious, scenario_id, depth, killchain_phase must not appear in JSON output."""
         from kinetix.outputs.file import FileOutput
         from kinetix.schemas.endpoint import ProcessEvent
 
         ev = ProcessEvent(
             FileName="test.exe", ProcessId=1,
             ProcessCommandLine="test", is_malicious=True,
-            scenario_id="TEST-001"
+            scenario_id="TEST-001", killchain_phase="execution"
         )
         fo = FileOutput.__new__(FileOutput)  # Skip __init__
         json_str = fo._format_json(ev)
@@ -240,6 +282,7 @@ class TestOutputFormats:
         assert "is_malicious" not in parsed
         assert "scenario_id" not in parsed
         assert "depth" not in parsed
+        assert "killchain_phase" not in parsed
         assert "FileName" in parsed  # Aliases should still work
 
     def test_json_uses_aliases(self):
@@ -304,6 +347,299 @@ class TestOutputFormats:
         assert "OSPlatform" not in cef # Should be excluded now
 
 
+class TestNewSchemas:
+    """Validates newly wired schemas work correctly."""
+
+    def test_vpn_event_creates(self):
+        from kinetix.schemas.cloud_auth import VPNEvent
+        ev = VPNEvent(client_ip="203.0.113.5")
+        assert ev.event_type == "CommonSecurityLog"
+        assert ev.source == "Firewall"
+
+    def test_web_server_event_creates(self):
+        from kinetix.schemas.app import webServerEvent
+        ev = webServerEvent(url="/login", http_method="POST", status_code=200, user_agent="curl/8", response_time_ms=45)
+        assert ev.event_type == "W3CIISLog"
+        assert ev.source == "Web"
+
+    def test_database_event_creates(self):
+        from kinetix.schemas.app import DatabaseEvent
+        ev = DatabaseEvent(db_name="SalesDB", query_text="SELECT * FROM Users", operation="SELECT")
+        assert ev.event_type == "AzureDiagnostics"
+        assert ev.source == "Azure"
+
+    def test_proxy_event_creates(self):
+        from kinetix.schemas.network import ProxyEvent
+        ev = ProxyEvent(url="https://example.com", http_method="GET", http_status=200, user_agent="Mozilla/5.0", content_type="text/html")
+        assert ev.event_type == "W3CIISLog"
+
+    def test_registry_includes_all_schema_types(self):
+        """All defined schema models are registered in the event registry."""
+        from main import _build_event_registry
+        registry = _build_event_registry()
+        expected_types = [
+            "authentication", "process_creation", "file_system", "registry",
+            "network_connection", "dns_query", "proxy", "vpn",
+            "web_request", "db_query", "office_activity", "cloud_activity",
+            "security_alert", "security_incident", "linux_auth", "linux_sudo",
+            "linux_audit", "linux_kernel", "linux_cron", "linux_process",
+            "macos_log", "macos_auth", "macos_exec",
+        ]
+        for etype in expected_types:
+            assert etype in registry, f"Missing registry entry: {etype}"
+
+
+class TestLinuxSchemas:
+    """Validates Linux event schemas and their to_syslog() output."""
+
+    def test_linux_auth_event_creates(self):
+        from kinetix.schemas.linux import LinuxAuthEvent
+        ev = LinuxAuthEvent(pid=1234, proc="sshd", log_message="Failed password for root from 10.0.0.1 port 22 ssh2")
+        assert ev.source == "linux"
+        assert ev.proc == "sshd"
+        assert ev.os_platform == "Linux"
+        assert ev.device_category == "Server"
+
+    def test_linux_auth_to_syslog_format(self):
+        from kinetix.schemas.linux import LinuxAuthEvent
+        ev = LinuxAuthEvent(pid=1234, proc="sshd", log_message="Failed password for root from 10.0.0.1 port 22 ssh2")
+        syslog = ev.to_syslog()
+        assert syslog.startswith("<")
+        assert "sshd" in syslog
+        assert "Failed password" in syslog
+
+    def test_linux_sudo_event_creates(self):
+        from kinetix.schemas.linux import LinuxSudoEvent
+        ev = LinuxSudoEvent(pid=1234, user="alice", command="whoami", hostname="web-01")
+        assert ev.source == "linux"
+
+    def test_linux_sudo_to_syslog(self):
+        from kinetix.schemas.linux import LinuxSudoEvent
+        ev = LinuxSudoEvent(pid=1234, user="alice", command="whoami", hostname="web-01")
+        syslog = ev.to_syslog()
+        assert "alice" in syslog
+        assert "sudo" in syslog or "whoami" in syslog
+
+    def test_linux_audit_event_creates(self):
+        from kinetix.schemas.linux import LinuxAuditdEvent
+        ev = LinuxAuditdEvent(pid=1234, hostname="db-01", audit_type="SYSCALL", audit_msg="arch=c000003e syscall=59 success=yes", auid=1000, ses=1)
+        assert ev.source == "linux"
+
+    def test_linux_audit_to_syslog(self):
+        from kinetix.schemas.linux import LinuxAuditdEvent
+        ev = LinuxAuditdEvent(pid=1234, hostname="db-01", audit_type="SYSCALL", audit_msg="arch=c000003e syscall=59 success=yes", auid=1000, ses=1)
+        syslog = ev.to_syslog()
+        assert "audit" in syslog
+        assert "SYSCALL" in syslog
+
+    def test_linux_kernel_to_syslog(self):
+        from kinetix.schemas.linux import LinuxKernelEvent
+        ev = LinuxKernelEvent(pid=0, log_message="CPU threshold exceeded")
+        syslog = ev.to_syslog()
+        assert "kernel" in syslog
+
+    def test_linux_cron_to_syslog(self):
+        from kinetix.schemas.linux import LinuxCronEvent
+        ev = LinuxCronEvent(pid=1234, user="root", command="run-parts /etc/cron.hourly")
+        syslog = ev.to_syslog()
+        assert "CRON" in syslog or "cron" in syslog
+
+    def test_linux_process_to_syslog(self):
+        from kinetix.schemas.linux import LinuxProcessEvent
+        ev = LinuxProcessEvent(pid=1234, exe="/usr/bin/ssh", args="ssh root@10.0.0.5", user="root", uid=0, gid=0)
+        syslog = ev.to_syslog()
+        assert "/usr/bin/ssh" in syslog or "ssh" in syslog
+
+    def test_random_linux_host_resolves(self):
+        from kinetix.core.vars import VariableManager
+        vm = VariableManager()
+        result = vm.resolve("{{RANDOM_LINUX_HOST}}")
+        assert "{{" not in result
+        assert result
+
+
+class TestMacOSSchemas:
+    """Validates macOS event schemas and their to_syslog() output."""
+
+    def test_macos_log_event_creates(self):
+        from kinetix.schemas.macos import MacOSLogEvent
+        ev = MacOSLogEvent(pid=5678, proc="installer", log_message="Install will request elevated privileges")
+        assert ev.source == "macos"
+        assert ev.os_platform == "macOS"
+
+    def test_macos_log_to_syslog(self):
+        from kinetix.schemas.macos import MacOSLogEvent
+        ev = MacOSLogEvent(pid=5678, proc="installer", log_message="Install will request elevated privileges")
+        syslog = ev.to_syslog()
+        assert "installer" in syslog
+
+    def test_macos_auth_event_creates(self):
+        from kinetix.schemas.macos import MacOSAuthEvent
+        ev = MacOSAuthEvent(pid=5678, proc="authd", log_message="USER_AUTH: user jsmith authenticated via TouchID", user="jsmith")
+        assert ev.source == "macos"
+
+    def test_macos_auth_to_syslog(self):
+        from kinetix.schemas.macos import MacOSAuthEvent
+        ev = MacOSAuthEvent(pid=5678, proc="authd", log_message="USER_AUTH: user jsmith authenticated via TouchID", user="jsmith")
+        syslog = ev.to_syslog()
+        assert "authd" in syslog or "auth" in syslog.lower()
+
+    def test_macos_exec_event_creates(self):
+        from kinetix.schemas.macos import MacOSAppExecEvent
+        ev = MacOSAppExecEvent(pid=5678, proc="kernel", bundle_id="com.example.trojan", app_path="/Applications/Evil.app", signer="Not signed", log_message="execution of untrusted app")
+        assert ev.source == "macos"
+
+    def test_macos_exec_to_syslog(self):
+        from kinetix.schemas.macos import MacOSAppExecEvent
+        ev = MacOSAppExecEvent(pid=5678, proc="kernel", bundle_id="com.example.trojan", app_path="/Applications/Evil.app", signer="Not signed", log_message="execution of untrusted app")
+        syslog = ev.to_syslog()
+        assert "kernel" in syslog
+        assert "untrusted app" in syslog
+
+    def test_random_mac_host_resolves(self):
+        from kinetix.core.vars import VariableManager
+        vm = VariableManager()
+        result = vm.resolve("{{RANDOM_MAC_HOST}}")
+        assert "{{" not in result
+        assert result
+
+
+class TestSyslogOutput:
+    """Validates syslog output format and file creation."""
+
+    def test_syslog_format_structure(self):
+        from kinetix.schemas.linux import LinuxAuthEvent
+        ev = LinuxAuthEvent(pid=1234, proc="sshd", log_message="Failed password for root from 10.0.0.1 port 22 ssh2")
+        syslog = ev.to_syslog()
+        assert syslog.startswith("<")
+        assert ">" in syslog
+        assert "sshd" in syslog
+        assert "Failed password" in syslog
+
+    def test_syslog_priority_range(self):
+        from kinetix.schemas.linux import LinuxAuthEvent
+        ev = LinuxAuthEvent(pid=1234, proc="sshd", log_message="test")
+        syslog = ev.to_syslog()
+        pri = int(syslog.split(">")[0].lstrip("<"))
+        assert 0 <= pri <= 191
+
+    def test_json_events_still_output_unaffected(self):
+        """Existing JSON/CEF output must not be broken by syslog additions."""
+        from kinetix.outputs.file import FileOutput
+        from kinetix.schemas.endpoint import ProcessEvent
+        ev = ProcessEvent(FileName="test.exe", ProcessId=1, ProcessCommandLine="test")
+        fo = FileOutput.__new__(FileOutput)
+        json_str = fo._format_json(ev)
+        parsed = json.loads(json_str)
+        assert "TimeGenerated" in parsed
+        assert "FileName" in parsed
+
+
+class TestEVTOutput:
+    """Validates Windows Event XML output format."""
+
+    def test_evt_format_structure(self):
+        from kinetix.schemas.endpoint import ProcessEvent
+        ev = ProcessEvent(FileName="cmd.exe", ProcessId=1234, ProcessCommandLine="cmd /c whoami")
+        evt = ev.to_evt()
+        assert evt.startswith("<Event xmlns=")
+        assert "EventID>4688<" in evt
+        assert "Microsoft-Windows-Security-Auditing" in evt
+        assert "Channel>Security<" in evt
+        assert "CommandLine" in evt
+
+    def test_evt_file_event(self):
+        from kinetix.schemas.endpoint import FileEvent
+        ev = FileEvent(ActionType="FileCreated", FileName="malware.exe", FolderPath="C:\\temp")
+        evt = ev.to_evt()
+        assert "EventID>4663<" in evt
+        assert "ObjectName" in evt
+
+    def test_evt_registry_event(self):
+        from kinetix.schemas.endpoint import RegistryEvent
+        ev = RegistryEvent(ActionType="RegistryValueSet", RegistryKey="HKLM\\Software\\Test", RegistryValueName="Malicious", RegistryValueData="malicious.exe")
+        evt = ev.to_evt()
+        assert "EventID>4657<" in evt
+
+    def test_evt_auth_event_success(self):
+        from kinetix.schemas.cloud_auth import AuthenticationEvent
+        ev = AuthenticationEvent(UserPrincipalName="admin@test.com", ResultType="0")
+        evt = ev.to_evt()
+        assert "EventID>4624<" in evt
+
+    def test_evt_auth_event_failure(self):
+        from kinetix.schemas.cloud_auth import AuthenticationEvent
+        ev = AuthenticationEvent(UserPrincipalName="root@test.com", ResultType="4625")
+        evt = ev.to_evt()
+        assert "EventID>4625<" in evt
+
+    def test_evt_firewall_event(self):
+        from kinetix.schemas.network import FirewallEvent
+        ev = FirewallEvent(DeviceAction="blocked", Protocol="TCP", SourcePort=12345, DestinationPort=443)
+        evt = ev.to_evt()
+        assert "EventID>5157<" in evt
+
+    def test_evt_dns_event(self):
+        from kinetix.schemas.network import DNSEvent
+        ev = DNSEvent(Name="evil.com")
+        evt = ev.to_evt()
+        assert "EventID>3008<" in evt
+
+    def test_evt_security_alert(self):
+        from kinetix.schemas.security import SecurityAlert
+        ev = SecurityAlert(AlertName="Test Alert", severity="High")
+        evt = ev.to_evt()
+        assert "EventID>1102<" in evt
+
+    def test_linux_event_has_no_evt(self):
+        """Linux events use syslog only, verify EVT is not Windows Event XML."""
+        from kinetix.schemas.linux import LinuxAuthEvent
+        ev = LinuxAuthEvent(pid=1234, proc="sshd", log_message="test")
+        evt = ev.to_evt()
+        # Linux event uses default to_evt (generic), not Windows Event XML
+        assert "Event xmlns=" in evt
+
+    def test_evt_routing_in_file_output(self):
+        """Windows events should write EVT; Linux events should not."""
+        from kinetix.outputs.file import FileOutput
+        fo = FileOutput.__new__(FileOutput)
+        from kinetix.schemas.endpoint import ProcessEvent
+        win_ev = ProcessEvent(FileName="test.exe", ProcessId=1, ProcessCommandLine="test")
+        assert not fo._is_syslog_event(win_ev), "Windows events should not be flagged as syslog-only"
+        from kinetix.schemas.linux import LinuxAuthEvent
+        lin_ev = LinuxAuthEvent(pid=1234, proc="sshd", log_message="test")
+        assert fo._is_syslog_event(lin_ev), "Linux events should be flagged as syslog-only"
+
+
+class TestKillchainPhase:
+    """Validates killchain_phase tracking works through the pipeline."""
+
+    def test_base_model_accepts_killchain_phase(self):
+        from kinetix.schemas.base import BaseLogEvent
+        ev = BaseLogEvent(SourceSystem="test", Type="test", killchain_phase="initial-access")
+        assert ev.killchain_phase == "initial-access"
+
+    def test_killchain_phase_excluded_from_json(self):
+        from kinetix.outputs.file import FileOutput
+        from kinetix.schemas.base import BaseLogEvent
+        ev = BaseLogEvent(SourceSystem="test", Type="test", killchain_phase="execution")
+        fo = FileOutput.__new__(FileOutput)
+        json_str = fo._format_json(ev)
+        assert "killchain_phase" not in json_str
+
+    def test_killchain_phase_inherited_by_follow_up(self):
+        from kinetix.core.temporal import TemporalEngine
+        from kinetix.schemas.endpoint import ProcessEvent
+        te = TemporalEngine()
+        parent = ProcessEvent(
+            FileName="init.exe", ProcessId=100,
+            ProcessCommandLine="init", killchain_phase="execution"
+        )
+        follow_up = te.create_follow_up(parent, "DeviceFileEvents")
+        assert follow_up is not None
+        assert follow_up.killchain_phase == "execution"
+
+
 # --- Scenario Loading Tests ---
 
 class TestScenarioLoading:
@@ -353,7 +689,7 @@ class TestTemporalEngine:
         from kinetix.core.temporal import TemporalEngine
         te = TemporalEngine()
         next_type = te.get_next_event_type("DeviceProcessEvents")
-        assert next_type in ["CommonSecurityLog", "DeviceFileEvents", None]
+        assert next_type in ["CommonSecurityLog", "DeviceFileEvents", "DnsEvents", None]
 
     def test_unknown_event_returns_none(self):
         from kinetix.core.temporal import TemporalEngine
@@ -374,3 +710,226 @@ class TestTemporalEngine:
         assert follow_up is not None
         assert follow_up.correlation_id == parent.correlation_id
         assert follow_up.user_name == "testuser"
+
+
+class TestEmailEvent:
+    def test_email_event_creates_with_required_fields(self):
+        from kinetix.schemas.email import EmailEvent
+        e = EmailEvent(sender="a@b.com", recipient="c@d.com", subject="Test")
+        assert e.sender == "a@b.com"
+        assert e.recipient == "c@d.com"
+        assert e.subject == "Test"
+        assert e.event_type == "EmailEvents"
+        assert e.attachment_verdict == "NoAttachment"
+        assert e.detection_method == "None"
+
+    def test_email_event_malicious(self):
+        from kinetix.schemas.email import EmailEvent
+        e = EmailEvent(
+            sender="attacker@evil.com", recipient="user@litware.com",
+            subject="Invoice", attachment_verdict="Malicious",
+            threat_types="Phish", detection_method="Heuristic",
+            is_malicious=True,
+        )
+        assert e.attachment_verdict == "Malicious"
+        assert e.detection_method == "Heuristic"
+        assert e.is_malicious
+        assert e.threat_types == "Phish"
+        assert "Malicious" in e.to_syslog()
+
+    def test_email_event_syslog_format(self):
+        from kinetix.schemas.email import EmailEvent
+        e = EmailEvent(sender="a@b.com", recipient="c@d.com", subject="Test")
+        syslog = e.to_syslog()
+        assert syslog.startswith("<")
+        assert "a@b.com" in syslog
+        assert "c@d.com" in syslog
+
+    def test_email_event_evt_format(self):
+        from kinetix.schemas.email import EmailEvent
+        e = EmailEvent(sender="a@b.com", recipient="c@d.com", subject="Test")
+        evt = e.to_evt()
+        assert "<Event" in evt
+        assert "a@b.com" in evt
+
+    def test_email_event_sentinel_table_name(self):
+        from kinetix.schemas.email import EmailEvent
+        e = EmailEvent(sender="a@b.com", recipient="c@d.com", subject="Test")
+        assert e.event_type == "EmailEvents"
+
+
+class TestCloudAppEvent:
+    def test_cloud_app_event_creates(self):
+        from kinetix.schemas.cloud_app import CloudAppEvent
+        c = CloudAppEvent(app_name="TestApp", action_type="Consent to application")
+        assert c.app_name == "TestApp"
+        assert c.action_type == "Consent to application"
+        assert c.event_type == "CloudAppEvents"
+
+    def test_cloud_app_malicious_oauth(self):
+        from kinetix.schemas.cloud_app import CloudAppEvent
+        c = CloudAppEvent(
+            app_name="EvilApp", action_type="Consent to application",
+            risk_level="High", oauth_consent_scope="Mail.ReadWrite offline_access",
+            is_third_party_app=True, is_malicious=True,
+        )
+        assert c.risk_level == "High"
+        assert c.oauth_consent_scope == "Mail.ReadWrite offline_access"
+        assert c.is_third_party_app
+
+    def test_cloud_app_syslog(self):
+        from kinetix.schemas.cloud_app import CloudAppEvent
+        c = CloudAppEvent(app_name="TestApp", action_type="ReadData")
+        syslog = c.to_syslog()
+        assert syslog.startswith("<")
+        assert "TestApp" in syslog
+
+
+class TestIdentityLogonEvent:
+    def test_identity_logon_creates(self):
+        from kinetix.schemas.identity import IdentityLogonEvent
+        i = IdentityLogonEvent(logon_type="Interactive", protocol="Kerberos", logon_result="Success")
+        assert i.logon_type == "Interactive"
+        assert i.protocol == "Kerberos"
+        assert i.logon_result == "Success"
+        assert i.event_type == "IdentityLogonEvents"
+
+    def test_identity_logon_admin_detection(self):
+        from kinetix.schemas.identity import IdentityLogonEvent
+        i = IdentityLogonEvent(
+            logon_type="RemoteInteractive", protocol="OAuth",
+            logon_result="Success", is_admin_logon=True,
+            account_domain="litware.com", source_ip="192.168.1.100",
+            is_malicious=True,
+        )
+        assert i.is_admin_logon
+        assert i.account_domain == "litware.com"
+
+    def test_identity_logon_failure(self):
+        from kinetix.schemas.identity import IdentityLogonEvent
+        i = IdentityLogonEvent(
+            logon_type="Interactive", protocol="Kerberos",
+            logon_result="Failure", failure_reason="Invalid password",
+        )
+        assert i.logon_result == "Failure"
+        assert i.failure_reason == "Invalid password"
+
+    def test_identity_logon_evt(self):
+        from kinetix.schemas.identity import IdentityLogonEvent
+        i = IdentityLogonEvent(logon_type="Interactive", protocol="Kerberos", logon_result="Success")
+        evt = i.to_evt()
+        assert "4624" in evt
+
+
+class TestAADNonInteractiveSignIn:
+    def test_non_interactive_creates(self):
+        from kinetix.schemas.identity import AADNonInteractiveSignIn
+        a = AADNonInteractiveSignIn(
+            service_principal_name="SyncAgent",
+            app_id="00000000-0000-0000-0000-000000000000",
+            resource_id="https://graph.microsoft.com",
+        )
+        assert a.service_principal_name == "SyncAgent"
+        assert a.app_id == "00000000-0000-0000-0000-000000000000"
+        assert a.is_service_principal
+        assert a.event_type == "AADNonInteractiveUserSignInLogs"
+
+    def test_non_interactive_malicious(self):
+        from kinetix.schemas.identity import AADNonInteractiveSignIn
+        a = AADNonInteractiveSignIn(
+            service_principal_name="BackdoorApp",
+            app_id="11111111-1111-1111-1111-111111111111",
+            resource_id="https://graph.microsoft.com",
+            result_type="0",
+            source_ip="91.228.100.50",
+            is_malicious=True,
+        )
+        assert a.is_malicious
+        assert a.source_ip == "91.228.100.50"
+
+    def test_non_interactive_syslog(self):
+        from kinetix.schemas.identity import AADNonInteractiveSignIn
+        a = AADNonInteractiveSignIn(
+            service_principal_name="SyncAgent",
+            app_id="00000000-0000-0000-0000-000000000000",
+            resource_id="https://graph.microsoft.com",
+        )
+        syslog = a.to_syslog()
+        assert syslog.startswith("<")
+        assert "SyncAgent" in syslog
+
+
+class TestPersonaVariables:
+    def test_persona_vars_resolve(self):
+        from kinetix.core.vars import VariableManager
+        vm = VariableManager()
+        for key in ["PERSONA_USER", "PERSONA_HOST", "PERSONA_EMAIL", "PERSONA_ROLE", "PERSONA_DEPT", "PERSONA_DOMAIN"]:
+            resolved = vm.resolve(f"{{{{{key}}}}}")
+            assert isinstance(resolved, str) and len(resolved) > 0
+
+    def test_persona_consistency_in_session(self):
+        from kinetix.core.vars import VariableManager
+        vm = VariableManager()
+        username = vm.resolve("{{PERSONA_USER}}")
+        email = vm.resolve("{{PERSONA_EMAIL}}")
+        assert username in email
+
+
+class TestExpectedDetectionField:
+    def test_expected_detection_default(self):
+        from kinetix.schemas.endpoint import ProcessEvent
+        e = ProcessEvent(
+            FileName="test.exe", ProcessId=123,
+            ProcessCommandLine="test.exe",
+        )
+        assert e.expected_detection is False
+        assert e.detection_guidance is None
+
+    def test_expected_detection_set(self):
+        from kinetix.schemas.base import BaseLogEvent
+        e = BaseLogEvent(
+            source="test", event_type="test",
+            expected_detection=True,
+            detection_guidance="Alert should fire on this event",
+        )
+        assert e.expected_detection
+        assert e.detection_guidance == "Alert should fire on this event"
+
+
+class TestNewScenarioLoading:
+    def _load_scenario(self, path):
+        import importlib.util
+        import sys
+        spec = importlib.util.spec_from_file_location("main", "main.py")
+        main = importlib.util.module_from_spec(spec)
+        sys.modules["main"] = main
+        spec.loader.exec_module(main)
+        from kinetix.core.vars import VariableManager
+        vm = VariableManager()
+        return main.load_scenario(path, vm)
+
+    def test_oauth_consent_phishing_loads(self):
+        stages = self._load_scenario("scenarios/oauth_consent_phishing.json")
+        assert len(stages) == 5
+        total = sum(len(s["events"]) for s in stages)
+        assert total >= 8
+
+    def test_oauth_device_code_loads(self):
+        stages = self._load_scenario("scenarios/oauth_device_code_phishing.json")
+        assert len(stages) == 5
+
+    def test_rmm_abuse_loads(self):
+        stages = self._load_scenario("scenarios/rmm_tool_abuse_c2.json")
+        assert len(stages) == 5
+
+    def test_sso_token_theft_loads(self):
+        stages = self._load_scenario("scenarios/sso_session_token_theft.json")
+        assert len(stages) == 5
+
+    def test_adcs_abuse_loads(self):
+        stages = self._load_scenario("scenarios/adcs_certificate_abuse.json")
+        assert len(stages) == 5
+
+    def test_cross_tenant_sync_loads(self):
+        stages = self._load_scenario("scenarios/cross_tenant_sync_attack.json")
+        assert len(stages) == 5

@@ -1,0 +1,225 @@
+[
+  {
+    "name": "Stage 1 - Initial Compromise of Source Tenant",
+    "delay": 0.2,
+    "events": [
+      {
+        "source": "auth",
+        "event_type": "authentication",
+        "UserPrincipalName": "ext_admin@litware.com",
+        "ClientAppUsed": "Browser",
+        "ResultType": "0",
+        "ResultDescription": "Success",
+        "IPAddress": "{{CNC_IP}}",
+        "risk_level": "Medium",
+        "location": "RU",
+        "city": "Moscow",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "app_display_name": "Azure Portal",
+        "conditional_access_status": "notApplied",
+        "mitre": {
+          "tactic": "Initial Access",
+          "technique_id": "T1078.004",
+          "technique_name": "Valid Accounts: Cloud Accounts"
+        },
+        "is_malicious": true,
+        "killchain_phase": "initial-access"
+      },
+      {
+        "source": "cloud_activity",
+        "event_type": "cloud_activity",
+        "OperationName": "List keys secrets",
+        "ResourceId": "/subscriptions/prod/resourceGroups/identity/providers/Microsoft.KeyVault/vaults/LitwareIdentityVault",
+        "Caller": "ext_admin@litware.com",
+        "IPAddress": "{{CNC_IP}}",
+        "mitre": {
+          "tactic": "Credential Access",
+          "technique_id": "T1528",
+          "technique_name": "Steal or Forge Application Access Token"
+        },
+        "is_malicious": true,
+        "killchain_phase": "credential-access"
+      }
+    ]
+  },
+  {
+    "name": "Stage 2 - Cross-Tenant Trust Relationship Abuse",
+    "delay": 2.0,
+    "events": [
+      {
+        "source": "cloud_activity",
+        "event_type": "cloud_activity",
+        "OperationName": "Create cross-tenant access policy",
+        "ResourceId": "/providers/Microsoft.AzureAD/tenantSettings",
+        "Caller": "ext_admin@litware.com",
+        "IPAddress": "{{CNC_IP}}",
+        "data": {
+          "PolicyType": "CrossTenantAccessPolicy",
+          "TargetTenant": "victim-tenant.onmicrosoft.com",
+          "Configuration": "Inbound trust: true, Application access: all, User synchronization: enabled"
+        },
+        "mitre": {
+          "tactic": "Persistence",
+          "technique_id": "T1098.005",
+          "technique_name": "Account Manipulation: Cross-Tenant Synchronization"
+        },
+        "is_malicious": true,
+        "killchain_phase": "persistence"
+      },
+      {
+        "source": "non_interactive",
+        "event_type": "non_interactive_signin",
+        "service_principal_name": "Microsoft Azure AD Sync",
+        "app_id": "{{RANDOM_GUID}}",
+        "resource_id": "https://graph.microsoft.com",
+        "ResultType": "0",
+        "user_agent": "AzureAD-Sync/1.0",
+        "IPAddress": "{{RANDOM_IP}}",
+        "is_service_principal": true,
+        "client_app": "Other",
+        "conditional_access_status": "notApplied",
+        "mitre": {
+          "tactic": "Persistence",
+          "technique_id": "T1098.005",
+          "technique_name": "Account Manipulation: Cross-Tenant Synchronization"
+        },
+        "is_malicious": true,
+        "killchain_phase": "persistence"
+      }
+    ]
+  },
+  {
+    "name": "Stage 3 - User Synchronization Across Tenants",
+    "delay": 3.0,
+    "events": [
+      {
+        "source": "cloud_activity",
+        "event_type": "cloud_activity",
+        "OperationName": "Add user",
+        "ResourceId": "/providers/Microsoft.AzureAD/users/attacker_sync_user",
+        "Caller": "Microsoft Azure AD Sync",
+        "IPAddress": "{{RANDOM_IP}}",
+        "data": {
+          "SyncedFromTenant": "litware.com",
+          "TargetTenant": "victim-tenant.onmicrosoft.com",
+          "UserType": "ExternalAAD",
+          "AssignedRoles": "User"
+        },
+        "mitre": {
+          "tactic": "Persistence",
+          "technique_id": "T1136.003",
+          "technique_name": "Create Account: Cloud Account"
+        },
+        "is_malicious": true,
+        "killchain_phase": "persistence"
+      },
+      {
+        "source": "auth",
+        "event_type": "authentication",
+        "UserPrincipalName": "attacker_sync_user@victim-tenant.onmicrosoft.com",
+        "ClientAppUsed": "Browser",
+        "ResultType": "0",
+        "ResultDescription": "Success (B2B cross-tenant auth)",
+        "IPAddress": "{{CNC_IP}}",
+        "risk_level": "Low",
+        "location": "RU",
+        "city": "Moscow",
+        "DeviceName": "{{RANDOM_HOST}}",
+        "app_display_name": "SharePoint Online (Victim Tenant)",
+        "conditional_access_status": "notApplied",
+        "mitre": {
+          "tactic": "Lateral Movement",
+          "technique_id": "T1526",
+          "technique_name": "Cloud Service: Cross-Tenant Lateral Movement"
+        },
+        "is_malicious": true,
+        "killchain_phase": "lateral-movement"
+      }
+    ]
+  },
+  {
+    "name": "Stage 4 - Privilege Escalation in Target Tenant",
+    "delay": 2.0,
+    "events": [
+      {
+        "source": "cloud_activity",
+        "event_type": "cloud_activity",
+        "OperationName": "Add member to role",
+        "ResourceId": "/providers/Microsoft.AzureAD/roleManagement",
+        "Caller": "attacker_sync_user@victim-tenant.onmicrosoft.com",
+        "IPAddress": "{{CNC_IP}}",
+        "data": {
+          "Role": "Global Administrator",
+          "Method": "Eligible assignment (PIM bypass)"
+        },
+        "mitre": {
+          "tactic": "Privilege Escalation",
+          "technique_id": "T1098.002",
+          "technique_name": "Account Manipulation: Cloud Role Assignment"
+        },
+        "is_malicious": true,
+        "killchain_phase": "privilege-escalation"
+      },
+      {
+        "source": "cloud_app",
+        "event_type": "cloud_app",
+        "app_name": "Microsoft Graph API",
+        "activity_type": "AdminOperation",
+        "action_type": "List service principals",
+        "risk_level": "High",
+        "is_admin_operation": true,
+        "is_third_party_app": false,
+        "AccountName": "attacker_sync_user@victim-tenant.onmicrosoft.com",
+        "IPAddress": "{{CNC_IP}}",
+        "is_malicious": true,
+        "mitre": {
+          "tactic": "Discovery",
+          "technique_id": "T1087.004",
+          "technique_name": "Account Discovery: Cloud Account"
+        },
+        "killchain_phase": "discovery"
+      }
+    ]
+  },
+  {
+    "name": "Stage 5 - Data Exfiltration from Target & Detection",
+    "delay": 3.0,
+    "events": [
+      {
+        "source": "office_activity",
+        "event_type": "office_activity",
+        "workload": "SharePoint",
+        "operation": "FileDownloaded",
+        "item_type": "File",
+        "user_key": "attacker_sync_user@victim-tenant.onmicrosoft.com",
+        "ClientIP": "{{CNC_IP}}",
+        "multiply": 50,
+        "is_malicious": true,
+        "mitre": {
+          "tactic": "Exfiltration",
+          "technique_id": "T1567.002",
+          "technique_name": "Exfiltration Over Web Service: Cloud Storage"
+        },
+        "killchain_phase": "exfiltration"
+      },
+      {
+        "source": "security_incident",
+        "event_type": "security_incident",
+        "title": "Cross-Tenant Identity Sync Attack - Cloud Lateral Movement",
+        "severity": "Critical",
+        "description": "Cross-tenant attack chain detected: (1) Source tenant (litware.com) compromised via credential access, (2) Cross-tenant sync policy created targeting victim-tenant.onmicrosoft.com, (3) Malicious user synced across tenants bypassing guest invite controls, (4) Privilege escalated to Global Administrator in victim tenant via PIM bypass, (5) Bulk data exfiltration from SharePoint Online (50+ files). CTS feature abused for lateral movement across organizational boundary.",
+        "status": "New",
+        "owner": "SOC-Tier3",
+        "tactics": "['Initial Access', 'Persistence', 'Lateral Movement', 'Privilege Escalation', 'Exfiltration']",
+        "techniques": "['T1078.004', 'T1098.005', 'T1526', 'T1098.002', 'T1567.002']",
+        "mitre": {
+          "tactic": "Lateral Movement",
+          "technique_id": "T1526",
+          "technique_name": "Cloud Service: Cross-Tenant Lateral Movement"
+        },
+        "is_malicious": true,
+        "killchain_phase": "lateral-movement"
+      }
+    ]
+  }
+]

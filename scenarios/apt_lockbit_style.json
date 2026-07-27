@@ -15,7 +15,8 @@
           "tactic": "Defense Evasion",
           "technique_id": "T1070.001",
           "technique_name": "Indicator Removal: Clear Windows Event Logs"
-        }
+        },
+        "killchain_phase": "defense-evasion"
       }
     ]
   },
@@ -35,7 +36,8 @@
           "tactic": "Exfiltration",
           "technique_id": "T1567.002",
           "technique_name": "Exfiltration Over Web Service: Exfiltration to Cloud Storage"
-        }
+        },
+        "killchain_phase": "exfiltration"
       },
       {
         "source": "proxy",
@@ -64,7 +66,8 @@
           "tactic": "Impact",
           "technique_id": "T1490",
           "technique_name": "Inhibit System Recovery"
-        }
+        },
+        "killchain_phase": "impact"
       }
     ]
   }

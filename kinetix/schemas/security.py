@@ -1,6 +1,6 @@
-from typing import Optional, List, Dict, Any, Literal
+from typing import Optional, List, Literal
 from pydantic import Field
-from kinetix.schemas.base import BaseLogEvent
+from kinetix.schemas.base import BaseLogEvent, syslog_priority, format_syslog, format_evt_xml, evt_level
 from datetime import datetime, timezone
 import uuid
 
@@ -18,7 +18,7 @@ class SecurityAlert(BaseLogEvent):
     end_time: datetime = Field(default_factory=lambda: datetime.now(timezone.utc), alias="EndTime")
     
     compromised_entity: Optional[str] = Field(None, alias="CompromisedEntity")
-    entities: str = Field("[]", alias="Entities")  # JSON string of entities
+    entities: str = Field("[]", alias="Entities")
     
     confidence_level: str = Field("High", alias="ConfidenceLevel")
     confidence_score: float = Field(1.0, alias="ConfidenceScore")
@@ -27,6 +27,19 @@ class SecurityAlert(BaseLogEvent):
     
     tactics: Optional[str] = Field(None, alias="Tactics")
     techniques: Optional[str] = Field(None, alias="Techniques")
+
+    def to_syslog(self) -> str:
+        prio = syslog_priority("authpriv", "crit" if self.severity in ("High", "Critical") else "warning")
+        return format_syslog(prio, self.timestamp, self.compromised_entity or "-", "Kinetix", 0,
+                              f"ALERT: {self.alert_name} [{self.alert_type}] confidence={self.confidence_level}")
+
+    def to_evt(self) -> str:
+        return format_evt_xml(1102, "Microsoft-Windows-Security-Auditing", "Security",
+                              self.compromised_entity or "-", self.timestamp,
+                              evt_level("crit" if self.severity in ("High", "Critical") else "warning"),
+                              [("AlertName", self.alert_name), ("AlertType", self.alert_type),
+                               ("Severity", self.severity),
+                               ("Confidence", str(self.confidence_score))])
 
 class SecurityIncident(BaseLogEvent):
     source: Literal["SecurityInsights"] = Field("SecurityInsights", alias="SourceSystem")
@@ -41,3 +54,9 @@ class SecurityIncident(BaseLogEvent):
     last_modified_time: datetime = Field(default_factory=lambda: datetime.now(timezone.utc), alias="LastModifiedTime")
     
     related_analytic_rule_ids: List[str] = Field(default_factory=list, alias="RelatedAnalyticRuleIds")
+
+    def to_evt(self) -> str:
+        return format_evt_xml(1102, "Microsoft-Windows-Security-Auditing", "Security",
+                              self.hostname or "-", self.timestamp, evt_level(self.severity),
+                              [("IncidentNumber", self.incident_number), ("Title", self.title),
+                               ("Status", self.status)])

