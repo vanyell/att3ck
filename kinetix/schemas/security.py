@@ -3,6 +3,7 @@ from pydantic import Field
 from kinetix.schemas.base import BaseLogEvent, syslog_priority, format_syslog, format_evt_xml, evt_level
 from datetime import datetime, timezone
 import uuid
+import random
 
 class SecurityAlert(BaseLogEvent):
     source: Literal["SecurityInsights"] = Field("SecurityInsights", alias="SourceSystem")
@@ -45,7 +46,7 @@ class SecurityIncident(BaseLogEvent):
     source: Literal["SecurityInsights"] = Field("SecurityInsights", alias="SourceSystem")
     event_type: Literal["SecurityIncident"] = Field("SecurityIncident", alias="Type")
     
-    incident_number: str = Field(default_factory=lambda: str(uuid.uuid4().int)[:8], alias="IncidentNumber")
+    incident_number: str = Field(default_factory=lambda: f"INC{random.randint(100000, 999999)}", alias="IncidentNumber")
     title: str = Field(..., alias="Title")
     description: Optional[str] = Field(None, alias="Description")
     status: str = Field("New", alias="Status")

@@ -8,6 +8,7 @@ import signal
 import sys
 import threading
 import random
+import orjson
 from logging.handlers import RotatingFileHandler
 from rich.console import Console
 from rich.logging import RichHandler
@@ -47,7 +48,7 @@ def _build_event_registry() -> dict:
     from kinetix.schemas.network import FirewallEvent, DNSEvent, ProxyEvent
     from kinetix.schemas.cloud_auth import AuthenticationEvent, VPNEvent, CloudActivityEvent, O365ActivityEvent
     from kinetix.schemas.security import SecurityAlert, SecurityIncident
-    from kinetix.schemas.app import webServerEvent, DatabaseEvent
+    from kinetix.schemas.app import WebServerEvent, DatabaseEvent
     from kinetix.schemas.linux import LinuxAuthEvent, LinuxSudoEvent, LinuxAuditdEvent, LinuxKernelEvent, LinuxCronEvent, LinuxProcessEvent
     from kinetix.schemas.macos import MacOSLogEvent, MacOSAuthEvent, MacOSAppExecEvent
     from kinetix.schemas.email import EmailEvent
@@ -63,7 +64,7 @@ def _build_event_registry() -> dict:
         "dns_query": DNSEvent,
         "proxy": ProxyEvent,
         "vpn": VPNEvent,
-        "web_request": webServerEvent,
+        "web_request": WebServerEvent,
         "db_query": DatabaseEvent,
         "office_activity": O365ActivityEvent,
         "cloud_activity": CloudActivityEvent,
@@ -174,7 +175,7 @@ def _generate_baseline_noise(count: int, var_manager: VariableManager) -> list:
     from kinetix.schemas.network import FirewallEvent, DNSEvent, ProxyEvent
     from kinetix.schemas.cloud_auth import AuthenticationEvent, VPNEvent, CloudActivityEvent, O365ActivityEvent
     from kinetix.schemas.security import SecurityAlert, SecurityIncident
-    from kinetix.schemas.app import webServerEvent, DatabaseEvent
+    from kinetix.schemas.app import WebServerEvent, DatabaseEvent
 
     event_registry = _build_event_registry()
     events = []
@@ -188,8 +189,8 @@ def _generate_baseline_noise(count: int, var_manager: VariableManager) -> list:
         model_class = event_registry.get(etype, BaseLogEvent)
         try:
             events.append(model_class(**params))
-        except Exception:
-            pass
+        except Exception as e:
+            logging.getLogger(__name__).debug(f"Baseline noise event skipped: {e}")
     return events
 
 

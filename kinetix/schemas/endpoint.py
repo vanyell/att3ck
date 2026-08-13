@@ -40,8 +40,8 @@ class ProcessEvent(EndpointEvent):
     def to_evt(self) -> str:
         return format_evt_xml(4688, "Microsoft-Windows-Security-Auditing", "Security",
                               self.hostname or "WKS", self.timestamp, evt_level("info"),
-                              [("NewProcessName", self.command_line),
-                               ("CreatorProcessName", self.parent_command_line or ""),
+                              [("NewProcessName", self.file_name),
+                               ("CreatorProcessName", self.parent_process_name or ""),
                                ("ProcessId", str(self.process_id)),
                                ("CommandLine", self.command_line)])
 

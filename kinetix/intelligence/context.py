@@ -1,6 +1,6 @@
 import random
 import ipaddress
-from typing import List, Optional, Dict, Tuple
+from typing import List
 
 class UserPersona:
     def __init__(self, username: str, role: str, department: str, domain: str,
@@ -37,6 +37,7 @@ class ContextGenerator:
 
     INTERNAL_SUBNETS = ["10.0.0.0/24", "192.168.1.0/24", "172.16.5.0/24"]
     EXTERNAL_IPS = ["8.8.8.8", "203.0.113.5", "198.51.100.12", "45.33.22.11"]
+    _subnet_hosts_cache: dict = {}
 
     @classmethod
     def get_persona(cls, username: str = None) -> UserPersona:
@@ -61,8 +62,10 @@ class ContextGenerator:
 
     @classmethod
     def get_random_internal_ip(cls) -> str:
-        subnet = ipaddress.ip_network(random.choice(cls.INTERNAL_SUBNETS))
-        hosts = list(subnet.hosts())
+        subnet_str = random.choice(cls.INTERNAL_SUBNETS)
+        if subnet_str not in cls._subnet_hosts_cache:
+            cls._subnet_hosts_cache[subnet_str] = list(ipaddress.ip_network(subnet_str).hosts())
+        hosts = cls._subnet_hosts_cache[subnet_str]
         return str(random.choice(hosts[:100]))
 
     @classmethod

@@ -36,7 +36,7 @@ def run_verification():
     try:
         # Run with --stress for true performance benchmark
         result = subprocess.run(
-            [sys.executable, "main.py", "--scenario", scenario, "--stress"], 
+            [sys.executable, "main.py", "--scenario", scenario, "--stress", "--duration", "10"],
             check=True,
             capture_output=True,
             text=True

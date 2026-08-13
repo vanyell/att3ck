@@ -72,15 +72,14 @@ class FileOutput(OutputProvider):
         # If the event_type is already a recognized Sentinel table name, use it directly
         # For specialized models, event_type is forced via Literal (e.g. DeviceProcessEvents)
         sentinel_tables = [
-            "DeviceProcessEvents", "DeviceFileEvents", "DeviceNetworkEvents", 
+            "DeviceProcessEvents", "DeviceFileEvents", "DeviceNetworkEvents",
             "DeviceRegistryEvents", "DeviceLogonEvents", "DeviceEvents",
             "SecurityAlert", "SecurityIncident", "SigninLogs", "AuditLogs",
             "AADNonInteractiveUserSignInLogs", "IdentityLogonEvents",
-            "OfficeActivity", "AzureActivity", "CloudAppEvents", 
+            "OfficeActivity", "AzureActivity", "CloudAppEvents",
             "CommonSecurityLog", "DnsEvents", "W3CIISLog", "AzureDiagnostics",
             "DatabaseAuditExport_CL", "LinuxAuditLog", "Syslog",
-            "EmailEvents", "CloudAppEvents", "IdentityLogonEvents",
-            "AADNonInteractiveUserSignInLogs",
+            "EmailEvents",
         ]
         
         if event.event_type in sentinel_tables:

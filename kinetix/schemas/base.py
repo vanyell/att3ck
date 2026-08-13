@@ -113,6 +113,3 @@ class BaseLogEvent(BaseModel):
 
     class Config:
         populate_by_name = True
-        json_encoders = {
-            datetime: lambda dt: dt.isoformat()
-        }

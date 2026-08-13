@@ -94,7 +94,7 @@ class VariableManager:
             "DEEPFAKE_PHONE": f"+1-{random.randint(200,999)}-{random.randint(100,999)}-{random.randint(1000,9999)}"
         }
 
-    def resolve(self, value: any) -> any:
+    def resolve(self, value):
         if isinstance(value, str):
             # 1. Persona Templates (consistent identity coupling)
             for k, v in self.persona_vars.items():
