@@ -1,4 +1,4 @@
-from typing import Optional, Literal
+from typing import Optional, Literal, Dict, Any
 from pydantic import Field, AliasChoices
 from kinetix.schemas.base import BaseLogEvent, syslog_priority, format_syslog, format_evt_xml, evt_level
 
@@ -18,6 +18,12 @@ class CloudAppEvent(BaseLogEvent):
     object_id: Optional[str] = Field(None, alias="ObjectId", validation_alias=AliasChoices("ObjectId", "object_id"))
     is_admin_operation: bool = Field(False, alias="IsAdminOperation")
     is_third_party_app: bool = Field(True, alias="IsThirdPartyApp")
+
+    # Real CloudAppEvents.AdditionalFields is "dynamic" type (a JSON object),
+    # unlike the "string" AdditionalFields on the DeviceProcessEvents/
+    # EmailEvents family -- verified against Microsoft Learn's advanced-
+    # hunting schema reference, so this is a Dict, not a JSON-string field.
+    additional_fields: Dict[str, Any] = Field(default_factory=dict, alias="AdditionalFields", validation_alias=AliasChoices("AdditionalFields", "additional_fields"))
 
     def to_syslog(self) -> str:
         prio = syslog_priority("daemon", "warning" if self.is_malicious else "info")

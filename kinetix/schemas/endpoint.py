@@ -9,6 +9,12 @@ class EndpointEvent(BaseLogEvent):
     report_id: int = Field(default_factory=lambda: random.randint(10000, 99999), alias="ReportId")
     action_type: str = Field(..., alias="ActionType", validation_alias=AliasChoices("ActionType", "action"))
 
+    # Real column on every Device* advanced-hunting table (DeviceProcessEvents,
+    # DeviceFileEvents, DeviceRegistryEvents, DeviceEvents): "string" type,
+    # "Additional information about the entity or event" (verified against
+    # Microsoft Learn's advanced-hunting schema reference for these tables).
+    additional_fields: Optional[str] = Field(None, alias="AdditionalFields", validation_alias=AliasChoices("AdditionalFields", "additional_fields"))
+
 class ProcessEvent(EndpointEvent):
     source: Literal["endpoint"] = Field("endpoint", alias="SourceSystem")
     event_type: Literal["DeviceProcessEvents"] = Field("DeviceProcessEvents", alias="Type")

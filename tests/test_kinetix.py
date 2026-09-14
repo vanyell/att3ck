@@ -424,6 +424,68 @@ class TestNewSchemas:
             assert etype in registry, f"Missing registry entry: {etype}"
 
 
+class TestAdditionalFieldsParity:
+    """Phase 1: AdditionalFields/field parity with real Sentinel/Defender XDR
+    table schemas, verified against Microsoft Learn's advanced-hunting and
+    Azure Monitor table references (not guessed)."""
+
+    def test_device_family_shares_additional_fields_as_string(self):
+        """DeviceProcessEvents/DeviceFileEvents/DeviceRegistryEvents/DeviceEvents
+        all carry a real "AdditionalFields" string column."""
+        from kinetix.schemas.endpoint import ProcessEvent, FileEvent, RegistryEvent, DeviceGenericEvent
+        p = ProcessEvent(FileName="a.exe", ProcessId=1, ProcessCommandLine="a.exe", AdditionalFields='{"k":"v"}')
+        f = FileEvent(FileName="a.txt", FolderPath="C:\\", AdditionalFields='{"k":"v"}')
+        r = RegistryEvent(RegistryKey="HKLM\\x", AdditionalFields='{"k":"v"}')
+        d = DeviceGenericEvent(ActionType="UsbDriveMounted", AdditionalFields='{"k":"v"}')
+        for ev in (p, f, r, d):
+            dumped = ev.model_dump(by_alias=True)
+            assert dumped["AdditionalFields"] == '{"k":"v"}'
+            assert isinstance(dumped["AdditionalFields"], str)
+
+    def test_email_event_has_missing_real_fields(self):
+        from kinetix.schemas.email import EmailEvent
+        ev = EmailEvent(sender="a@b.com", recipient="c@d.com", subject="Test",
+                         RecipientObjectId="obj-1", SenderObjectId="obj-2",
+                         SenderDisplayName="A B", ThreatNames="Trojan:Win/Foo",
+                         ConfidenceLevel="High", BulkComplaintLevel=3, EmailClusterId=42,
+                         AdditionalFields='{"x":1}')
+        dumped = ev.model_dump(by_alias=True)
+        assert dumped["RecipientObjectId"] == "obj-1"
+        assert dumped["SenderObjectId"] == "obj-2"
+        assert dumped["SenderDisplayName"] == "A B"
+        assert dumped["ThreatNames"] == "Trojan:Win/Foo"
+        assert dumped["ConfidenceLevel"] == "High"
+        assert dumped["BulkComplaintLevel"] == 3
+        assert dumped["EmailClusterId"] == 42
+        assert dumped["AdditionalFields"] == '{"x":1}'
+
+    def test_cloud_app_event_additional_fields_is_dict_not_string(self):
+        """Real CloudAppEvents.AdditionalFields is "dynamic" type (a JSON
+        object), unlike the "string" AdditionalFields on the Device*/Email*
+        family -- these must not be serialized the same way."""
+        from kinetix.schemas.cloud_app import CloudAppEvent
+        ev = CloudAppEvent(Application="Office 365", ActionType="FileAccessed",
+                            AdditionalFields={"RiskScore": 5})
+        dumped = ev.model_dump(by_alias=True)
+        assert dumped["AdditionalFields"] == {"RiskScore": 5}
+        assert isinstance(dumped["AdditionalFields"], dict)
+
+    def test_aad_non_interactive_signin_has_no_additional_fields_column(self):
+        """AADNonInteractiveUserSignInLogs is a fully-enumerated Log Analytics
+        table with no AdditionalFields column at all -- unlike the Defender
+        XDR advanced-hunting tables. Must not fabricate one."""
+        from kinetix.schemas.identity import AADNonInteractiveSignIn
+        ev = AADNonInteractiveSignIn(AppId="app-1", ResourceId="res-1")
+        dumped = ev.model_dump(by_alias=True)
+        assert "AdditionalFields" not in dumped
+        # Real fields that previously were missing from this schema.
+        assert dumped["AuthenticationRequirement"] == "singleFactorAuthentication"
+        assert dumped["RiskLevelDuringSignIn"] == "none"
+        assert dumped["RiskLevelAggregated"] == "none"
+        assert dumped["AuthenticationProtocol"] == "none"
+        assert dumped["TokenIssuerType"] == "Azure AD"
+
+
 class TestLinuxSchemas:
     """Validates Linux event schemas and their to_syslog() output."""
 

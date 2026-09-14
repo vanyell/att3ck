@@ -54,6 +54,22 @@ class AADNonInteractiveSignIn(BaseLogEvent):
     client_app: str = Field("Other", alias="ClientAppUsed", validation_alias=AliasChoices("ClientAppUsed", "client_app"))
     conditional_access_status: str = Field("notApplied", alias="ConditionalAccessStatus")
 
+    # Real AADNonInteractiveUserSignInLogs columns (verified against Azure
+    # Monitor's table reference) previously missing from this schema. Note:
+    # this table has no AdditionalFields column at all -- unlike the Defender
+    # XDR advanced-hunting tables, it's a fully-enumerated fixed schema, so
+    # one isn't added here.
+    location_details: Optional[str] = Field(None, alias="LocationDetails", validation_alias=AliasChoices("LocationDetails", "location_details"))
+    device_detail: Optional[str] = Field(None, alias="DeviceDetail", validation_alias=AliasChoices("DeviceDetail", "device_detail"))
+    authentication_requirement: str = Field("singleFactorAuthentication", alias="AuthenticationRequirement", validation_alias=AliasChoices("AuthenticationRequirement", "authentication_requirement"))
+    risk_level_during_signin: str = Field("none", alias="RiskLevelDuringSignIn", validation_alias=AliasChoices("RiskLevelDuringSignIn", "risk_level_during_signin"))
+    risk_level_aggregated: str = Field("none", alias="RiskLevelAggregated", validation_alias=AliasChoices("RiskLevelAggregated", "risk_level_aggregated"))
+    # Docs: "For authentications that use protocols other than the possible
+    # values listed, the protocol type is listed as none" -- "none" is a real
+    # documented value here, not a placeholder default.
+    authentication_protocol: str = Field("none", alias="AuthenticationProtocol", validation_alias=AliasChoices("AuthenticationProtocol", "authentication_protocol"))
+    token_issuer_type: str = Field("Azure AD", alias="TokenIssuerType", validation_alias=AliasChoices("TokenIssuerType", "token_issuer_type"))
+
     def to_syslog(self) -> str:
         result = "accepted" if self.result_type == "0" else "failed"
         return format_syslog(syslog_priority("authpriv", "info"), self.timestamp, self.hostname or "SERVER",
