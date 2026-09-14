@@ -346,6 +346,41 @@ class TestOutputFormats:
         assert "externalId=" in cef  # CorrelationId fallback
         assert "OSPlatform" not in cef # Should be excluded now
 
+    def test_cef_overflow_beyond_cs6_is_logged_not_silent(self, caplog):
+        """CEF's cs1-cs6 is a real spec limit (ArcSight CEF defines exactly 6
+        custom-string extensions), so a field-heavy event genuinely can't fit
+        everything -- but the drop must be logged, not silent."""
+        import logging
+        from kinetix.outputs.file import FileOutput
+        from kinetix.schemas.email import EmailEvent
+
+        ev = EmailEvent(sender="a@b.com", recipient="c@d.com", subject="Test",
+                         DetectionMethods="AntiSpam", NetworkMessageId="msg-1",
+                         SenderDisplayName="A B", ThreatNames="none",
+                         ConfidenceLevel="0", BulkComplaintLevel="0")
+        fo = FileOutput.__new__(FileOutput)
+        with caplog.at_level(logging.DEBUG, logger="kinetix.outputs.file"):
+            cef = fo._format_cef(ev)
+
+        assert "cs6Label=" in cef
+        assert "cs7Label=" not in cef  # cs7+ is not valid CEF, must never appear
+        assert any("dropped fields" in r.message for r in caplog.records)
+
+    def test_unmapped_source_uses_explicit_fallback_and_warns(self, caplog):
+        """A schema with no entry in sentinel_tables or the source->table
+        mapping must not silently guess a table filename via .capitalize()."""
+        import logging
+        from kinetix.outputs.file import FileOutput
+        from kinetix.schemas.base import BaseLogEvent
+
+        ev = BaseLogEvent(source="totally_unmapped_source", event_type="SomeNewThing")
+        fo = FileOutput.__new__(FileOutput)
+        with caplog.at_level(logging.WARNING, logger="kinetix.outputs.file"):
+            table = fo._map_to_table_name(ev)
+
+        assert table == "Unmapped_Totally_unmapped_source"
+        assert any("No table mapping" in r.message for r in caplog.records)
+
 
 class TestNewSchemas:
     """Validates newly wired schemas work correctly."""
@@ -710,6 +745,40 @@ class TestTemporalEngine:
         assert follow_up is not None
         assert follow_up.correlation_id == parent.correlation_id
         assert follow_up.user_name == "testuser"
+
+    def test_every_declared_transition_target_has_a_follow_up_factory(self):
+        """Regression guard: the transition table previously named next-types
+        (DnsEvents/SigninLogs/OfficeActivity/AzureActivity/CloudAppEvents) that
+        create_follow_up() had no branch for, so those transitions silently
+        resolved to None instead of producing an event."""
+        from kinetix.core.temporal import TemporalEngine
+        from kinetix.schemas.endpoint import ProcessEvent
+
+        te = TemporalEngine()
+        parent = ProcessEvent(
+            FileName="parent.exe", ProcessId=100,
+            ProcessCommandLine="parent.exe", user_name="testuser",
+            hostname="WS-01", source_ip="10.0.0.5"
+        )
+        all_targets = {t for probs in te.transitions.values() for t in probs}
+        missing = [t for t in sorted(all_targets) if te.create_follow_up(parent, t) is None]
+        assert not missing, f"No follow-up factory for declared transition target(s): {missing}"
+
+    def test_follow_up_factory_handles_parent_with_no_user_name(self):
+        """Regression guard: a DNS/network-originated parent event commonly has
+        no user_name, and AuthenticationEvent's required user_principal_name
+        field was previously populated with that None via AliasChoices
+        auto-matching on context["user_name"], failing Pydantic validation
+        (surfaced by running the real simulation end-to-end)."""
+        from kinetix.core.temporal import TemporalEngine
+        from kinetix.schemas.network import DNSEvent
+
+        te = TemporalEngine()
+        parent = DNSEvent(Name="example.com", hostname="WS-01")
+        assert parent.user_name is None
+        all_targets = {t for probs in te.transitions.values() for t in probs}
+        missing = [t for t in sorted(all_targets) if te.create_follow_up(parent, t) is None]
+        assert not missing, f"No follow-up factory for declared transition target(s): {missing}"
 
 
 class TestEmailEvent:

@@ -1,6 +1,7 @@
 import random
 import math
 import logging
+import uuid
 from datetime import datetime
 from typing import Optional, Dict
 from kinetix.schemas.base import BaseLogEvent
@@ -86,8 +87,9 @@ class TemporalEngine:
         This is a basic factory approach for Phase 2.
         """
         from kinetix.schemas.endpoint import ProcessEvent, FileEvent, RegistryEvent
-        from kinetix.schemas.network import FirewallEvent
-        from kinetix.schemas.cloud_auth import AuthenticationEvent
+        from kinetix.schemas.network import FirewallEvent, DNSEvent
+        from kinetix.schemas.cloud_auth import AuthenticationEvent, CloudActivityEvent, O365ActivityEvent
+        from kinetix.schemas.cloud_app import CloudAppEvent
         
         # Clone base context
         context = {
@@ -137,6 +139,48 @@ class TemporalEngine:
                     key_path="HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
                     value_name="Updater",
                     value_data="C:\\Users\\Public\\updater.exe"
+                )
+            elif next_type == "DnsEvents":
+                return DNSEvent(
+                    **context,
+                    query_name="update.microsoft.com",
+                    query_type="A",
+                )
+            elif next_type == "SigninLogs":
+                # AuthenticationEvent.user_principal_name accepts "user_name" via
+                # AliasChoices, and that alias is checked before "user_principal_name"
+                # itself -- so a None in context["user_name"] would win over an
+                # explicit user_principal_name= kwarg. Override it in the context
+                # copy instead of adding a separate kwarg.
+                signin_context = {**context, "user_name": context["user_name"] or "unknown@corp.local"}
+                return AuthenticationEvent(
+                    **signin_context,
+                    app_display_name="Office 365",
+                    client_app_used="Browser",
+                    result_type="0",
+                )
+            elif next_type == "OfficeActivity":
+                return O365ActivityEvent(
+                    **context,
+                    workload="Exchange",
+                    operation="MailItemsAccessed",
+                    item_type="Message",
+                    user_key=context["user_name"] or "unknown@corp.local",
+                    client_ip=context["source_ip"] or "127.0.0.1",
+                )
+            elif next_type == "AzureActivity":
+                return CloudActivityEvent(
+                    **context,
+                    operation_name="Microsoft.Resources/subscriptions/resourceGroups/read",
+                    resource_id=f"/subscriptions/{uuid.uuid4()}/resourceGroups/default",
+                    caller=context["user_name"] or "unknown@corp.local",
+                )
+            elif next_type == "CloudAppEvents":
+                return CloudAppEvent(
+                    **context,
+                    app_name="Microsoft Office 365",
+                    activity_type="FileAccessed",
+                    action_type="FileAccessed",
                 )
         except Exception as e:
             logger.error(f"Failed to create follow-up event of type {next_type}: {e}")

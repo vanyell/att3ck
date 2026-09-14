@@ -109,7 +109,22 @@ class FileOutput(OutputProvider):
             "identity": "IdentityLogonEvents",
             "non_interactive": "AADNonInteractiveUserSignInLogs",
         }
-        return mapping.get(source, source.capitalize())
+        if source in mapping:
+            return mapping[source]
+
+        # Neither event_type nor source matched a known table -- this means a
+        # schema was added without a corresponding entry here. Silently
+        # guessing a filename (the old `source.capitalize()` fallback) hid
+        # that gap and could scatter events into an arbitrary, likely-wrong
+        # table file. Log it loudly and use an unmistakable fallback name so
+        # the gap gets noticed and fixed instead of silently accepted.
+        logger.warning(
+            "No table mapping for event_type=%r source=%r -- add an entry to "
+            "sentinel_tables or the source->table mapping in _map_to_table_name(). "
+            "Writing to Unmapped_%s.json in the meantime.",
+            event.event_type, event.source, source.capitalize()
+        )
+        return f"Unmapped_{source.capitalize()}"
 
     def write(self, event: BaseLogEvent):
         # 1. Write to individual Sentinel-ready JSON tables
@@ -194,22 +209,39 @@ class FileOutput(OutputProvider):
             cs_index += 1
             consumed_fields.add("mitre")
 
-        # Generic Loop over remaining fields
+        # Generic Loop over remaining fields.
+        # CEF (ArcSight Common Event Format) defines exactly 6 custom-string
+        # extensions (cs1-cs6) -- this is a real spec limit, not an arbitrary
+        # cap, so it must not be widened (cs7+ would be non-standard and could
+        # break real CEF parsers/Sentinel-CEF or Wazuh CEF ingestion). Any
+        # field-heavy schema (e.g. email/identity) will genuinely lose fields
+        # in CEF output; the full data is still available via JSON output.
+        # What was silent before was the truncation itself -- log it instead
+        # so it's visible which fields were dropped for which event.
+        dropped = []
         for field_name, value in full_data.items():
             if field_name in consumed_fields or value is None:
                 continue
-            
+
             # Skip complex objects (except we already excluded mitre/d3fend/data if empty)
             if isinstance(value, (dict, list)):
                 continue
-                
+
             if cs_index > 6:
-                break
-                
+                dropped.append(field_name)
+                continue
+
             # Formatting value: ensure no pipes or newlines which break CEF
             clean_val = str(value).replace("|", "\\|").replace("\n", " ").replace("\r", " ")
             extensions.append(f"cs{cs_index}Label={field_name} cs{cs_index}={clean_val}")
             cs_index += 1
+
+        if dropped:
+            logger.debug(
+                "CEF cs1-cs6 limit reached for %s event %s; dropped fields not "
+                "representable in CEF: %s (full data still in JSON output)",
+                event.event_type, event.event_id, dropped
+            )
 
         # Flatten string
         ext_str = " ".join([e for e in extensions if "=" in e and e.split("=")[1]])

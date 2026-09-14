@@ -1,9 +1,8 @@
 from abc import ABC, abstractmethod
-from typing import List, Optional, Dict
+from typing import List, Dict
 import time
 import threading
 import logging
-from kinetix.schemas.base import BaseLogEvent
 
 logger = logging.getLogger(__name__)
 
@@ -58,17 +57,3 @@ class AttackChain(Scenario):
             
         self.is_running = False
         logger.info(f"Attack Chain {self.name} completed.")
-
-class StandAloneScenario(Scenario):
-    """
-    Simulates individual malicious events or small bursts.
-    """
-    def __init__(self, scenario_id: str, name: str, events: List[BaseLogEvent]):
-        super().__init__(scenario_id, name)
-        self.events = events
-
-    def run(self, engine):
-        logger.info(f"Running Stand-alone Scenario: {self.name}")
-        for event in self.events:
-            event.scenario_id = self.scenario_id
-            engine.emit(event)
