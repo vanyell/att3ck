@@ -1,0 +1,274 @@
+{
+  "fields": {
+    "#attributes.xmlns": {
+      "kind": "freeform",
+      "n": 1,
+      "values": [
+        {
+          "count": 1,
+          "value": "http://schemas.microsoft.com/win/2004/08/events/event",
+          "weight": 1.0
+        }
+      ]
+    },
+    "EventData.Image": {
+      "kind": "freeform",
+      "n": 1,
+      "values": [
+        {
+          "count": 1,
+          "value": "C:\\Windows\\System32\\svchost.exe",
+          "weight": 1.0
+        }
+      ]
+    },
+    "EventData.ProcessGuid": {
+      "kind": "identifier",
+      "n": 1,
+      "shapes": [
+        {
+          "count": 1,
+          "shape": "guid",
+          "weight": 1.0
+        }
+      ]
+    },
+    "EventData.ProcessId": {
+      "kind": "freeform",
+      "n": 1,
+      "values": [
+        {
+          "count": 1,
+          "value": "2428",
+          "weight": 1.0
+        }
+      ]
+    },
+    "EventData.QueryName": {
+      "kind": "freeform",
+      "n": 1,
+      "values": [
+        {
+          "count": 1,
+          "value": "wpad",
+          "weight": 1.0
+        }
+      ]
+    },
+    "EventData.QueryResults": {
+      "kind": "freeform",
+      "n": 1,
+      "values": [
+        {
+          "count": 1,
+          "value": "-",
+          "weight": 1.0
+        }
+      ]
+    },
+    "EventData.QueryStatus": {
+      "kind": "freeform",
+      "n": 1,
+      "values": [
+        {
+          "count": 1,
+          "value": "9003",
+          "weight": 1.0
+        }
+      ]
+    },
+    "EventData.RuleName": {
+      "kind": "freeform",
+      "n": 1,
+      "values": [
+        {
+          "count": 1,
+          "value": "-",
+          "weight": 1.0
+        }
+      ]
+    },
+    "EventData.UtcTime": {
+      "kind": "freeform",
+      "n": 1,
+      "values": [
+        {
+          "count": 1,
+          "value": "2020-10-20 11:50:59.461",
+          "weight": 1.0
+        }
+      ]
+    },
+    "System.Channel": {
+      "kind": "freeform",
+      "n": 1,
+      "values": [
+        {
+          "count": 1,
+          "value": "Microsoft-Windows-Sysmon/Operational",
+          "weight": 1.0
+        }
+      ]
+    },
+    "System.Computer": {
+      "kind": "identifier",
+      "n": 1,
+      "shapes": [
+        {
+          "count": 1,
+          "shape": "str:len_bucket=<=16",
+          "weight": 1.0
+        }
+      ]
+    },
+    "System.EventID": {
+      "kind": "freeform",
+      "n": 1,
+      "values": [
+        {
+          "count": 1,
+          "value": "22",
+          "weight": 1.0
+        }
+      ]
+    },
+    "System.EventRecordID": {
+      "kind": "freeform",
+      "n": 1,
+      "values": [
+        {
+          "count": 1,
+          "value": "1084",
+          "weight": 1.0
+        }
+      ]
+    },
+    "System.Execution.#attributes.ProcessID": {
+      "kind": "freeform",
+      "n": 1,
+      "values": [
+        {
+          "count": 1,
+          "value": "7212",
+          "weight": 1.0
+        }
+      ]
+    },
+    "System.Execution.#attributes.ThreadID": {
+      "kind": "freeform",
+      "n": 1,
+      "values": [
+        {
+          "count": 1,
+          "value": "1320",
+          "weight": 1.0
+        }
+      ]
+    },
+    "System.Keywords": {
+      "kind": "freeform",
+      "n": 1,
+      "values": [
+        {
+          "count": 1,
+          "value": "0x8000000000000000",
+          "weight": 1.0
+        }
+      ]
+    },
+    "System.Level": {
+      "kind": "freeform",
+      "n": 1,
+      "values": [
+        {
+          "count": 1,
+          "value": "4",
+          "weight": 1.0
+        }
+      ]
+    },
+    "System.Opcode": {
+      "kind": "freeform",
+      "n": 1,
+      "values": [
+        {
+          "count": 1,
+          "value": "0",
+          "weight": 1.0
+        }
+      ]
+    },
+    "System.Provider.#attributes.Guid": {
+      "kind": "identifier",
+      "n": 1,
+      "shapes": [
+        {
+          "count": 1,
+          "shape": "guid",
+          "weight": 1.0
+        }
+      ]
+    },
+    "System.Provider.#attributes.Name": {
+      "kind": "freeform",
+      "n": 1,
+      "values": [
+        {
+          "count": 1,
+          "value": "Microsoft-Windows-Sysmon",
+          "weight": 1.0
+        }
+      ]
+    },
+    "System.Security.#attributes.UserID": {
+      "kind": "identifier",
+      "n": 1,
+      "shapes": [
+        {
+          "count": 1,
+          "shape": "sid:parts=4",
+          "weight": 1.0
+        }
+      ]
+    },
+    "System.Task": {
+      "kind": "freeform",
+      "n": 1,
+      "values": [
+        {
+          "count": 1,
+          "value": "22",
+          "weight": 1.0
+        }
+      ]
+    },
+    "System.TimeCreated.#attributes.SystemTime": {
+      "kind": "freeform",
+      "n": 1,
+      "values": [
+        {
+          "count": 1,
+          "value": "2020-10-20T11:51:01.476722Z",
+          "weight": 1.0
+        }
+      ]
+    },
+    "System.Version": {
+      "kind": "freeform",
+      "n": 1,
+      "values": [
+        {
+          "count": 1,
+          "value": "5",
+          "weight": 1.0
+        }
+      ]
+    }
+  },
+  "mined_at": "2026-09-14T06:12:04.102169+00:00",
+  "record_count": 1,
+  "sources": {
+    "evtx-attack-samples/Privilege Escalation/Sysmon_UACME_64.evtx": 1
+  },
+  "table": "DnsEvents"
+}

@@ -1,12 +1,38 @@
 import random
 import uuid
+from pathlib import Path
+from typing import Optional
 from kinetix.intelligence.context import ContextGenerator
+from kinetix.intelligence.corpus import CorpusProfile, get_profile
+
+# For each RANDOM_* placeholder below, corpus-mined (table, field) pairs to try
+# before falling back to the static pool. Only fields the miner classifies as
+# "freeform" ever have real values to sample -- identifier-like placeholders
+# (RANDOM_HOST, RANDOM_USER, RANDOM_EMAIL, RANDOM_IP, ...) are deliberately
+# absent here and always use the static pools, since mined profiles never
+# carry real entity values for those (see kinetix/intelligence/corpus.py).
+CORPUS_FIELD_CANDIDATES = {
+    "RANDOM_UA": [
+        ("SigninLogs", "UserAgent"),
+        ("AADNonInteractiveUserSignInLogs", "UserAgent"),
+        ("CloudAppEvents", "UserAgent"),
+        ("OfficeActivity", "UserAgent"),
+    ],
+    "RANDOM_URL": [
+        ("CommonSecurityLog", "RequestURL"),
+        ("OfficeActivity", "OfficeObjectId"),
+        ("CloudAppEvents", "ObjectId"),
+        ("W3CIISLog", "csUriStem"),
+        ("DeviceNetworkEvents", "EventData.url"),  # from mined BITS-Client EVTX records
+    ],
+}
 
 class VariableManager:
     """
     Handles dynamic placeholder replacement in scenario files.
     """
-    def __init__(self):
+    def __init__(self, corpus_dir: Optional[Path] = None):
+        self._corpus: CorpusProfile = get_profile(corpus_dir)
         self._set_session_vars()
         self._set_persona_vars()
         self.ip_pool = [f"192.168.1.{i}" for i in range(10, 250)]
@@ -94,6 +120,15 @@ class VariableManager:
             "DEEPFAKE_PHONE": f"+1-{random.randint(200,999)}-{random.randint(100,999)}-{random.randint(1000,9999)}"
         }
 
+    def _corpus_or_pool(self, placeholder: str, pool: list) -> str:
+        """Sample from a mined corpus profile if it has this field, else the static pool."""
+        pairs = CORPUS_FIELD_CANDIDATES.get(placeholder)
+        if pairs:
+            value = self._corpus.sample_first(pairs)
+            if value is not None:
+                return value
+        return random.choice(pool)
+
     def resolve(self, value: any) -> any:
         if isinstance(value, str):
             # 1. Persona Templates (consistent identity coupling)
@@ -124,9 +159,9 @@ class VariableManager:
             if "{{RANDOM_ORG}}" in value:
                 value = value.replace("{{RANDOM_ORG}}", random.choice(self.org_names))
             if "{{RANDOM_UA}}" in value:
-                value = value.replace("{{RANDOM_UA}}", random.choice(self.user_agent_pool))
+                value = value.replace("{{RANDOM_UA}}", self._corpus_or_pool("RANDOM_UA", self.user_agent_pool))
             if "{{RANDOM_URL}}" in value:
-                value = value.replace("{{RANDOM_URL}}", random.choice(self.url_pool))
+                value = value.replace("{{RANDOM_URL}}", self._corpus_or_pool("RANDOM_URL", self.url_pool))
             if "{{RANDOM_LOCATION}}" in value:
                 value = value.replace("{{RANDOM_LOCATION}}", random.choice(self.location_pool))
             if "{{RANDOM_CITY}}" in value:

@@ -1,0 +1,629 @@
+{
+  "fields": {
+    "#attributes.xmlns": {
+      "kind": "freeform",
+      "n": 40,
+      "values": [
+        {
+          "count": 40,
+          "value": "http://schemas.microsoft.com/win/2004/08/events/event",
+          "weight": 1.0
+        }
+      ]
+    },
+    "EventData.Binary": {
+      "kind": "freeform",
+      "n": 23,
+      "values": [
+        {
+          "count": 10,
+          "value": "184800000E0000000C0000004D0053004500440047004500570049004E00310030000000070000006D00610073007400650072000000",
+          "weight": 0.4348
+        },
+        {
+          "count": 8,
+          "value": "613C00000A0000000C0000004D0053004500440047004500570049004E00310030000000070000006D00610073007400650072000000",
+          "weight": 0.3478
+        },
+        {
+          "count": 4,
+          "value": "164800000A0000000C0000004D0053004500440047004500570049004E00310030000000070000006D00610073007400650072000000",
+          "weight": 0.1739
+        },
+        {
+          "count": 1,
+          "value": "B13B00000A0000001B0000004C004100500054004F0050002D004A00550034004D0033004900300045005C00530051004C0045005800500052004500530053000000070000006D00610073007400650072000000",
+          "weight": 0.0435
+        }
+      ]
+    },
+    "EventData.Data.#text": {
+      "kind": "freeform",
+      "n": 13,
+      "values": [
+        {
+          "count": 1,
+          "value": "audit_schema_version:1\nevent_time:2019-11-04 09:27:26.1750932\nsequence_number:1\naction_id:EX  \nsucceeded:true\nis_column_permission:false\nsession_id:58\nserver_principal_id:266\ndatabase_principal_id:1\ntarget_server_principal_id:0\ntarget_database_principal_id:0\nobject_id:-1008137134\nuser_defined_event_id:0\ntransaction_id:14356\nclass_type:X \nduration_milliseconds:0\nresponse_rows:0\naffected_rows:0\nclient_ip:10.0.2.17\npermission_bitmask:00000000000000000000000000000020\nsequence_group_id:AE51063D-49C6-4990-A00D-6A3833CFECA0\nsession_server_principal_name:root\nserver_principal_name:root\nserver_principal_sid:8867c003d7407345abb6e4ed81382626\ndatabase_principal_name:dbo\ntarget_server_principal_name:\ntarget_server_principal_sid:\ntarget_database_principal_name:\nserver_instance_name:MSEDGEWIN10\ndatabase_name:master\nschema_name:sys\nobject_name:xp_cmdshell\nstatement:EXEC master..xp_cmdshell 'Whoami'\nadditional_information:\nuser_defined_information:\napplication_name:.Net SqlClient Data Provider\n",
+          "weight": 0.0769
+        },
+        {
+          "count": 1,
+          "value": "audit_schema_version:1\nevent_time:2019-11-04 09:27:25.9866222\nsequence_number:1\naction_id:LGIS\nsucceeded:true\nis_column_permission:false\nsession_id:54\nserver_principal_id:266\ndatabase_principal_id:0\ntarget_server_principal_id:0\ntarget_database_principal_id:0\nobject_id:0\nuser_defined_event_id:0\ntransaction_id:0\nclass_type:LX\nduration_milliseconds:0\nresponse_rows:0\naffected_rows:0\nclient_ip:10.0.2.17\npermission_bitmask:00000000000000000000000000000000\nsequence_group_id:EF40C0FB-23A3-4173-8333-18A9D6806471\nsession_server_principal_name:root\nserver_principal_name:root\nserver_principal_sid:8867c003d7407345abb6e4ed81382626\ndatabase_principal_name:\ntarget_server_principal_name:\ntarget_server_principal_sid:\ntarget_database_principal_name:\nserver_instance_name:MSEDGEWIN10\ndatabase_name:\nschema_name:\nobject_name:\nstatement:-- network protocol: TCP/IP\r\nset quoted_identifier on\r\nset arithabort off\r\nset numeric_roundabort off\r\nset ansi_warnings on\r\nset ansi_padding on\r\nset ansi_nulls on\r\nset concat_null_yields_null on\r\nset cursor_close_on_commit off\r\nset implicit_transactions off\r\nset language us_english\r\nset dateformat mdy\r\nset datefirst 7\r\nset transaction isolation level read committed\r\n\nadditional_information:<action_info xmlns=\"http://schemas.microsoft.com/sqlserver/2008/sqlaudit_data\"><pooled_connection>0</pooled_connection><client_options>0x28000020</client_options><client_options1>0x0001f438</client_options1><connect_options>0x00000000</connect_options><packet_data_size>8000</packet_data_size><address>10.0.2.17</address><is_dac>0</is_dac></action_info>\nuser_defined_information:\napplication_name:.Net SqlClient Data Provider\n",
+          "weight": 0.0769
+        },
+        {
+          "count": 1,
+          "value": "audit_schema_version:1\nevent_time:2019-11-04 09:27:25.9866222\nsequence_number:1\naction_id:LGIS\nsucceeded:true\nis_column_permission:false\nsession_id:55\nserver_principal_id:266\ndatabase_principal_id:0\ntarget_server_principal_id:0\ntarget_database_principal_id:0\nobject_id:0\nuser_defined_event_id:0\ntransaction_id:0\nclass_type:LX\nduration_milliseconds:0\nresponse_rows:0\naffected_rows:0\nclient_ip:10.0.2.17\npermission_bitmask:00000000000000000000000000000000\nsequence_group_id:53CB6410-88A9-44C3-AB4B-E614F9A5C05B\nsession_server_principal_name:root\nserver_principal_name:root\nserver_principal_sid:8867c003d7407345abb6e4ed81382626\ndatabase_principal_name:\ntarget_server_principal_name:\ntarget_server_principal_sid:\ntarget_database_principal_name:\nserver_instance_name:MSEDGEWIN10\ndatabase_name:\nschema_name:\nobject_name:\nstatement:-- network protocol: TCP/IP\r\nset quoted_identifier on\r\nset arithabort off\r\nset numeric_roundabort off\r\nset ansi_warnings on\r\nset ansi_padding on\r\nset ansi_nulls on\r\nset concat_null_yields_null on\r\nset cursor_close_on_commit off\r\nset implicit_transactions off\r\nset language us_english\r\nset dateformat mdy\r\nset datefirst 7\r\nset transaction isolation level read committed\r\n\nadditional_information:<action_info xmlns=\"http://schemas.microsoft.com/sqlserver/2008/sqlaudit_data\"><pooled_connection>0</pooled_connection><client_options>0x28000020</client_options><client_options1>0x0001f438</client_options1><connect_options>0x00000000</connect_options><packet_data_size>8000</packet_data_size><address>10.0.2.17</address><is_dac>0</is_dac></action_info>\nuser_defined_information:\napplication_name:.Net SqlClient Data Provider\n",
+          "weight": 0.0769
+        },
+        {
+          "count": 1,
+          "value": "audit_schema_version:1\nevent_time:2019-11-04 09:27:26.0416197\nsequence_number:1\naction_id:LGIS\nsucceeded:true\nis_column_permission:false\nsession_id:57\nserver_principal_id:266\ndatabase_principal_id:0\ntarget_server_principal_id:0\ntarget_database_principal_id:0\nobject_id:0\nuser_defined_event_id:0\ntransaction_id:0\nclass_type:LX\nduration_milliseconds:0\nresponse_rows:0\naffected_rows:0\nclient_ip:10.0.2.17\npermission_bitmask:00000000000000000000000000000000\nsequence_group_id:DFE84D50-E254-41C5-9802-448DC6C5FDCA\nsession_server_principal_name:root\nserver_principal_name:root\nserver_principal_sid:8867c003d7407345abb6e4ed81382626\ndatabase_principal_name:\ntarget_server_principal_name:\ntarget_server_principal_sid:\ntarget_database_principal_name:\nserver_instance_name:MSEDGEWIN10\ndatabase_name:\nschema_name:\nobject_name:\nstatement:-- network protocol: TCP/IP\r\nset quoted_identifier on\r\nset arithabort off\r\nset numeric_roundabort off\r\nset ansi_warnings on\r\nset ansi_padding on\r\nset ansi_nulls on\r\nset concat_null_yields_null on\r\nset cursor_close_on_commit off\r\nset implicit_transactions off\r\nset language us_english\r\nset dateformat mdy\r\nset datefirst 7\r\nset transaction isolation level read committed\r\n\nadditional_information:<action_info xmlns=\"http://schemas.microsoft.com/sqlserver/2008/sqlaudit_data\"><pooled_connection>0</pooled_connection><client_options>0x28000020</client_options><client_options1>0x0001f438</client_options1><connect_options>0x00000000</connect_options><packet_data_size>8000</packet_data_size><address>10.0.2.17</address><is_dac>0</is_dac></action_info>\nuser_defined_information:\napplication_name:.Net SqlClient Data Provider\n",
+          "weight": 0.0769
+        },
+        {
+          "count": 1,
+          "value": "audit_schema_version:1\nevent_time:2019-11-04 09:27:26.0496965\nsequence_number:1\naction_id:LGIS\nsucceeded:true\nis_column_permission:false\nsession_id:57\nserver_principal_id:266\ndatabase_principal_id:0\ntarget_server_principal_id:0\ntarget_database_principal_id:0\nobject_id:0\nuser_defined_event_id:0\ntransaction_id:0\nclass_type:LX\nduration_milliseconds:0\nresponse_rows:0\naffected_rows:0\nclient_ip:10.0.2.17\npermission_bitmask:00000000000000000000000000000000\nsequence_group_id:6455E73D-FCB0-4BCA-B7A8-F4834D9105C6\nsession_server_principal_name:root\nserver_principal_name:root\nserver_principal_sid:8867c003d7407345abb6e4ed81382626\ndatabase_principal_name:\ntarget_server_principal_name:\ntarget_server_principal_sid:\ntarget_database_principal_name:\nserver_instance_name:MSEDGEWIN10\ndatabase_name:\nschema_name:\nobject_name:\nstatement:-- network protocol: TCP/IP\r\nset quoted_identifier on\r\nset arithabort off\r\nset numeric_roundabort off\r\nset ansi_warnings on\r\nset ansi_padding on\r\nset ansi_nulls on\r\nset concat_null_yields_null on\r\nset cursor_close_on_commit off\r\nset implicit_transactions off\r\nset language us_english\r\nset dateformat mdy\r\nset datefirst 7\r\nset transaction isolation level read committed\r\n\nadditional_information:<action_info xmlns=\"http://schemas.microsoft.com/sqlserver/2008/sqlaudit_data\"><pooled_connection>1</pooled_connection><client_options>0x28000020</client_options><client_options1>0x0001f438</client_options1><connect_options>0x00000000</connect_options><packet_data_size>8000</packet_data_size><address>10.0.2.17</address><is_dac>0</is_dac></action_info>\nuser_defined_information:\napplication_name:.Net SqlClient Data Provider\n",
+          "weight": 0.0769
+        },
+        {
+          "count": 1,
+          "value": "audit_schema_version:1\nevent_time:2019-11-04 09:27:26.1270378\nsequence_number:1\naction_id:LGIS\nsucceeded:true\nis_column_permission:false\nsession_id:58\nserver_principal_id:266\ndatabase_principal_id:0\ntarget_server_principal_id:0\ntarget_database_principal_id:0\nobject_id:0\nuser_defined_event_id:0\ntransaction_id:0\nclass_type:LX\nduration_milliseconds:0\nresponse_rows:0\naffected_rows:0\nclient_ip:10.0.2.17\npermission_bitmask:00000000000000000000000000000000\nsequence_group_id:469CC759-337C-4D04-B7DF-F5726CE4A3FC\nsession_server_principal_name:root\nserver_principal_name:root\nserver_principal_sid:8867c003d7407345abb6e4ed81382626\ndatabase_principal_name:\ntarget_server_principal_name:\ntarget_server_principal_sid:\ntarget_database_principal_name:\nserver_instance_name:MSEDGEWIN10\ndatabase_name:\nschema_name:\nobject_name:\nstatement:-- network protocol: TCP/IP\r\nset quoted_identifier on\r\nset arithabort off\r\nset numeric_roundabort off\r\nset ansi_warnings on\r\nset ansi_padding on\r\nset ansi_nulls on\r\nset concat_null_yields_null on\r\nset cursor_close_on_commit off\r\nset implicit_transactions off\r\nset language us_english\r\nset dateformat mdy\r\nset datefirst 7\r\nset transaction isolation level read committed\r\n\nadditional_information:<action_info xmlns=\"http://schemas.microsoft.com/sqlserver/2008/sqlaudit_data\"><pooled_connection>0</pooled_connection><client_options>0x28000020</client_options><client_options1>0x0001f438</client_options1><connect_options>0x00000000</connect_options><packet_data_size>8000</packet_data_size><address>10.0.2.17</address><is_dac>0</is_dac></action_info>\nuser_defined_information:\napplication_name:.Net SqlClient Data Provider\n",
+          "weight": 0.0769
+        },
+        {
+          "count": 1,
+          "value": "audit_schema_version:1\nevent_time:2019-11-04 09:27:26.1420640\nsequence_number:1\naction_id:LGIS\nsucceeded:true\nis_column_permission:false\nsession_id:58\nserver_principal_id:266\ndatabase_principal_id:0\ntarget_server_principal_id:0\ntarget_database_principal_id:0\nobject_id:0\nuser_defined_event_id:0\ntransaction_id:0\nclass_type:LX\nduration_milliseconds:0\nresponse_rows:0\naffected_rows:0\nclient_ip:10.0.2.17\npermission_bitmask:00000000000000000000000000000000\nsequence_group_id:63ECDF80-6AF8-469D-B28B-503C44B89E04\nsession_server_principal_name:root\nserver_principal_name:root\nserver_principal_sid:8867c003d7407345abb6e4ed81382626\ndatabase_principal_name:\ntarget_server_principal_name:\ntarget_server_principal_sid:\ntarget_database_principal_name:\nserver_instance_name:MSEDGEWIN10\ndatabase_name:\nschema_name:\nobject_name:\nstatement:-- network protocol: TCP/IP\r\nset quoted_identifier on\r\nset arithabort off\r\nset numeric_roundabort off\r\nset ansi_warnings on\r\nset ansi_padding on\r\nset ansi_nulls on\r\nset concat_null_yields_null on\r\nset cursor_close_on_commit off\r\nset implicit_transactions off\r\nset language us_english\r\nset dateformat mdy\r\nset datefirst 7\r\nset transaction isolation level read committed\r\n\nadditional_information:<action_info xmlns=\"http://schemas.microsoft.com/sqlserver/2008/sqlaudit_data\"><pooled_connection>1</pooled_connection><client_options>0x28000020</client_options><client_options1>0x0001f438</client_options1><connect_options>0x00000000</connect_options><packet_data_size>8000</packet_data_size><address>10.0.2.17</address><is_dac>0</is_dac></action_info>\nuser_defined_information:\napplication_name:.Net SqlClient Data Provider\n",
+          "weight": 0.0769
+        },
+        {
+          "count": 1,
+          "value": "audit_schema_version:1\nevent_time:2019-11-04 09:27:26.1430643\nsequence_number:1\naction_id:LGIS\nsucceeded:true\nis_column_permission:false\nsession_id:58\nserver_principal_id:266\ndatabase_principal_id:0\ntarget_server_principal_id:0\ntarget_database_principal_id:0\nobject_id:0\nuser_defined_event_id:0\ntransaction_id:0\nclass_type:LX\nduration_milliseconds:0\nresponse_rows:0\naffected_rows:0\nclient_ip:10.0.2.17\npermission_bitmask:00000000000000000000000000000000\nsequence_group_id:9B59F07F-2EFC-4F7C-8C63-8411AB84409D\nsession_server_principal_name:root\nserver_principal_name:root\nserver_principal_sid:8867c003d7407345abb6e4ed81382626\ndatabase_principal_name:\ntarget_server_principal_name:\ntarget_server_principal_sid:\ntarget_database_principal_name:\nserver_instance_name:MSEDGEWIN10\ndatabase_name:\nschema_name:\nobject_name:\nstatement:-- network protocol: TCP/IP\r\nset quoted_identifier on\r\nset arithabort off\r\nset numeric_roundabort off\r\nset ansi_warnings on\r\nset ansi_padding on\r\nset ansi_nulls on\r\nset concat_null_yields_null on\r\nset cursor_close_on_commit off\r\nset implicit_transactions off\r\nset language us_english\r\nset dateformat mdy\r\nset datefirst 7\r\nset transaction isolation level read committed\r\n\nadditional_information:<action_info xmlns=\"http://schemas.microsoft.com/sqlserver/2008/sqlaudit_data\"><pooled_connection>1</pooled_connection><client_options>0x28000020</client_options><client_options1>0x0001f438</client_options1><connect_options>0x00000000</connect_options><packet_data_size>8000</packet_data_size><address>10.0.2.17</address><is_dac>0</is_dac></action_info>\nuser_defined_information:\napplication_name:.Net SqlClient Data Provider\n",
+          "weight": 0.0769
+        },
+        {
+          "count": 1,
+          "value": "audit_schema_version:1\nevent_time:2019-11-04 09:27:26.1586215\nsequence_number:1\naction_id:LGIS\nsucceeded:true\nis_column_permission:false\nsession_id:58\nserver_principal_id:266\ndatabase_principal_id:0\ntarget_server_principal_id:0\ntarget_database_principal_id:0\nobject_id:0\nuser_defined_event_id:0\ntransaction_id:0\nclass_type:LX\nduration_milliseconds:0\nresponse_rows:0\naffected_rows:0\nclient_ip:10.0.2.17\npermission_bitmask:00000000000000000000000000000000\nsequence_group_id:C8DF7FD0-75CF-490A-B4D1-F7771829971B\nsession_server_principal_name:root\nserver_principal_name:root\nserver_principal_sid:8867c003d7407345abb6e4ed81382626\ndatabase_principal_name:\ntarget_server_principal_name:\ntarget_server_principal_sid:\ntarget_database_principal_name:\nserver_instance_name:MSEDGEWIN10\ndatabase_name:\nschema_name:\nobject_name:\nstatement:-- network protocol: TCP/IP\r\nset quoted_identifier on\r\nset arithabort off\r\nset numeric_roundabort off\r\nset ansi_warnings on\r\nset ansi_padding on\r\nset ansi_nulls on\r\nset concat_null_yields_null on\r\nset cursor_close_on_commit off\r\nset implicit_transactions off\r\nset language us_english\r\nset dateformat mdy\r\nset datefirst 7\r\nset transaction isolation level read committed\r\n\nadditional_information:<action_info xmlns=\"http://schemas.microsoft.com/sqlserver/2008/sqlaudit_data\"><pooled_connection>1</pooled_connection><client_options>0x28000020</client_options><client_options1>0x0001f438</client_options1><connect_options>0x00000000</connect_options><packet_data_size>8000</packet_data_size><address>10.0.2.17</address><is_dac>0</is_dac></action_info>\nuser_defined_information:\napplication_name:.Net SqlClient Data Provider\n",
+          "weight": 0.0769
+        },
+        {
+          "count": 1,
+          "value": "audit_schema_version:1\nevent_time:2019-11-04 09:27:26.1586215\nsequence_number:1\naction_id:LGIS\nsucceeded:true\nis_column_permission:false\nsession_id:58\nserver_principal_id:266\ndatabase_principal_id:0\ntarget_server_principal_id:0\ntarget_database_principal_id:0\nobject_id:0\nuser_defined_event_id:0\ntransaction_id:0\nclass_type:LX\nduration_milliseconds:0\nresponse_rows:0\naffected_rows:0\nclient_ip:10.0.2.17\npermission_bitmask:00000000000000000000000000000000\nsequence_group_id:99BC3EF0-EF56-4C7B-B5E2-7C845BBA7803\nsession_server_principal_name:root\nserver_principal_name:root\nserver_principal_sid:8867c003d7407345abb6e4ed81382626\ndatabase_principal_name:\ntarget_server_principal_name:\ntarget_server_principal_sid:\ntarget_database_principal_name:\nserver_instance_name:MSEDGEWIN10\ndatabase_name:\nschema_name:\nobject_name:\nstatement:-- network protocol: TCP/IP\r\nset quoted_identifier on\r\nset arithabort off\r\nset numeric_roundabort off\r\nset ansi_warnings on\r\nset ansi_padding on\r\nset ansi_nulls on\r\nset concat_null_yields_null on\r\nset cursor_close_on_commit off\r\nset implicit_transactions off\r\nset language us_english\r\nset dateformat mdy\r\nset datefirst 7\r\nset transaction isolation level read committed\r\n\nadditional_information:<action_info xmlns=\"http://schemas.microsoft.com/sqlserver/2008/sqlaudit_data\"><pooled_connection>1</pooled_connection><client_options>0x28000020</client_options><client_options1>0x0001f438</client_options1><connect_options>0x00000000</connect_options><packet_data_size>8000</packet_data_size><address>10.0.2.17</address><is_dac>0</is_dac></action_info>\nuser_defined_information:\napplication_name:.Net SqlClient Data Provider\n",
+          "weight": 0.0769
+        },
+        {
+          "count": 1,
+          "value": "audit_schema_version:1\nevent_time:2019-11-04 09:27:26.1750932\nsequence_number:1\naction_id:LGIS\nsucceeded:true\nis_column_permission:false\nsession_id:58\nserver_principal_id:266\ndatabase_principal_id:0\ntarget_server_principal_id:0\ntarget_database_principal_id:0\nobject_id:0\nuser_defined_event_id:0\ntransaction_id:0\nclass_type:LX\nduration_milliseconds:0\nresponse_rows:0\naffected_rows:0\nclient_ip:10.0.2.17\npermission_bitmask:00000000000000000000000000000000\nsequence_group_id:94C2F0EF-CC41-403B-9238-E3B222DA1599\nsession_server_principal_name:root\nserver_principal_name:root\nserver_principal_sid:8867c003d7407345abb6e4ed81382626\ndatabase_principal_name:\ntarget_server_principal_name:\ntarget_server_principal_sid:\ntarget_database_principal_name:\nserver_instance_name:MSEDGEWIN10\ndatabase_name:\nschema_name:\nobject_name:\nstatement:-- network protocol: TCP/IP\r\nset quoted_identifier on\r\nset arithabort off\r\nset numeric_roundabort off\r\nset ansi_warnings on\r\nset ansi_padding on\r\nset ansi_nulls on\r\nset concat_null_yields_null on\r\nset cursor_close_on_commit off\r\nset implicit_transactions off\r\nset language us_english\r\nset dateformat mdy\r\nset datefirst 7\r\nset transaction isolation level read committed\r\n\nadditional_information:<action_info xmlns=\"http://schemas.microsoft.com/sqlserver/2008/sqlaudit_data\"><pooled_connection>1</pooled_connection><client_options>0x28000020</client_options><client_options1>0x0001f438</client_options1><connect_options>0x00000000</connect_options><packet_data_size>8000</packet_data_size><address>10.0.2.17</address><is_dac>0</is_dac></action_info>\nuser_defined_information:\napplication_name:.Net SqlClient Data Provider\n",
+          "weight": 0.0769
+        },
+        {
+          "count": 1,
+          "value": "audit_schema_version:1\nevent_time:2019-11-04 09:27:26.2994577\nsequence_number:1\naction_id:LGIS\nsucceeded:true\nis_column_permission:false\nsession_id:58\nserver_principal_id:266\ndatabase_principal_id:0\ntarget_server_principal_id:0\ntarget_database_principal_id:0\nobject_id:0\nuser_defined_event_id:0\ntransaction_id:0\nclass_type:LX\nduration_milliseconds:0\nresponse_rows:0\naffected_rows:0\nclient_ip:10.0.2.17\npermission_bitmask:00000000000000000000000000000000\nsequence_group_id:9E1D8A7C-EFB3-474E-9022-CB4BA5C1CD62\nsession_server_principal_name:root\nserver_principal_name:root\nserver_principal_sid:8867c003d7407345abb6e4ed81382626\ndatabase_principal_name:\ntarget_server_principal_name:\ntarget_server_principal_sid:\ntarget_database_principal_name:\nserver_instance_name:MSEDGEWIN10\ndatabase_name:\nschema_name:\nobject_name:\nstatement:-- network protocol: TCP/IP\r\nset quoted_identifier on\r\nset arithabort off\r\nset numeric_roundabort off\r\nset ansi_warnings on\r\nset ansi_padding on\r\nset ansi_nulls on\r\nset concat_null_yields_null on\r\nset cursor_close_on_commit off\r\nset implicit_transactions off\r\nset language us_english\r\nset dateformat mdy\r\nset datefirst 7\r\nset transaction isolation level read committed\r\n\nadditional_information:<action_info xmlns=\"http://schemas.microsoft.com/sqlserver/2008/sqlaudit_data\"><pooled_connection>1</pooled_connection><client_options>0x28000020</client_options><client_options1>0x0001f438</client_options1><connect_options>0x00000000</connect_options><packet_data_size>8000</packet_data_size><address>10.0.2.17</address><is_dac>0</is_dac></action_info>\nuser_defined_information:\napplication_name:.Net SqlClient Data Provider\n",
+          "weight": 0.0769
+        },
+        {
+          "count": 1,
+          "value": "audit_schema_version:1\nevent_time:2019-11-04 09:27:26.3150666\nsequence_number:1\naction_id:LGIS\nsucceeded:true\nis_column_permission:false\nsession_id:58\nserver_principal_id:266\ndatabase_principal_id:0\ntarget_server_principal_id:0\ntarget_database_principal_id:0\nobject_id:0\nuser_defined_event_id:0\ntransaction_id:0\nclass_type:LX\nduration_milliseconds:0\nresponse_rows:0\naffected_rows:0\nclient_ip:10.0.2.17\npermission_bitmask:00000000000000000000000000000000\nsequence_group_id:2D5419DB-389F-4478-946C-23870BA1D2C4\nsession_server_principal_name:root\nserver_principal_name:root\nserver_principal_sid:8867c003d7407345abb6e4ed81382626\ndatabase_principal_name:\ntarget_server_principal_name:\ntarget_server_principal_sid:\ntarget_database_principal_name:\nserver_instance_name:MSEDGEWIN10\ndatabase_name:\nschema_name:\nobject_name:\nstatement:-- network protocol: TCP/IP\r\nset quoted_identifier on\r\nset arithabort off\r\nset numeric_roundabort off\r\nset ansi_warnings on\r\nset ansi_padding on\r\nset ansi_nulls on\r\nset concat_null_yields_null on\r\nset cursor_close_on_commit off\r\nset implicit_transactions off\r\nset language us_english\r\nset dateformat mdy\r\nset datefirst 7\r\nset transaction isolation level read committed\r\n\nadditional_information:<action_info xmlns=\"http://schemas.microsoft.com/sqlserver/2008/sqlaudit_data\"><pooled_connection>1</pooled_connection><client_options>0x28000020</client_options><client_options1>0x0001f438</client_options1><connect_options>0x00000000</connect_options><packet_data_size>8000</packet_data_size><address>10.0.2.17</address><is_dac>0</is_dac></action_info>\nuser_defined_information:\napplication_name:.Net SqlClient Data Provider\n",
+          "weight": 0.0769
+        }
+      ]
+    },
+    "EventData.Data.#text[]": {
+      "kind": "freeform",
+      "n": 27,
+      "values": [
+        {
+          "count": 18,
+          "value": "list_len=3",
+          "weight": 0.6667
+        },
+        {
+          "count": 4,
+          "value": "list_len=2",
+          "weight": 0.1481
+        },
+        {
+          "count": 3,
+          "value": "list_len=8",
+          "weight": 0.1111
+        },
+        {
+          "count": 1,
+          "value": "list_len=7",
+          "weight": 0.037
+        },
+        {
+          "count": 1,
+          "value": "list_len=6",
+          "weight": 0.037
+        }
+      ]
+    },
+    "System.Channel": {
+      "kind": "freeform",
+      "n": 40,
+      "values": [
+        {
+          "count": 40,
+          "value": "Application",
+          "weight": 1.0
+        }
+      ]
+    },
+    "System.Computer": {
+      "kind": "identifier",
+      "n": 40,
+      "shapes": [
+        {
+          "count": 36,
+          "shape": "str:len_bucket=<=16",
+          "weight": 0.9
+        },
+        {
+          "count": 4,
+          "shape": "fqdn:labels=3",
+          "weight": 0.1
+        }
+      ]
+    },
+    "System.EventID.#attributes.Qualifiers": {
+      "kind": "freeform",
+      "n": 40,
+      "values": [
+        {
+          "count": 26,
+          "value": "16384",
+          "weight": 0.65
+        },
+        {
+          "count": 10,
+          "value": "49152",
+          "weight": 0.25
+        },
+        {
+          "count": 4,
+          "value": "0",
+          "weight": 0.1
+        }
+      ]
+    },
+    "System.EventID.#text": {
+      "kind": "freeform",
+      "n": 40,
+      "values": [
+        {
+          "count": 13,
+          "value": "33205",
+          "weight": 0.325
+        },
+        {
+          "count": 10,
+          "value": "18456",
+          "weight": 0.25
+        },
+        {
+          "count": 8,
+          "value": "15457",
+          "weight": 0.2
+        },
+        {
+          "count": 4,
+          "value": "18454",
+          "weight": 0.1
+        },
+        {
+          "count": 2,
+          "value": "327",
+          "weight": 0.05
+        },
+        {
+          "count": 1,
+          "value": "326",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "325",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "15281",
+          "weight": 0.025
+        }
+      ]
+    },
+    "System.EventRecordID": {
+      "kind": "freeform",
+      "n": 40,
+      "values": [
+        {
+          "count": 2,
+          "value": "9691",
+          "weight": 0.05
+        },
+        {
+          "count": 2,
+          "value": "9692",
+          "weight": 0.05
+        },
+        {
+          "count": 2,
+          "value": "9696",
+          "weight": 0.05
+        },
+        {
+          "count": 2,
+          "value": "9706",
+          "weight": 0.05
+        },
+        {
+          "count": 1,
+          "value": "1969",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "1970",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "1971",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "1972",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "13026",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "13027",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "13028",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "13029",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "13030",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "13031",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "13032",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "13033",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "13034",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "13035",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "37899",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "9687",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "9688",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "9689",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "9690",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "9693",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "9694",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "9695",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "9697",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "9698",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "9699",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "9700",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "9701",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "9702",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "9703",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "9704",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "9705",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "9707",
+          "weight": 0.025
+        }
+      ]
+    },
+    "System.Keywords": {
+      "kind": "freeform",
+      "n": 40,
+      "values": [
+        {
+          "count": 17,
+          "value": "0xa0000000000000",
+          "weight": 0.425
+        },
+        {
+          "count": 13,
+          "value": "0x80000000000000",
+          "weight": 0.325
+        },
+        {
+          "count": 10,
+          "value": "0x90000000000000",
+          "weight": 0.25
+        }
+      ]
+    },
+    "System.Level": {
+      "kind": "freeform",
+      "n": 40,
+      "values": [
+        {
+          "count": 27,
+          "value": "0",
+          "weight": 0.675
+        },
+        {
+          "count": 13,
+          "value": "4",
+          "weight": 0.325
+        }
+      ]
+    },
+    "System.Provider.#attributes.Name": {
+      "kind": "freeform",
+      "n": 40,
+      "values": [
+        {
+          "count": 35,
+          "value": "MSSQLSERVER",
+          "weight": 0.875
+        },
+        {
+          "count": 4,
+          "value": "ESENT",
+          "weight": 0.1
+        },
+        {
+          "count": 1,
+          "value": "MSSQL$SQLEXPRESS",
+          "weight": 0.025
+        }
+      ]
+    },
+    "System.Security.#attributes.UserID": {
+      "kind": "identifier",
+      "n": 1,
+      "shapes": [
+        {
+          "count": 1,
+          "shape": "sid:parts=8",
+          "weight": 1.0
+        }
+      ]
+    },
+    "System.Task": {
+      "kind": "freeform",
+      "n": 40,
+      "values": [
+        {
+          "count": 26,
+          "value": "4",
+          "weight": 0.65
+        },
+        {
+          "count": 9,
+          "value": "2",
+          "weight": 0.225
+        },
+        {
+          "count": 4,
+          "value": "1",
+          "weight": 0.1
+        },
+        {
+          "count": 1,
+          "value": "5",
+          "weight": 0.025
+        }
+      ]
+    },
+    "System.TimeCreated.#attributes.SystemTime": {
+      "kind": "freeform",
+      "n": 40,
+      "values": [
+        {
+          "count": 16,
+          "value": "2019-11-04T09:27:26.315066Z",
+          "weight": 0.4
+        },
+        {
+          "count": 2,
+          "value": "2019-11-26T23:55:00.000000Z",
+          "weight": 0.05
+        },
+        {
+          "count": 2,
+          "value": "2019-11-26T23:55:02.000000Z",
+          "weight": 0.05
+        },
+        {
+          "count": 2,
+          "value": "2019-11-04T13:46:01.202731Z",
+          "weight": 0.05
+        },
+        {
+          "count": 2,
+          "value": "2019-11-04T09:27:25.986622Z",
+          "weight": 0.05
+        },
+        {
+          "count": 2,
+          "value": "2019-11-04T09:27:26.143064Z",
+          "weight": 0.05
+        },
+        {
+          "count": 2,
+          "value": "2019-11-04T09:27:26.158621Z",
+          "weight": 0.05
+        },
+        {
+          "count": 1,
+          "value": "2019-11-04T13:46:01.171339Z",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "2019-11-04T13:46:01.187637Z",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "2019-11-04T13:46:01.222452Z",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "2019-11-04T13:46:01.233944Z",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "2019-11-04T13:46:01.248423Z",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "2019-11-04T13:46:01.248883Z",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "2019-11-04T13:46:01.266435Z",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "2019-11-04T13:46:01.279825Z",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "2020-08-03T08:11:51.057019Z",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "2019-11-04T09:27:26.041619Z",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "2019-11-04T09:27:26.127037Z",
+          "weight": 0.025
+        },
+        {
+          "count": 1,
+          "value": "2019-11-04T09:27:27.315012Z",
+          "weight": 0.025
+        }
+      ]
+    }
+  },
+  "mined_at": "2026-09-14T06:12:12.927306+00:00",
+  "record_count": 40,
+  "sources": {
+    "evtx-attack-samples/Credential Access/MSSQL_multiple_failed_logon_EventID_18456.evtx": 10,
+    "evtx-attack-samples/Credential Access/dc_applog_ntdsutil_dfir_325_326_327.evtx": 4,
+    "evtx-attack-samples/Defense Evasion/DE_xp_cmdshell_enabled_MSSQL_EID_15457.evtx": 4,
+    "evtx-attack-samples/Lateral Movement/LM_xp_cmdshell_MSSQL_Events.evtx": 21,
+    "evtx-attack-samples/Lateral Movement/MSSQL_15281_xp_cmdshell_exec_failed_attempt.evtx": 1
+  },
+  "table": "AzureDiagnostics"
+}

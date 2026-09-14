@@ -1,0 +1,6049 @@
+{
+  "fields": {
+    "#attributes.xmlns": {
+      "kind": "freeform",
+      "n": 340,
+      "values": [
+        {
+          "count": 340,
+          "value": "http://schemas.microsoft.com/win/2004/08/events/event",
+          "weight": 1.0
+        }
+      ]
+    },
+    "EventData.AccessList": {
+      "kind": "freeform",
+      "n": 121,
+      "values": [
+        {
+          "count": 116,
+          "value": "%%4432\r\n\t\t\t\t",
+          "weight": 0.9587
+        },
+        {
+          "count": 4,
+          "value": "%%4416\r\n\t\t\t\t",
+          "weight": 0.0331
+        },
+        {
+          "count": 1,
+          "value": "%%4484\r\n\t\t\t\t",
+          "weight": 0.0083
+        }
+      ]
+    },
+    "EventData.AccessMask": {
+      "kind": "freeform",
+      "n": 121,
+      "values": [
+        {
+          "count": 120,
+          "value": "0x1",
+          "weight": 0.9917
+        },
+        {
+          "count": 1,
+          "value": "0x10",
+          "weight": 0.0083
+        }
+      ]
+    },
+    "EventData.Archived": {
+      "kind": "freeform",
+      "n": 3,
+      "values": [
+        {
+          "count": 3,
+          "value": "true",
+          "weight": 1.0
+        }
+      ]
+    },
+    "EventData.CreationUtcTime": {
+      "kind": "freeform",
+      "n": 216,
+      "values": [
+        {
+          "count": 9,
+          "value": "2020-08-12 13:04:27.549",
+          "weight": 0.0417
+        },
+        {
+          "count": 7,
+          "value": "2020-08-25 10:08:37.392",
+          "weight": 0.0324
+        },
+        {
+          "count": 5,
+          "value": "2020-08-12 13:04:27.563",
+          "weight": 0.0231
+        },
+        {
+          "count": 4,
+          "value": "2020-04-25 22:19:26.766",
+          "weight": 0.0185
+        },
+        {
+          "count": 4,
+          "value": "2020-08-25 10:08:05.766",
+          "weight": 0.0185
+        },
+        {
+          "count": 4,
+          "value": "2009-07-14 04:42:30.134",
+          "weight": 0.0185
+        },
+        {
+          "count": 3,
+          "value": "2019-06-21 06:53:03.227",
+          "weight": 0.0139
+        },
+        {
+          "count": 3,
+          "value": "2020-08-12 13:04:27.533",
+          "weight": 0.0139
+        },
+        {
+          "count": 3,
+          "value": "2020-08-25 10:08:37.673",
+          "weight": 0.0139
+        },
+        {
+          "count": 3,
+          "value": "2020-10-17 22:53:05.627",
+          "weight": 0.0139
+        },
+        {
+          "count": 2,
+          "value": "2019-07-27 22:43:41.627",
+          "weight": 0.0093
+        },
+        {
+          "count": 2,
+          "value": "2018-01-03 01:21:25.726",
+          "weight": 0.0093
+        },
+        {
+          "count": 2,
+          "value": "2020-04-25 22:19:26.750",
+          "weight": 0.0093
+        },
+        {
+          "count": 2,
+          "value": "2020-08-12 13:04:28.486",
+          "weight": 0.0093
+        },
+        {
+          "count": 2,
+          "value": "2019-03-19 18:43:52.537",
+          "weight": 0.0093
+        },
+        {
+          "count": 2,
+          "value": "2019-03-19 18:43:52.578",
+          "weight": 0.0093
+        },
+        {
+          "count": 2,
+          "value": "2020-08-25 10:07:58.689",
+          "weight": 0.0093
+        },
+        {
+          "count": 2,
+          "value": "2020-08-25 10:07:58.704",
+          "weight": 0.0093
+        },
+        {
+          "count": 2,
+          "value": "2009-07-14 04:53:47.031",
+          "weight": 0.0093
+        },
+        {
+          "count": 2,
+          "value": "2019-02-13 12:42:37.010",
+          "weight": 0.0093
+        },
+        {
+          "count": 2,
+          "value": "2019-03-19 20:48:33.549",
+          "weight": 0.0093
+        },
+        {
+          "count": 2,
+          "value": "2019-03-19 20:49:27.927",
+          "weight": 0.0093
+        },
+        {
+          "count": 2,
+          "value": "2019-03-19 20:49:44.932",
+          "weight": 0.0093
+        },
+        {
+          "count": 2,
+          "value": "2019-03-19 20:52:26.064",
+          "weight": 0.0093
+        },
+        {
+          "count": 2,
+          "value": "2019-03-19 20:52:47.244",
+          "weight": 0.0093
+        },
+        {
+          "count": 2,
+          "value": "2019-05-20 23:39:21.672",
+          "weight": 0.0093
+        },
+        {
+          "count": 2,
+          "value": "2021-01-26 13:21:13.560",
+          "weight": 0.0093
+        },
+        {
+          "count": 2,
+          "value": "2021-01-26 13:21:13.975",
+          "weight": 0.0093
+        },
+        {
+          "count": 2,
+          "value": "2021-01-26 13:15:06.578",
+          "weight": 0.0093
+        },
+        {
+          "count": 2,
+          "value": "2021-01-26 13:21:14.394",
+          "weight": 0.0093
+        },
+        {
+          "count": 2,
+          "value": "2021-01-26 13:21:14.396",
+          "weight": 0.0093
+        },
+        {
+          "count": 2,
+          "value": "2021-01-26 13:21:14.826",
+          "weight": 0.0093
+        },
+        {
+          "count": 2,
+          "value": "2021-01-26 13:21:14.818",
+          "weight": 0.0093
+        },
+        {
+          "count": 2,
+          "value": "2019-04-30 22:43:38.892",
+          "weight": 0.0093
+        },
+        {
+          "count": 2,
+          "value": "2020-10-17 16:27:10.777",
+          "weight": 0.0093
+        },
+        {
+          "count": 2,
+          "value": "2020-10-17 10:48:12.936",
+          "weight": 0.0093
+        },
+        {
+          "count": 2,
+          "value": "2020-10-23 21:35:19.617",
+          "weight": 0.0093
+        },
+        {
+          "count": 2,
+          "value": "2019-04-27 15:57:53.634",
+          "weight": 0.0093
+        },
+        {
+          "count": 2,
+          "value": "2013-09-04 16:29:27.000",
+          "weight": 0.0093
+        },
+        {
+          "count": 1,
+          "value": "2020-09-28 12:47:36.624",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-08-30 12:54:08.392",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-06-21 07:36:50.985",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-17 19:09:41.318",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-17 19:10:02.058",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2021-04-22 22:09:26.157",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-04-18 17:03:03.311",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-04-18 17:03:03.441",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-09-11 12:10:22.357",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-07-29 21:32:59.193",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-07-29 21:33:04.539",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-07-29 21:33:49.256",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-07-29 21:33:54.618",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-07-29 21:34:40.866",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-07-19 14:43:46.619",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-07-18 20:53:13.080",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-07-19 14:57:46.479",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-07-19 15:10:52.699",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-11-26 17:38:11.146",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-11 16:54:02.305",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-11 16:54:07.462",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-11 16:46:10.344",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-11 16:46:15.484",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-11 09:50:08.491",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-11 09:50:13.464",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-11 17:28:17.363",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-12 00:32:30.086",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-10 12:06:06.896",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-07-27 22:43:41.641",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-10 13:49:29.789",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-10 13:49:34.899",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-09 02:52:18.765",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-04-25 22:18:47.120",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-04-25 22:19:17.750",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-08-12 13:04:27.391",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-08-12 13:04:27.438",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-08-12 13:04:27.938",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-08-12 13:04:28.453",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2022-02-19 17:35:16.295",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-04-07 11:26:35.879",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25 10:07:58.673",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25 10:08:05.751",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25 10:08:05.782",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25 10:08:37.579",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25 10:08:37.595",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-10-01 18:35:02.768",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-05-12 15:06:49.134",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-10-20 11:50:55.442",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-10-20 11:50:56.082",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-08-04 09:33:57.716",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-08-03 15:08:06.372",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-08-03 13:50:26.727",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-08-03 12:31:14.985",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-08-03 12:32:34.721",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-08-03 10:51:46.599",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-08-03 11:23:15.519",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-08-03 12:06:53.846",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-08-03 12:08:13.721",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-06-14 22:22:21.503",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19 20:47:56.426",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19 20:48:33.369",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19 20:49:27.767",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19 20:49:44.772",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19 20:52:25.923",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19 20:52:47.114",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19 20:58:20.974",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19 20:58:31.799",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19 23:20:19.195",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-10-17 22:52:34.236",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-08-27 11:40:56.396",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-12-09 22:45:33.087",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-14 14:03:45.071",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-14 13:55:57.243",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-14 14:04:06.309",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-14 14:04:28.849",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2021-10-21 12:05:31.740",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2021-10-21 16:27:12.521",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2021-10-21 16:27:12.548",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-27 15:12:46.981",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-07-29 21:09:48.910",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-07-03 08:47:21.485",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26 13:21:13.236",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26 13:21:13.558",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26 13:14:25.290",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26 13:14:25.641",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26 13:21:23.229",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26 13:21:23.302",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26 13:21:23.305",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26 13:21:33.196",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-23 16:49:07.731",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-12 13:56:12.329",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-12 13:56:46.526",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2018-01-03 01:23:40.048",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-11 16:45:37.875",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-12 13:30:46.181",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-12 13:37:49.604",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-21 15:32:59.809",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-04-30 10:12:45.583",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2016-02-02 15:30:02.000",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-17 20:17:44.526",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-17 20:17:44.607",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-17 20:17:44.777",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-17 20:17:45.458",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-17 20:17:45.618",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-17 20:17:45.648",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-10-17 16:26:54.668",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-02-10 08:28:12.870",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-10-27 10:15:20.376",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-10-23 21:57:34.734",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-10-23 21:57:34.751",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-10-23 21:22:14.491",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-04-27 15:57:25.868",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2013-09-05 17:50:28.000",
+          "weight": 0.0046
+        }
+      ]
+    },
+    "EventData.HandleId": {
+      "kind": "freeform",
+      "n": 121,
+      "values": [
+        {
+          "count": 34,
+          "value": "0x468",
+          "weight": 0.281
+        },
+        {
+          "count": 32,
+          "value": "0x520",
+          "weight": 0.2645
+        },
+        {
+          "count": 22,
+          "value": "0x1ac",
+          "weight": 0.1818
+        },
+        {
+          "count": 22,
+          "value": "0x420",
+          "weight": 0.1818
+        },
+        {
+          "count": 4,
+          "value": "0x50",
+          "weight": 0.0331
+        },
+        {
+          "count": 2,
+          "value": "0xb34",
+          "weight": 0.0165
+        },
+        {
+          "count": 1,
+          "value": "0x558",
+          "weight": 0.0083
+        },
+        {
+          "count": 1,
+          "value": "0x7a4",
+          "weight": 0.0083
+        },
+        {
+          "count": 1,
+          "value": "0x15a8",
+          "weight": 0.0083
+        },
+        {
+          "count": 1,
+          "value": "0xc88",
+          "weight": 0.0083
+        },
+        {
+          "count": 1,
+          "value": "0x3708",
+          "weight": 0.0083
+        }
+      ]
+    },
+    "EventData.Hash": {
+      "kind": "freeform",
+      "n": 1,
+      "values": [
+        {
+          "count": 1,
+          "value": "Unknown",
+          "weight": 1.0
+        }
+      ]
+    },
+    "EventData.Hashes": {
+      "kind": "freeform",
+      "n": 3,
+      "values": [
+        {
+          "count": 2,
+          "value": "SHA1=6BFB38629570909D3D9EEDFC783A948CE7849105,MD5=EE2A1C85C472F89B146CC8EE598CCCBC,SHA256=19FD0010DA92B654D1CA270247061A39EA13C0A58529FD8257A97E2EF7794911,IMPHASH=522D83761201075834F05037F5307949",
+          "weight": 0.6667
+        },
+        {
+          "count": 1,
+          "value": "SHA1=6298449EB38C20ABFE79C32346258BF4951C1E53,MD5=98F48037163A97285E72A2107F0336CA,SHA256=B26D892448D336EBFAB26F033457D1A2A94E3CD8FBBDA5AE0DBB09E16BE4C84E,IMPHASH=DEA061EF56E13C6D0B065E71A879D9B6",
+          "weight": 0.3333
+        }
+      ]
+    },
+    "EventData.Image": {
+      "kind": "freeform",
+      "n": 219,
+      "values": [
+        {
+          "count": 27,
+          "value": "C:\\Windows\\System32\\spoolsv.exe",
+          "weight": 0.1233
+        },
+        {
+          "count": 20,
+          "value": "C:\\Windows\\Explorer.EXE",
+          "weight": 0.0913
+        },
+        {
+          "count": 13,
+          "value": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\MSBuild\\Current\\Bin\\MSBuild.exe",
+          "weight": 0.0594
+        },
+        {
+          "count": 12,
+          "value": "C:\\Users\\user01\\Desktop\\Debug\\TransactionLog.exe",
+          "weight": 0.0548
+        },
+        {
+          "count": 11,
+          "value": "C:\\Windows\\explorer.exe",
+          "weight": 0.0502
+        },
+        {
+          "count": 11,
+          "value": "C:\\Windows\\system32\\svchost.exe",
+          "weight": 0.0502
+        },
+        {
+          "count": 10,
+          "value": "C:\\Windows\\System32\\osk.exe",
+          "weight": 0.0457
+        },
+        {
+          "count": 8,
+          "value": "C:\\Windows\\System32\\svchost.exe",
+          "weight": 0.0365
+        },
+        {
+          "count": 8,
+          "value": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\Common7\\IDE\\devenv.exe",
+          "weight": 0.0365
+        },
+        {
+          "count": 8,
+          "value": "c:\\python27\\python.exe",
+          "weight": 0.0365
+        },
+        {
+          "count": 6,
+          "value": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+          "weight": 0.0274
+        },
+        {
+          "count": 6,
+          "value": "C:\\Windows\\system32\\sdbinst.exe",
+          "weight": 0.0274
+        },
+        {
+          "count": 6,
+          "value": "System",
+          "weight": 0.0274
+        },
+        {
+          "count": 5,
+          "value": "C:\\Users\\IEUser\\Downloads\\Flash_update.exe",
+          "weight": 0.0228
+        },
+        {
+          "count": 4,
+          "value": "C:\\Windows\\System32\\makecab.exe",
+          "weight": 0.0183
+        },
+        {
+          "count": 4,
+          "value": "C:\\Windows\\System32\\smss.exe",
+          "weight": 0.0183
+        },
+        {
+          "count": 4,
+          "value": "C:\\Windows\\system32\\cmd.exe",
+          "weight": 0.0183
+        },
+        {
+          "count": 3,
+          "value": "C:\\Windows\\system32\\rundll32.exe",
+          "weight": 0.0137
+        },
+        {
+          "count": 3,
+          "value": "C:\\Users\\IEUser\\Downloads\\UACBypass.exe",
+          "weight": 0.0137
+        },
+        {
+          "count": 3,
+          "value": "C:\\Windows\\system32\\RunDll32.exe",
+          "weight": 0.0137
+        },
+        {
+          "count": 3,
+          "value": "C:\\windows\\system32\\cscript.exe",
+          "weight": 0.0137
+        },
+        {
+          "count": 3,
+          "value": "C:\\Windows\\System32\\RuntimeBroker.exe",
+          "weight": 0.0137
+        },
+        {
+          "count": 3,
+          "value": "C:\\Windows\\SysWOW64\\rundll32.exe",
+          "weight": 0.0137
+        },
+        {
+          "count": 2,
+          "value": "C:\\Program Files\\Internet Explorer\\IEInstal.exe",
+          "weight": 0.0091
+        },
+        {
+          "count": 2,
+          "value": "C:\\Windows\\system32\\DllHost.exe",
+          "weight": 0.0091
+        },
+        {
+          "count": 2,
+          "value": "C:\\Program Files\\freeSSHd\\FreeSSHDService.exe",
+          "weight": 0.0091
+        },
+        {
+          "count": 2,
+          "value": "C:\\Windows\\system32\\utilman.exe",
+          "weight": 0.0091
+        },
+        {
+          "count": 2,
+          "value": "C:\\Users\\IEUser\\Downloads\\com-hijack.exe",
+          "weight": 0.0091
+        },
+        {
+          "count": 2,
+          "value": "C:\\Windows\\System32\\Wbem\\WMIC.exe",
+          "weight": 0.0091
+        },
+        {
+          "count": 2,
+          "value": "\\\\?\\C:\\Windows\\system32\\wbem\\WMIADAP.EXE",
+          "weight": 0.0091
+        },
+        {
+          "count": 2,
+          "value": "C:\\Users\\Public\\tools\\apt\\wwlib\\test.exe",
+          "weight": 0.0091
+        },
+        {
+          "count": 2,
+          "value": "c:\\Users\\Public\\test.tmp",
+          "weight": 0.0091
+        },
+        {
+          "count": 1,
+          "value": "C:\\WINDOWS\\system32\\rdrleakdiag.exe",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\administrator\\Desktop\\x64\\Outflank-Dumpert.exe",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\administrator\\Desktop\\AndrewSpecial.exe",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\IEUser\\Desktop\\procdump.exe",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "C:\\Windows\\system32\\taskmgr.exe",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "C:\\Windows\\system32\\services.exe",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "C:\\Windows\\system32\\lsass.exe",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "C:\\Windows\\system32\\certutil.exe",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "C:\\Windows\\System32\\cmd.exe",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\Public\\tools\\privesc\\uac\\byeintegrity5-uac.exe",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\win10\\Desktop\\SpoolFool-main\\SpoolFool.exe",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "C:\\Windows\\system32\\LogonUI.exe",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\IEUser\\Downloads\\a.exe",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "C:\\Windows\\system32\\mstsc.exe",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "C:\\Windows\\System32\\notepad.exe",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "C:\\windows\\system32\\mmc.exe",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "C:\\Windows\\System32\\msiexec.exe",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "C:\\Windows\\system32\\msiexec.exe",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "c:\\Users\\Public\\BYOV\\TDL\\Furutaka.exe",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "c:\\Users\\bouss\\Downloads\\ProcessHerpaderping.exe",
+          "weight": 0.0046
+        }
+      ]
+    },
+    "EventData.IsExecutable": {
+      "kind": "freeform",
+      "n": 3,
+      "values": [
+        {
+          "count": 3,
+          "value": "True",
+          "weight": 1.0
+        }
+      ]
+    },
+    "EventData.ObjectName": {
+      "kind": "identifier",
+      "n": 121,
+      "shapes": [
+        {
+          "count": 65,
+          "shape": "str:len_bucket=<=128",
+          "weight": 0.5372
+        },
+        {
+          "count": 56,
+          "shape": "str:len_bucket=<=64",
+          "weight": 0.4628
+        }
+      ]
+    },
+    "EventData.ObjectServer": {
+      "kind": "identifier",
+      "n": 121,
+      "shapes": [
+        {
+          "count": 121,
+          "shape": "str:len_bucket=<=8",
+          "weight": 1.0
+        }
+      ]
+    },
+    "EventData.ObjectType": {
+      "kind": "freeform",
+      "n": 121,
+      "values": [
+        {
+          "count": 116,
+          "value": "Key",
+          "weight": 0.9587
+        },
+        {
+          "count": 4,
+          "value": "File",
+          "weight": 0.0331
+        },
+        {
+          "count": 1,
+          "value": "Process",
+          "weight": 0.0083
+        }
+      ]
+    },
+    "EventData.PreviousCreationUtcTime": {
+      "kind": "freeform",
+      "n": 6,
+      "values": [
+        {
+          "count": 2,
+          "value": "2019-04-27 15:57:53.634",
+          "weight": 0.3333
+        },
+        {
+          "count": 1,
+          "value": "2019-04-30 22:48:58.901",
+          "weight": 0.1667
+        },
+        {
+          "count": 1,
+          "value": "2019-04-30 22:49:07.854",
+          "weight": 0.1667
+        },
+        {
+          "count": 1,
+          "value": "2019-04-30 10:12:45.583",
+          "weight": 0.1667
+        },
+        {
+          "count": 1,
+          "value": "2019-04-27 15:57:53.650",
+          "weight": 0.1667
+        }
+      ]
+    },
+    "EventData.ProcessGuid": {
+      "kind": "identifier",
+      "n": 219,
+      "shapes": [
+        {
+          "count": 219,
+          "shape": "guid",
+          "weight": 1.0
+        }
+      ]
+    },
+    "EventData.ProcessId": {
+      "kind": "freeform",
+      "n": 340,
+      "values": [
+        {
+          "count": 110,
+          "value": "0x5a8",
+          "weight": 0.3235
+        },
+        {
+          "count": 22,
+          "value": "7700",
+          "weight": 0.0647
+        },
+        {
+          "count": 13,
+          "value": "2988",
+          "weight": 0.0382
+        },
+        {
+          "count": 12,
+          "value": "520",
+          "weight": 0.0353
+        },
+        {
+          "count": 8,
+          "value": "7664",
+          "weight": 0.0235
+        },
+        {
+          "count": 7,
+          "value": "3884",
+          "weight": 0.0206
+        },
+        {
+          "count": 6,
+          "value": "5632",
+          "weight": 0.0176
+        },
+        {
+          "count": 6,
+          "value": "4192",
+          "weight": 0.0176
+        },
+        {
+          "count": 6,
+          "value": "4",
+          "weight": 0.0176
+        },
+        {
+          "count": 5,
+          "value": "2576",
+          "weight": 0.0147
+        },
+        {
+          "count": 5,
+          "value": "2680",
+          "weight": 0.0147
+        },
+        {
+          "count": 4,
+          "value": "0x134c",
+          "weight": 0.0118
+        },
+        {
+          "count": 4,
+          "value": "0x380",
+          "weight": 0.0118
+        },
+        {
+          "count": 3,
+          "value": "6632",
+          "weight": 0.0088
+        },
+        {
+          "count": 3,
+          "value": "1036",
+          "weight": 0.0088
+        },
+        {
+          "count": 3,
+          "value": "3596",
+          "weight": 0.0088
+        },
+        {
+          "count": 3,
+          "value": "28176",
+          "weight": 0.0088
+        },
+        {
+          "count": 2,
+          "value": "1568",
+          "weight": 0.0059
+        },
+        {
+          "count": 2,
+          "value": "1388",
+          "weight": 0.0059
+        },
+        {
+          "count": 2,
+          "value": "3912",
+          "weight": 0.0059
+        },
+        {
+          "count": 2,
+          "value": "3552",
+          "weight": 0.0059
+        },
+        {
+          "count": 2,
+          "value": "2812",
+          "weight": 0.0059
+        },
+        {
+          "count": 2,
+          "value": "308",
+          "weight": 0.0059
+        },
+        {
+          "count": 2,
+          "value": "304",
+          "weight": 0.0059
+        },
+        {
+          "count": 2,
+          "value": "8736",
+          "weight": 0.0059
+        },
+        {
+          "count": 2,
+          "value": "9444",
+          "weight": 0.0059
+        },
+        {
+          "count": 2,
+          "value": "3916",
+          "weight": 0.0059
+        },
+        {
+          "count": 2,
+          "value": "3508",
+          "weight": 0.0059
+        },
+        {
+          "count": 2,
+          "value": "1788",
+          "weight": 0.0059
+        },
+        {
+          "count": 2,
+          "value": "1040",
+          "weight": 0.0059
+        },
+        {
+          "count": 2,
+          "value": "1912",
+          "weight": 0.0059
+        },
+        {
+          "count": 2,
+          "value": "1512",
+          "weight": 0.0059
+        },
+        {
+          "count": 2,
+          "value": "2720",
+          "weight": 0.0059
+        },
+        {
+          "count": 2,
+          "value": "1256",
+          "weight": 0.0059
+        },
+        {
+          "count": 2,
+          "value": "7624",
+          "weight": 0.0059
+        },
+        {
+          "count": 2,
+          "value": "8920",
+          "weight": 0.0059
+        },
+        {
+          "count": 1,
+          "value": "3352",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "2888",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "3572",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "1856",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "3576",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "7188",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "912",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "0x1688",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "640",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "700",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "3000",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "1208",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "4896",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "1028",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "1108",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "5840",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "11644",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "2028",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "2956",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "3812",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "1136",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "3716",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "2460",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "972",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "4076",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "1700",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "1900",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "5712",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "2056",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "2532",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "1232",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "8500",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "6932",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "8712",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "4480",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "4884",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "5284",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "6380",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "7984",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "5080",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "5336",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "4020",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "2984",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "2112",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "3724",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "3404",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "2236",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "3740",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "4052",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "2668",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "3956",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "3896",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "3848",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "100",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "2548",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "3088",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "3132",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "2848",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "3204",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "0xd60",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "0x258",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "2580",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "1944",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "4600",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "1556",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "22932",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "3872",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "684",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "968",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "1332",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "2940",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "856",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "868",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "2080",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "3292",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "2836",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "3364",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "3768",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "21756",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "3396",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "2772",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "944",
+          "weight": 0.0029
+        }
+      ]
+    },
+    "EventData.ProcessName": {
+      "kind": "freeform",
+      "n": 121,
+      "values": [
+        {
+          "count": 114,
+          "value": "C:\\Windows\\System32\\svchost.exe",
+          "weight": 0.9421
+        },
+        {
+          "count": 4,
+          "value": "C:\\Users\\Defau1t\\wsus.exe",
+          "weight": 0.0331
+        },
+        {
+          "count": 1,
+          "value": "C:\\Windows\\System32\\cscript.exe",
+          "weight": 0.0083
+        },
+        {
+          "count": 1,
+          "value": "C:\\Program Files\\Microsoft Office\\Office14\\WINWORD.EXE",
+          "weight": 0.0083
+        },
+        {
+          "count": 1,
+          "value": "C:\\Windows\\explorer.exe",
+          "weight": 0.0083
+        }
+      ]
+    },
+    "EventData.ResourceAttributes": {
+      "kind": "freeform",
+      "n": 7,
+      "values": [
+        {
+          "count": 7,
+          "value": "-",
+          "weight": 1.0
+        }
+      ]
+    },
+    "EventData.RuleName": {
+      "kind": "freeform",
+      "n": 21,
+      "values": [
+        {
+          "count": 7,
+          "value": "-",
+          "weight": 0.3333
+        },
+        {
+          "count": 3,
+          "value": "ProvEsc - UAC Bypass Mocking Trusted WinFolders",
+          "weight": 0.1429
+        },
+        {
+          "count": 3,
+          "value": "technique_id=T1099,technique_name=Timestomp",
+          "weight": 0.1429
+        },
+        {
+          "count": 2,
+          "value": "technique_id=T1187,technique_name=Forced Authentication",
+          "weight": 0.0952
+        },
+        {
+          "count": 1,
+          "value": "undefined",
+          "weight": 0.0476
+        },
+        {
+          "count": 1,
+          "value": "PrivEsc - Potential PrivEsc via unquoted Service",
+          "weight": 0.0476
+        },
+        {
+          "count": 1,
+          "value": "PrivEsc - UAC Bypass UACME 32",
+          "weight": 0.0476
+        },
+        {
+          "count": 1,
+          "value": "PrivEsc - UAC Bypass UACME 30",
+          "weight": 0.0476
+        },
+        {
+          "count": 1,
+          "value": "PrivEsc - UAC Bypass UACME 23",
+          "weight": 0.0476
+        },
+        {
+          "count": 1,
+          "value": "PrivEsc - UAC Bypass UACME 22",
+          "weight": 0.0476
+        }
+      ]
+    },
+    "EventData.SubjectDomainName": {
+      "kind": "identifier",
+      "n": 121,
+      "shapes": [
+        {
+          "count": 117,
+          "shape": "str:len_bucket=<=16",
+          "weight": 0.9669
+        },
+        {
+          "count": 4,
+          "shape": "str:len_bucket=<=8",
+          "weight": 0.0331
+        }
+      ]
+    },
+    "EventData.SubjectLogonId": {
+      "kind": "freeform",
+      "n": 121,
+      "values": [
+        {
+          "count": 110,
+          "value": "0x3e5",
+          "weight": 0.9091
+        },
+        {
+          "count": 6,
+          "value": "0x7a857",
+          "weight": 0.0496
+        },
+        {
+          "count": 4,
+          "value": "0xffa8",
+          "weight": 0.0331
+        },
+        {
+          "count": 1,
+          "value": "0x33392",
+          "weight": 0.0083
+        }
+      ]
+    },
+    "EventData.SubjectUserName": {
+      "kind": "identifier",
+      "n": 121,
+      "shapes": [
+        {
+          "count": 110,
+          "shape": "str:len_bucket=<=16",
+          "weight": 0.9091
+        },
+        {
+          "count": 11,
+          "shape": "str:len_bucket=<=8",
+          "weight": 0.0909
+        }
+      ]
+    },
+    "EventData.SubjectUserSid": {
+      "kind": "identifier",
+      "n": 121,
+      "shapes": [
+        {
+          "count": 110,
+          "shape": "sid:parts=4",
+          "weight": 0.9091
+        },
+        {
+          "count": 11,
+          "shape": "sid:parts=8",
+          "weight": 0.0909
+        }
+      ]
+    },
+    "EventData.TargetFilename": {
+      "kind": "freeform",
+      "n": 219,
+      "values": [
+        {
+          "count": 2,
+          "value": "C:\\Users\\bouss\\AppData\\Local\\Temp\\NuGetScratch\\lock\\3eaea9d73c9b6f131ef5b5e8a4cf9a7567b32fa3",
+          "weight": 0.0333
+        },
+        {
+          "count": 2,
+          "value": "C:\\Users\\bouss\\AppData\\Local\\Temp\\tmpf890f11830e143ada2d718f706dd94c0.exec.cmd",
+          "weight": 0.0333
+        },
+        {
+          "count": 2,
+          "value": "C:\\Users\\bouss\\source\\repos\\blabla\\blabla\\Debug\\blabla.tlog\\CL.command.1.tlog",
+          "weight": 0.0333
+        },
+        {
+          "count": 2,
+          "value": "C:\\Users\\bouss\\AppData\\Local\\Temp\\tmp5938b880d43743db91973c95f519f06b.tmp",
+          "weight": 0.0333
+        },
+        {
+          "count": 2,
+          "value": "C:\\Users\\bouss\\AppData\\Local\\Temp\\tmp19546d957b6e4d15b83f93a323d5f087.rsp",
+          "weight": 0.0333
+        },
+        {
+          "count": 2,
+          "value": "C:\\Users\\bouss\\source\\repos\\blabla\\blabla\\Debug\\blabla.tlog\\CL.write.1.tlog",
+          "weight": 0.0333
+        },
+        {
+          "count": 2,
+          "value": "C:\\Users\\bouss\\source\\repos\\blabla\\blabla\\Debug\\blabla.tlog\\CL.read.1.tlog",
+          "weight": 0.0333
+        },
+        {
+          "count": 2,
+          "value": "C:\\Users\\IEUser\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\bs.ps1",
+          "weight": 0.0333
+        },
+        {
+          "count": 2,
+          "value": "C:\\Users\\IEUser\\AppData\\Roaming\\NvSmart.exe",
+          "weight": 0.0333
+        },
+        {
+          "count": 2,
+          "value": "C:\\Users\\IEUser\\AppData\\Roaming\\NvSmartMax.dll",
+          "weight": 0.0333
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\IEUser\\AppData\\Local\\Temp\\Personalization\\LockScreenImage\\LockScreenImage_uXQ8IiHL80mkJsKc319JaA.7z",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\bouss\\AppData\\Local\\Temp\\~DF0187A90594A6AC9B.TMP",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\bouss\\AppData\\Local\\Temp\\NuGetScratch\\lock\\b8162606fcd2bea192a83c85aaff3292f908cfde",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\bouss\\source\\repos\\blabla\\blabla\\Debug\\blabla.log",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\bouss\\source\\repos\\blabla\\blabla\\Debug\\blabla.tlog\\blabla.lastbuildstate",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\bouss\\AppData\\Local\\Microsoft\\VSApplicationInsights\\vstelAIF-312cbd79-9dbb-4c48-a7da-3cc2a931cb70\\20210126132123_277b7688d03b431eb925a7d64307d79a.tmp",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\bouss\\AppData\\Local\\Microsoft\\VSApplicationInsights\\vstelAIF-312cbd79-9dbb-4c48-a7da-3cc2a931cb70\\20210126132123_dd350a9897114eee834fb0993b4dee7e.tmp",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\bouss\\AppData\\Local\\Microsoft\\VSApplicationInsights\\vstelf144292e-e3b2-4011-ac90-20e5c03fbce5\\20210126132123_195f3c1acef04eaeb6f67d3ff46e5958.tmp",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\bouss\\Downloads\\prebuildevent_visual_studio.evtx",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\IEUser\\AppData\\Local\\Microsoft\\Windows\\Temporary Internet Files\\Content.IE5\\S97WTYG7\\x50IGVBRfr55_test[1].xsl",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\IEUser\\AppData\\Local\\Temp\\shdocvw.url",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Windows\\inf\\WmiApRpl\\0009\\WmiApRpl.ini",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Windows\\System32\\PerfStringBackup.INI",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Windows\\System32\\Tasks\\Microsoft\\Windows Defender\\MpIdleTask",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\IEUser\\AppData\\Local\\Temp\\ieframe.url",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\ProgramData\\calc.hta",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Windows\\System32\\Tasks\\MSOFFICE_",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\IEUser\\AppData\\Local\\Temp\\302a23.msi",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Windows\\Installer\\304d1c.msi",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\IEUser\\Desktop\\RDPWRA~1.2\\install.bat",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\IEUser\\Desktop\\RDPWRA~1.2\\RDPCheck.exe",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\IEUser\\Desktop\\RDPWRA~1.2\\RDPConf.exe",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\IEUser\\Desktop\\RDPWRA~1.2\\RDPWInst.exe",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\IEUser\\Desktop\\RDPWRA~1.2\\uninstall.bat",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\IEUser\\Desktop\\RDPWRA~1.2\\update.bat",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\ProgramData\\Intel\\wwlib.dll",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\IEUser\\AppData\\Roaming\\Microsoft\\Windows\\Recent\\CustomDestinations\\HCJVGQ5XQYJQFTRJAKRF.temp",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\IEUser\\AppData\\Roaming\\Microsoft\\Windows\\Recent\\CustomDestinations\\ff99ba2fb2e34b73.customDestinations-ms~RF6f668.TMP",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Windows\\System32\\drivers\\VBoxDrv.sys",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\bouss\\Downloads\\samir.exe",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\IEUser\\AppData\\Roaming\\WINWORD.exe",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\IEUser\\AppData\\Roaming\\wwlib.dll",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\IEUser\\AppData\\Local\\Temp\\tmp1375\\__tmp_rar_sfx_access_check_2914968",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\IEUser\\AppData\\Local\\Temp\\tmp1375\\d948",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\IEUser\\AppData\\Local\\Temp\\sduchxll.tmp",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\IEUser\\AppData\\Roaming\\data.enc",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\IEUser\\AppData\\Roaming\\config.xml",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\IEUser\\Downloads\\Flash_update.exe",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Windows\\System32\\Tasks\\Microsoft\\Windows Defender\\MP Scheduled Scan",
+          "weight": 0.0167
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\IEUser\\AppData\\Roaming\\NvSmartMax.dll.url",
+          "weight": 0.0167
+        }
+      ]
+    },
+    "EventData.User": {
+      "kind": "identifier",
+      "n": 4,
+      "shapes": [
+        {
+          "count": 4,
+          "shape": "str:len_bucket=<=32",
+          "weight": 1.0
+        }
+      ]
+    },
+    "EventData.UtcTime": {
+      "kind": "freeform",
+      "n": 219,
+      "values": [
+        {
+          "count": 9,
+          "value": "2020-08-12 13:04:27.549",
+          "weight": 0.0411
+        },
+        {
+          "count": 6,
+          "value": "2020-08-25 10:08:37.392",
+          "weight": 0.0274
+        },
+        {
+          "count": 5,
+          "value": "2020-08-12 13:04:27.563",
+          "weight": 0.0228
+        },
+        {
+          "count": 4,
+          "value": "2020-04-25 22:19:26.766",
+          "weight": 0.0183
+        },
+        {
+          "count": 4,
+          "value": "2020-08-25 10:08:05.766",
+          "weight": 0.0183
+        },
+        {
+          "count": 4,
+          "value": "2020-08-25 10:08:37.673",
+          "weight": 0.0183
+        },
+        {
+          "count": 3,
+          "value": "2020-08-12 13:04:27.533",
+          "weight": 0.0137
+        },
+        {
+          "count": 3,
+          "value": "2019-04-27 15:57:53.634",
+          "weight": 0.0137
+        },
+        {
+          "count": 2,
+          "value": "2019-07-27 22:43:41.627",
+          "weight": 0.0091
+        },
+        {
+          "count": 2,
+          "value": "2019-05-09 02:52:23.500",
+          "weight": 0.0091
+        },
+        {
+          "count": 2,
+          "value": "2020-04-25 22:19:26.750",
+          "weight": 0.0091
+        },
+        {
+          "count": 2,
+          "value": "2020-08-12 13:04:28.486",
+          "weight": 0.0091
+        },
+        {
+          "count": 2,
+          "value": "2020-08-25 19:02:22.357",
+          "weight": 0.0091
+        },
+        {
+          "count": 2,
+          "value": "2020-08-25 10:07:58.689",
+          "weight": 0.0091
+        },
+        {
+          "count": 2,
+          "value": "2020-08-25 10:07:58.704",
+          "weight": 0.0091
+        },
+        {
+          "count": 2,
+          "value": "2019-05-21 00:35:07.375",
+          "weight": 0.0091
+        },
+        {
+          "count": 2,
+          "value": "2021-01-26 13:21:13.975",
+          "weight": 0.0091
+        },
+        {
+          "count": 2,
+          "value": "2021-01-26 13:21:14.396",
+          "weight": 0.0091
+        },
+        {
+          "count": 2,
+          "value": "2021-01-26 13:21:14.853",
+          "weight": 0.0091
+        },
+        {
+          "count": 2,
+          "value": "2020-10-17 16:27:10.777",
+          "weight": 0.0091
+        },
+        {
+          "count": 2,
+          "value": "2020-10-17 11:43:33.444",
+          "weight": 0.0091
+        },
+        {
+          "count": 2,
+          "value": "2019-04-27 15:57:53.650",
+          "weight": 0.0091
+        },
+        {
+          "count": 1,
+          "value": "2020-09-28 12:47:36.624",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-08-30 12:54:08.392",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-06-21 07:35:37.324",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-06-21 07:35:50.258",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-06-21 07:35:50.727",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-06-21 07:36:50.985",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-17 19:09:41.318",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-17 19:10:02.058",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2021-04-22 22:09:26.157",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-04-18 16:57:06.954",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-04-18 17:03:03.311",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-04-18 17:03:03.441",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-09-11 12:10:22.357",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-07-29 21:32:59.209",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-07-29 21:33:24.100",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-07-29 21:33:49.287",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-07-29 21:33:54.618",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-07-29 21:34:40.880",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-07-19 14:43:46.619",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-07-19 14:45:31.276",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-07-19 14:57:46.479",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-07-19 15:10:52.699",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-11-26 17:38:11.146",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-11 16:54:02.305",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-11 16:54:07.462",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-11 16:46:10.344",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-11 16:46:15.484",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-11 09:50:08.491",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-11 09:50:13.464",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-11 17:28:17.363",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-12 00:32:30.086",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-10 12:22:02.434",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-07-27 22:43:41.641",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-10 13:49:29.789",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-10 13:49:34.899",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-09 02:52:18.765",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-04-25 22:18:47.120",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-04-25 22:19:17.764",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-08-12 13:04:27.391",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-08-12 13:04:27.438",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-08-12 13:04:27.938",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-08-12 13:04:28.501",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2022-02-19 17:35:16.295",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25 09:58:51.423",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25 10:07:58.673",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25 10:08:05.751",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25 10:08:05.782",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25 10:08:37.579",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25 10:08:37.595",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25 10:09:20.552",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25 10:09:20.568",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-10-01 18:35:02.768",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-05-12 15:06:49.134",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-10-20 11:50:55.442",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-10-20 11:50:55.457",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-10-20 11:50:55.992",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-10-20 11:50:56.082",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-10-20 11:50:56.994",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-08-04 09:33:57.716",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-08-03 15:08:06.372",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-08-03 13:50:26.727",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-08-03 12:31:14.986",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-08-03 12:32:34.721",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-08-03 10:51:46.599",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-08-03 11:23:15.519",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-08-03 12:06:53.846",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-08-03 12:08:13.721",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-06-14 22:22:21.503",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19 20:35:29.940",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19 20:36:30.807",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19 20:46:25.856",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19 20:47:56.426",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19 20:48:33.369",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19 20:48:33.549",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19 20:48:33.780",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19 20:49:27.767",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19 20:49:27.927",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19 20:49:28.148",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19 20:49:44.772",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19 20:49:44.932",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19 20:49:45.152",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19 20:52:25.923",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19 20:52:26.064",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19 20:52:26.274",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19 20:52:47.114",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19 20:52:47.254",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19 20:52:47.454",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19 20:58:20.974",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19 20:58:31.799",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19 23:13:07.374",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19 23:14:08.880",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19 23:20:19.195",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19 23:24:08.284",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-10-17 22:52:34.236",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-10-17 22:53:05.627",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-10-17 22:53:05.707",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-10-17 22:53:05.815",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-08-27 11:40:56.396",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-12-09 22:45:33.087",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-14 14:03:45.073",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-14 14:04:05.696",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-14 14:04:06.310",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-14 14:04:28.849",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2021-10-21 16:27:03.397",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2021-10-21 16:27:12.522",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2021-10-21 16:27:12.549",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-27 15:12:46.981",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-07-29 21:11:11.127",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-07-03 08:47:21.485",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26 13:21:13.236",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26 13:21:13.558",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26 13:21:13.560",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26 13:21:13.561",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26 13:21:13.683",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26 13:21:13.972",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26 13:21:14.363",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26 13:21:14.394",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26 13:21:14.395",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26 13:21:14.852",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26 13:21:14.854",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26 13:21:14.855",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26 13:21:23.229",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26 13:21:23.302",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26 13:21:23.305",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26 13:21:33.197",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-23 16:49:07.731",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-12 13:56:12.329",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-12 13:56:46.526",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-12 13:56:46.589",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-12 13:57:39.662",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-12 13:30:46.181",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-12 13:37:49.604",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-05-21 15:32:59.809",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-04-30 22:48:58.901",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-04-30 22:49:07.901",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-04-30 10:12:45.583",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-04-30 10:13:42.052",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-17 20:17:44.526",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-17 20:17:44.607",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-17 20:17:44.777",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-17 20:17:45.458",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-17 20:17:45.618",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-03-17 20:17:45.648",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-10-17 16:26:54.668",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-02-10 08:28:12.870",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-10-27 10:17:18.369",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-10-23 21:57:34.734",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-10-23 21:57:34.751",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-10-23 21:57:36.328",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-10-23 21:58:22.360",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2020-10-23 21:58:22.375",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-04-27 15:57:25.868",
+          "weight": 0.0046
+        },
+        {
+          "count": 1,
+          "value": "2019-04-27 15:57:27.087",
+          "weight": 0.0046
+        }
+      ]
+    },
+    "System.Channel": {
+      "kind": "freeform",
+      "n": 340,
+      "values": [
+        {
+          "count": 219,
+          "value": "Microsoft-Windows-Sysmon/Operational",
+          "weight": 0.6441
+        },
+        {
+          "count": 121,
+          "value": "Security",
+          "weight": 0.3559
+        }
+      ]
+    },
+    "System.Computer": {
+      "kind": "identifier",
+      "n": 340,
+      "shapes": [
+        {
+          "count": 152,
+          "shape": "fqdn:labels=3",
+          "weight": 0.4471
+        },
+        {
+          "count": 144,
+          "shape": "str:len_bucket=<=16",
+          "weight": 0.4235
+        },
+        {
+          "count": 44,
+          "shape": "str:len_bucket=<=8",
+          "weight": 0.1294
+        }
+      ]
+    },
+    "System.EventID": {
+      "kind": "freeform",
+      "n": 340,
+      "values": [
+        {
+          "count": 209,
+          "value": "11",
+          "weight": 0.6147
+        },
+        {
+          "count": 121,
+          "value": "4663",
+          "weight": 0.3559
+        },
+        {
+          "count": 6,
+          "value": "2",
+          "weight": 0.0176
+        },
+        {
+          "count": 3,
+          "value": "23",
+          "weight": 0.0088
+        },
+        {
+          "count": 1,
+          "value": "15",
+          "weight": 0.0029
+        }
+      ]
+    },
+    "System.EventRecordID": {
+      "kind": "freeform",
+      "n": 340,
+      "values": [
+        {
+          "count": 1,
+          "value": "5229",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "32155",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "238375",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "238380",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "238383",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "238387",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "4433",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "4441",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "564596",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "16",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "32",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "33",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "314462",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "4988",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "4989",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "4990",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "4991",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "385052",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "4891",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "4913",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "4935",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "4942",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "5003",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "3575",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "3609",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "4087",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "4109",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2362765",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "15987",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "15989",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "15970",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "15972",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "15875",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "15877",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "16037",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "16244",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "15636",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "4724",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "4725",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "4726",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "15706",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "15707",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "11219",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "11240",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "11241",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "27292",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "27570",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "27792",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "27793",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "27794",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "27795",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "27796",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "27797",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "342289",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "342290",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "342291",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "342292",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "342293",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "342294",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "342295",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "342296",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "342297",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "342298",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "342299",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "342300",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "342301",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "342302",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "342303",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "342304",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "342305",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "342306",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "342307",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "342308",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "342310",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "342311",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "342312",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "1986612",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "358803",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "358897",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "358898",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "358983",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "358984",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "358985",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "358986",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "358987",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "358988",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "358989",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "358990",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "358991",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "358992",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "358993",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "359028",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "359030",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "359031",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "359032",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "359033",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "359036",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "359040",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "359041",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "359044",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "359046",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "359047",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "359048",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "359148",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "359149",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "410487",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "143175",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "768",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "769",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "869",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "877",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "1081",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "5763",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "5527",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "5518",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "5487",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "5494",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "5305",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "5401",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "5429",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "5438",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "7531",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "1966239",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "1966259",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "1966356",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "1966367",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "1966372",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "1966380",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "1966384",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "1966392",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "1966400",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "1966404",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "1966412",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "1966420",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "1966424",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "1966433",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "1966441",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "1966445",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "1966453",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "1966461",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "1966465",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "1966484",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "1966499",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "1966620",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "1966643",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "1966727",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "1966750",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "371",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "373",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "340232",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "340233",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "340234",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "340235",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "340236",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "340237",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "421207",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "421224",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "421226",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "421228",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "263572",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "549541",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "31144",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "31145",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "31146",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "31147",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "10920369",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "10920370",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "10920378",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "6179",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "4860",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "305356",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2429127",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2429128",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2429129",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2429130",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2429131",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2429134",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2429135",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2429136",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2429140",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2429141",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2429142",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2429143",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2429144",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2429148",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2429149",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2429150",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2429151",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2429152",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2429153",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2429154",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2429155",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2429156",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "894",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "16437",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "16439",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "16440",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "16441",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "16387",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "16394",
+          "weight": 0.005
+        }
+      ]
+    },
+    "System.Execution.#attributes.ProcessID": {
+      "kind": "freeform",
+      "n": 340,
+      "values": [
+        {
+          "count": 121,
+          "value": "4",
+          "weight": 0.3559
+        },
+        {
+          "count": 25,
+          "value": "3156",
+          "weight": 0.0735
+        },
+        {
+          "count": 23,
+          "value": "3296",
+          "weight": 0.0676
+        },
+        {
+          "count": 22,
+          "value": "5272",
+          "weight": 0.0647
+        },
+        {
+          "count": 21,
+          "value": "1564",
+          "weight": 0.0618
+        },
+        {
+          "count": 11,
+          "value": "2796",
+          "weight": 0.0324
+        },
+        {
+          "count": 9,
+          "value": "2780",
+          "weight": 0.0265
+        },
+        {
+          "count": 7,
+          "value": "1912",
+          "weight": 0.0206
+        },
+        {
+          "count": 6,
+          "value": "2640",
+          "weight": 0.0176
+        },
+        {
+          "count": 6,
+          "value": "1852",
+          "weight": 0.0176
+        },
+        {
+          "count": 5,
+          "value": "2008",
+          "weight": 0.0147
+        },
+        {
+          "count": 5,
+          "value": "7212",
+          "weight": 0.0147
+        },
+        {
+          "count": 5,
+          "value": "3208",
+          "weight": 0.0147
+        },
+        {
+          "count": 4,
+          "value": "1560",
+          "weight": 0.0118
+        },
+        {
+          "count": 4,
+          "value": "988",
+          "weight": 0.0118
+        },
+        {
+          "count": 4,
+          "value": "3236",
+          "weight": 0.0118
+        },
+        {
+          "count": 4,
+          "value": "1580",
+          "weight": 0.0118
+        },
+        {
+          "count": 4,
+          "value": "2036",
+          "weight": 0.0118
+        },
+        {
+          "count": 3,
+          "value": "3192",
+          "weight": 0.0088
+        },
+        {
+          "count": 3,
+          "value": "2748",
+          "weight": 0.0088
+        },
+        {
+          "count": 3,
+          "value": "1988",
+          "weight": 0.0088
+        },
+        {
+          "count": 3,
+          "value": "5396",
+          "weight": 0.0088
+        },
+        {
+          "count": 3,
+          "value": "2032",
+          "weight": 0.0088
+        },
+        {
+          "count": 3,
+          "value": "3416",
+          "weight": 0.0088
+        },
+        {
+          "count": 3,
+          "value": "3344",
+          "weight": 0.0088
+        },
+        {
+          "count": 2,
+          "value": "344",
+          "weight": 0.0059
+        },
+        {
+          "count": 2,
+          "value": "2000",
+          "weight": 0.0059
+        },
+        {
+          "count": 2,
+          "value": "1980",
+          "weight": 0.0059
+        },
+        {
+          "count": 2,
+          "value": "3252",
+          "weight": 0.0059
+        },
+        {
+          "count": 2,
+          "value": "1936",
+          "weight": 0.0059
+        },
+        {
+          "count": 2,
+          "value": "1956",
+          "weight": 0.0059
+        },
+        {
+          "count": 2,
+          "value": "3500",
+          "weight": 0.0059
+        },
+        {
+          "count": 1,
+          "value": "2848",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "3292",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "3352",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "3044",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "5900",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "1996",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "2016",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "2752",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "2320",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "3300",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "3308",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "2856",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "1960",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "2580",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "3428",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "980",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "3324",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "2728",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "5400",
+          "weight": 0.0029
+        }
+      ]
+    },
+    "System.Execution.#attributes.ThreadID": {
+      "kind": "freeform",
+      "n": 340,
+      "values": [
+        {
+          "count": 110,
+          "value": "60",
+          "weight": 0.3235
+        },
+        {
+          "count": 25,
+          "value": "112",
+          "weight": 0.0735
+        },
+        {
+          "count": 23,
+          "value": "4484",
+          "weight": 0.0676
+        },
+        {
+          "count": 22,
+          "value": "6060",
+          "weight": 0.0647
+        },
+        {
+          "count": 21,
+          "value": "1252",
+          "weight": 0.0618
+        },
+        {
+          "count": 9,
+          "value": "3676",
+          "weight": 0.0265
+        },
+        {
+          "count": 7,
+          "value": "3572",
+          "weight": 0.0206
+        },
+        {
+          "count": 7,
+          "value": "996",
+          "weight": 0.0206
+        },
+        {
+          "count": 6,
+          "value": "1068",
+          "weight": 0.0176
+        },
+        {
+          "count": 6,
+          "value": "3476",
+          "weight": 0.0176
+        },
+        {
+          "count": 6,
+          "value": "1644",
+          "weight": 0.0176
+        },
+        {
+          "count": 6,
+          "value": "464",
+          "weight": 0.0176
+        },
+        {
+          "count": 5,
+          "value": "1992",
+          "weight": 0.0147
+        },
+        {
+          "count": 5,
+          "value": "9748",
+          "weight": 0.0147
+        },
+        {
+          "count": 5,
+          "value": "4804",
+          "weight": 0.0147
+        },
+        {
+          "count": 4,
+          "value": "2316",
+          "weight": 0.0118
+        },
+        {
+          "count": 4,
+          "value": "3592",
+          "weight": 0.0118
+        },
+        {
+          "count": 4,
+          "value": "4832",
+          "weight": 0.0118
+        },
+        {
+          "count": 4,
+          "value": "2324",
+          "weight": 0.0118
+        },
+        {
+          "count": 4,
+          "value": "296",
+          "weight": 0.0118
+        },
+        {
+          "count": 3,
+          "value": "3288",
+          "weight": 0.0088
+        },
+        {
+          "count": 3,
+          "value": "3376",
+          "weight": 0.0088
+        },
+        {
+          "count": 3,
+          "value": "228",
+          "weight": 0.0088
+        },
+        {
+          "count": 3,
+          "value": "7692",
+          "weight": 0.0088
+        },
+        {
+          "count": 3,
+          "value": "3496",
+          "weight": 0.0088
+        },
+        {
+          "count": 3,
+          "value": "4376",
+          "weight": 0.0088
+        },
+        {
+          "count": 3,
+          "value": "4688",
+          "weight": 0.0088
+        },
+        {
+          "count": 2,
+          "value": "2032",
+          "weight": 0.0059
+        },
+        {
+          "count": 2,
+          "value": "56",
+          "weight": 0.0059
+        },
+        {
+          "count": 2,
+          "value": "1748",
+          "weight": 0.0059
+        },
+        {
+          "count": 2,
+          "value": "1948",
+          "weight": 0.0059
+        },
+        {
+          "count": 2,
+          "value": "3880",
+          "weight": 0.0059
+        },
+        {
+          "count": 2,
+          "value": "1996",
+          "weight": 0.0059
+        },
+        {
+          "count": 2,
+          "value": "1636",
+          "weight": 0.0059
+        },
+        {
+          "count": 1,
+          "value": "2328",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "928",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "4696",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "160",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "68",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "44",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "3900",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "6484",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "1832",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "2012",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "3576",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "3120",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "4000",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "4656",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "3608",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "288",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "4144",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "2220",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "4016",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "2092",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "3876",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "6548",
+          "weight": 0.0029
+        }
+      ]
+    },
+    "System.Keywords": {
+      "kind": "freeform",
+      "n": 340,
+      "values": [
+        {
+          "count": 219,
+          "value": "0x8000000000000000",
+          "weight": 0.6441
+        },
+        {
+          "count": 121,
+          "value": "0x8020000000000000",
+          "weight": 0.3559
+        }
+      ]
+    },
+    "System.Level": {
+      "kind": "freeform",
+      "n": 340,
+      "values": [
+        {
+          "count": 219,
+          "value": "4",
+          "weight": 0.6441
+        },
+        {
+          "count": 121,
+          "value": "0",
+          "weight": 0.3559
+        }
+      ]
+    },
+    "System.Opcode": {
+      "kind": "freeform",
+      "n": 340,
+      "values": [
+        {
+          "count": 340,
+          "value": "0",
+          "weight": 1.0
+        }
+      ]
+    },
+    "System.Provider.#attributes.Guid": {
+      "kind": "identifier",
+      "n": 340,
+      "shapes": [
+        {
+          "count": 340,
+          "shape": "guid",
+          "weight": 1.0
+        }
+      ]
+    },
+    "System.Provider.#attributes.Name": {
+      "kind": "freeform",
+      "n": 340,
+      "values": [
+        {
+          "count": 219,
+          "value": "Microsoft-Windows-Sysmon",
+          "weight": 0.6441
+        },
+        {
+          "count": 121,
+          "value": "Microsoft-Windows-Security-Auditing",
+          "weight": 0.3559
+        }
+      ]
+    },
+    "System.Security.#attributes.UserID": {
+      "kind": "identifier",
+      "n": 219,
+      "shapes": [
+        {
+          "count": 219,
+          "shape": "sid:parts=4",
+          "weight": 1.0
+        }
+      ]
+    },
+    "System.Task": {
+      "kind": "freeform",
+      "n": 340,
+      "values": [
+        {
+          "count": 209,
+          "value": "11",
+          "weight": 0.6147
+        },
+        {
+          "count": 116,
+          "value": "12801",
+          "weight": 0.3412
+        },
+        {
+          "count": 6,
+          "value": "2",
+          "weight": 0.0176
+        },
+        {
+          "count": 4,
+          "value": "12800",
+          "weight": 0.0118
+        },
+        {
+          "count": 3,
+          "value": "23",
+          "weight": 0.0088
+        },
+        {
+          "count": 1,
+          "value": "12802",
+          "weight": 0.0029
+        },
+        {
+          "count": 1,
+          "value": "15",
+          "weight": 0.0029
+        }
+      ]
+    },
+    "System.TimeCreated.#attributes.SystemTime": {
+      "kind": "freeform",
+      "n": 340,
+      "values": [
+        {
+          "count": 2,
+          "value": "2019-05-09T02:52:23.500263Z",
+          "weight": 0.01
+        },
+        {
+          "count": 1,
+          "value": "2020-09-28T12:47:36.630448Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-08-30T12:54:08.396724Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-06-21T07:35:37.329185Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-06-21T07:35:50.259077Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-06-21T07:35:50.729226Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-06-21T07:36:51.681567Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-03-17T19:09:41.328868Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-03-17T19:10:03.991455Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2021-04-22T22:09:26.163007Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-04-18T16:57:06.954307Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-04-18T17:03:03.321806Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-04-18T17:03:03.441979Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-03-08T22:11:34.340584Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-04-27T19:31:15.355063Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-04-27T19:33:05.308188Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-04-27T19:33:18.699755Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-04-27T19:33:50.134293Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-09-11T12:10:22.398726Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-07-29T21:32:59.582599Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-07-29T21:33:24.104732Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-07-29T21:33:49.340889Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-07-29T21:33:54.630548Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-07-29T21:34:41.793311Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-07-19T14:43:46.623217Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-07-19T14:45:31.287863Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-07-19T14:57:46.608481Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-07-19T15:10:52.700901Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-11-26T17:38:11.147605Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-05-11T16:54:02.305766Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-05-11T16:54:07.524516Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-05-11T16:46:10.344282Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-05-11T16:46:15.547407Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-05-11T09:50:08.491568Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-05-11T09:50:13.509892Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-05-11T17:28:17.363930Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-05-12T00:32:30.227012Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-05-10T12:22:02.434314Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-07-27T22:43:41.755254Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-07-27T22:43:41.755406Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-07-27T22:43:41.757216Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-05-10T13:49:29.789907Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-05-10T13:49:34.946157Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-05-09T02:52:18.765888Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-04-25T22:18:47.143475Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-04-25T22:19:27.481891Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-04-25T22:19:36.984165Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-04-25T22:19:36.984310Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-04-25T22:19:36.984579Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-04-25T22:19:36.984650Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-04-25T22:19:36.984719Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-04-25T22:19:36.984818Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-12T13:04:27.419260Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-12T13:04:27.454625Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-12T13:04:27.551382Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-12T13:04:27.551399Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-12T13:04:27.551413Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-12T13:04:27.562442Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-12T13:04:27.562798Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-12T13:04:27.562856Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-12T13:04:27.562922Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-12T13:04:27.562970Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-12T13:04:27.563018Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-12T13:04:27.563107Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-12T13:04:27.563213Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-12T13:04:27.563647Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-12T13:04:27.602658Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-12T13:04:27.602986Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-12T13:04:27.603171Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-12T13:04:27.603794Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-12T13:04:27.622837Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-12T13:04:27.949078Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-12T13:04:28.509187Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-12T13:04:28.509239Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-12T13:04:28.521402Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-19T17:35:16.301121Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25T09:58:51.434852Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25T10:02:32.697832Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25T10:02:32.701149Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25T10:07:58.690502Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25T10:07:58.702021Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25T10:07:58.704064Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25T10:07:58.710094Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25T10:07:58.719295Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25T10:08:05.763694Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25T10:08:05.770148Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25T10:08:05.772810Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25T10:08:05.776409Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25T10:08:05.780448Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25T10:08:05.787947Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25T10:08:37.398014Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25T10:08:37.401175Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25T10:08:37.401210Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25T10:08:37.401236Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25T10:08:37.401303Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25T10:08:37.418961Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25T10:08:37.594123Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25T10:08:37.610172Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25T10:08:37.677776Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25T10:08:37.678592Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25T10:08:37.678627Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25T10:08:37.678671Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25T10:09:27.981043Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-25T10:09:27.988042Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-10-01T18:35:02.775302Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-05-12T15:06:49.184059Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-10-20T11:50:55.450643Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-10-20T11:50:55.461859Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-10-20T11:50:56.004595Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-10-20T11:50:56.090214Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-10-20T11:50:56.999458Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-08-04T09:33:57.800853Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-08-03T15:08:06.419322Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-08-03T13:50:26.782725Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-08-03T12:31:15.096244Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-08-03T12:32:34.875974Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-08-03T10:51:46.647421Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-08-03T11:23:15.560614Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-08-03T12:06:53.933988Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-08-03T12:08:13.818381Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-06-14T22:22:21.503995Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19T20:41:14.563441Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19T20:41:15.454723Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19T20:46:25.856126Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19T20:47:56.436374Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19T20:48:33.459611Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19T20:48:33.559755Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19T20:48:33.930288Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19T20:49:27.807760Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19T20:49:27.978004Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19T20:49:28.168278Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19T20:49:44.802196Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19T20:49:44.972441Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19T20:49:45.172729Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19T20:52:25.953921Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19T20:52:26.104137Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19T20:52:26.364512Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19T20:52:47.144392Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19T20:52:47.294608Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19T20:52:47.484881Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19T20:58:21.014473Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19T20:58:31.860068Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19T23:18:53.501883Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19T23:18:54.623496Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19T23:20:19.205118Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-03-19T23:24:08.294533Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-05-21T00:35:07.463144Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-05-21T00:35:07.474160Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2021-08-07T23:33:00.588510Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2021-08-07T23:33:00.594949Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2021-08-07T23:33:00.595251Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2021-08-07T23:33:00.595338Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2021-08-07T23:33:00.595410Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2021-08-07T23:33:00.610059Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-10-17T22:52:34.249345Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-10-17T22:53:05.633952Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-10-17T22:53:05.720846Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-10-17T22:53:05.822098Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-08-27T11:40:56.397086Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-12-09T22:45:33.090853Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-05-14T14:03:45.100850Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-05-14T14:04:05.697491Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-05-14T14:04:06.339356Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-05-14T14:04:28.860777Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2021-10-21T16:27:03.398717Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2021-10-21T16:27:12.523359Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2021-10-21T16:27:12.549955Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-05-27T15:12:46.981641Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-07-29T21:11:11.156704Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2020-07-03T08:47:21.491108Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26T13:21:13.237481Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26T13:21:13.558988Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26T13:21:13.560814Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26T13:21:13.561514Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26T13:21:13.683762Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26T13:21:13.972503Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26T13:21:13.975523Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26T13:21:13.975732Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26T13:21:14.399477Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26T13:21:14.425366Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26T13:21:14.425472Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26T13:21:14.425565Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26T13:21:14.425664Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26T13:21:14.871509Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26T13:21:14.871745Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26T13:21:14.871980Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26T13:21:14.872190Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26T13:21:14.872564Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26T13:21:23.229964Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26T13:21:23.303639Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26T13:21:23.305903Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2021-01-26T13:21:33.197967Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-05-23T16:49:07.731893Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-05-12T13:56:12.329626Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-05-12T13:56:46.573766Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-05-12T13:56:46.605016Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-05-12T13:57:39.662634Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-05-12T13:30:46.181756Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-05-12T13:37:49.604920Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2019-05-21T15:32:59.809883Z",
+          "weight": 0.005
+        }
+      ]
+    },
+    "System.Version": {
+      "kind": "freeform",
+      "n": 340,
+      "values": [
+        {
+          "count": 210,
+          "value": "2",
+          "weight": 0.6176
+        },
+        {
+          "count": 114,
+          "value": "0",
+          "weight": 0.3353
+        },
+        {
+          "count": 7,
+          "value": "1",
+          "weight": 0.0206
+        },
+        {
+          "count": 6,
+          "value": "4",
+          "weight": 0.0176
+        },
+        {
+          "count": 3,
+          "value": "5",
+          "weight": 0.0088
+        }
+      ]
+    }
+  },
+  "mined_at": "2026-09-14T06:12:13.907802+00:00",
+  "record_count": 340,
+  "sources": {
+    "evtx-attack-samples/AutomatedTestingTools/Malware/DE_timestomp_and_dll_sideloading_and_RunPersist.evtx": 7,
+    "evtx-attack-samples/AutomatedTestingTools/Malware/rundll32_cmd_schtask.evtx": 5,
+    "evtx-attack-samples/AutomatedTestingTools/Malware/sideloading_uacbypass_rundll32_injection_c2.evtx": 2,
+    "evtx-attack-samples/AutomatedTestingTools/PanacheSysmon_vs_AtomicRedTeam01.evtx": 4,
+    "evtx-attack-samples/AutomatedTestingTools/panache_sysmon_vs_EDRTestingScript.evtx": 5,
+    "evtx-attack-samples/Credential Access/CA_Mimikatz_Memssp_Default_Logs_Sysmon_11.evtx": 1,
+    "evtx-attack-samples/Credential Access/CA_chrome_firefox_opera_4663.evtx": 4,
+    "evtx-attack-samples/Credential Access/CA_hashdump_4663_4656_lsass_access.evtx": 1,
+    "evtx-attack-samples/Credential Access/babyshark_mimikatz_powershell.evtx": 3,
+    "evtx-attack-samples/Credential Access/ppl_bypass_ppldump_knowdll_hijack_sysmon_security.evtx": 1,
+    "evtx-attack-samples/Credential Access/sysmon_10_11_lsass_memdump.evtx": 2,
+    "evtx-attack-samples/Credential Access/sysmon_10_11_outlfank_dumpert_and_andrewspecial_memdump.evtx": 4,
+    "evtx-attack-samples/Credential Access/sysmon_10_1_memdump_comsvcs_minidump.evtx": 1,
+    "evtx-attack-samples/Credential Access/sysmon_rdrleakdiag_lsass_dump.evtx": 1,
+    "evtx-attack-samples/Defense Evasion/DE_1102_security_log_cleared.evtx": 110,
+    "evtx-attack-samples/Defense Evasion/DE_ProcessHerpaderping_Sysmon_11_10_1_7.evtx": 1,
+    "evtx-attack-samples/Defense Evasion/DSE_bypass_BYOV_TDL_dummydriver_sysmon_6_7_13.evtx": 1,
+    "evtx-attack-samples/Defense Evasion/sideloading_wwlib_sysmon_7_1_11.evtx": 3,
+    "evtx-attack-samples/Defense Evasion/sysmon_13_rdp_settings_tampering.evtx": 6,
+    "evtx-attack-samples/Defense Evasion/sysmon_2_11_evasion_timestomp_MACE.evtx": 2,
+    "evtx-attack-samples/Execution/Exec_sysmon_meterpreter_reversetcp_msipackage.evtx": 2,
+    "evtx-attack-samples/Execution/exec_persist_rundll32_mshta_scheduledtask_sysmon_1_3_11.evtx": 1,
+    "evtx-attack-samples/Execution/exec_sysmon_1_11_lolbin_rundll32_openurl_FileProtocolHandler.evtx": 2,
+    "evtx-attack-samples/Execution/exec_sysmon_1_11_lolbin_rundll32_shdocvw_openurl.evtx": 4,
+    "evtx-attack-samples/Execution/exec_wmic_xsl_internet_sysmon_3_1_11.evtx": 1,
+    "evtx-attack-samples/Execution/execution_evasion_visual_studio_prebuild_event.evtx": 22,
+    "evtx-attack-samples/Execution/sysmon_11_1_lolbas_downldr_desktopimgdownldr.evtx": 1,
+    "evtx-attack-samples/Execution/sysmon_1_11_rundll32_cpl_ostap.evtx": 1,
+    "evtx-attack-samples/Execution/sysmon_exec_from_vss_persistence.evtx": 1,
+    "evtx-attack-samples/Execution/sysmon_zipexec.evtx": 3,
+    "evtx-attack-samples/Lateral Movement/LM_tsclient_startup_folder.evtx": 4,
+    "evtx-attack-samples/Lateral Movement/lateral_movement_startup_3_11.evtx": 1,
+    "evtx-attack-samples/Lateral Movement/remote_file_copy_system_proc_file_write_sysmon_11.evtx": 1,
+    "evtx-attack-samples/Lateral Movement/smbmap_upload_exec_sysmon.evtx": 4,
+    "evtx-attack-samples/Other/maldoc_mshta_via_shellbrowserwind_rundll32.evtx": 6,
+    "evtx-attack-samples/Persistence/persist_firefox_comhijack_sysmon_11_13_7_1.evtx": 2,
+    "evtx-attack-samples/Persistence/persistence_sysmon_11_13_1_shime_appfix.evtx": 25,
+    "evtx-attack-samples/Persistence/sysmon_13_1_persistence_via_winlogon_shell.evtx": 1,
+    "evtx-attack-samples/Privilege Escalation/Sysmon_UACME_22.evtx": 1,
+    "evtx-attack-samples/Privilege Escalation/Sysmon_UACME_23.evtx": 1,
+    "evtx-attack-samples/Privilege Escalation/Sysmon_UACME_30.evtx": 1,
+    "evtx-attack-samples/Privilege Escalation/Sysmon_UACME_32.evtx": 1,
+    "evtx-attack-samples/Privilege Escalation/Sysmon_UACME_36_FileCreate.evtx": 1,
+    "evtx-attack-samples/Privilege Escalation/Sysmon_UACME_37_FileCreate.evtx": 1,
+    "evtx-attack-samples/Privilege Escalation/Sysmon_UACME_38.evtx": 1,
+    "evtx-attack-samples/Privilege Escalation/Sysmon_UACME_39.evtx": 1,
+    "evtx-attack-samples/Privilege Escalation/Sysmon_UACME_54.evtx": 1,
+    "evtx-attack-samples/Privilege Escalation/Sysmon_UACME_64.evtx": 5,
+    "evtx-attack-samples/Privilege Escalation/Sysmon_uacme_58.evtx": 1,
+    "evtx-attack-samples/Privilege Escalation/eop_appcontainer_il_broker_filewrite.evtx": 1,
+    "evtx-attack-samples/Privilege Escalation/privesc_registry_symlink_CVE-2020-1377.evtx": 28,
+    "evtx-attack-samples/Privilege Escalation/privesc_spoolfool_mahdihtm_sysmon_1_11_7_13.evtx": 1,
+    "evtx-attack-samples/Privilege Escalation/privesc_spoolsv_spl_file_write_sysmon11.evtx": 23,
+    "evtx-attack-samples/Privilege Escalation/privesc_unquoted_svc_sysmon_1_11.evtx": 8,
+    "evtx-attack-samples/Privilege Escalation/sysmon_11_1_15_WScriptBypassUAC.evtx": 3,
+    "evtx-attack-samples/Privilege Escalation/sysmon_11_1_7_uacbypass_cliconfg.evtx": 2,
+    "evtx-attack-samples/Privilege Escalation/sysmon_11_7_1_uacbypass_windirectory_mocking.evtx": 3,
+    "evtx-attack-samples/Privilege Escalation/sysmon_13_1_12_11_perfmonUACBypass.evtx": 1,
+    "evtx-attack-samples/Privilege Escalation/sysmon_1_11_exec_as_system_via_schedtask.evtx": 1,
+    "evtx-attack-samples/Privilege Escalation/sysmon_1_13_11_cmstp_ini_uacbypass.evtx": 1,
+    "evtx-attack-samples/Privilege Escalation/sysmon_1_7_11_mcx2prov_uacbypass.evtx": 2,
+    "evtx-attack-samples/Privilege Escalation/sysmon_1_7_11_migwiz.evtx": 2,
+    "evtx-attack-samples/Privilege Escalation/sysmon_1_7_11_sysprep_uacbypass.evtx": 2,
+    "evtx-attack-samples/Privilege Escalation/sysmon_uacbypass_CDSSync_schtask_hijack_byeintegrity5.evtx": 1
+  },
+  "table": "DeviceFileEvents"
+}
