@@ -120,12 +120,19 @@ class VariableManager:
             "DEEPFAKE_PHONE": f"+1-{random.randint(200,999)}-{random.randint(100,999)}-{random.randint(1000,9999)}"
         }
 
-    def _corpus_or_pool(self, placeholder: str, pool: list) -> str:
-        """Sample from a mined corpus profile if it has this field, else the static pool."""
+    def _corpus_or_pool(self, placeholder: str, pool: list, validator=None) -> str:
+        """Sample from a mined corpus profile if it has this field, else the static pool.
+
+        `validator`, if given, rejects a corpus-sampled value that doesn't
+        actually fit the placeholder's contract even though the mined field
+        was real telemetry -- e.g. a BITS-Client job's "url" field can
+        legitimately be a local file path (BITS supports local transfers,
+        not just remote URLs), which isn't a valid RANDOM_URL substitution.
+        """
         pairs = CORPUS_FIELD_CANDIDATES.get(placeholder)
         if pairs:
             value = self._corpus.sample_first(pairs)
-            if value is not None:
+            if value is not None and (validator is None or validator(value)):
                 return value
         return random.choice(pool)
 
@@ -161,7 +168,10 @@ class VariableManager:
             if "{{RANDOM_UA}}" in value:
                 value = value.replace("{{RANDOM_UA}}", self._corpus_or_pool("RANDOM_UA", self.user_agent_pool))
             if "{{RANDOM_URL}}" in value:
-                value = value.replace("{{RANDOM_URL}}", self._corpus_or_pool("RANDOM_URL", self.url_pool))
+                value = value.replace("{{RANDOM_URL}}", self._corpus_or_pool(
+                    "RANDOM_URL", self.url_pool,
+                    validator=lambda v: v.startswith("http://") or v.startswith("https://")
+                ))
             if "{{RANDOM_LOCATION}}" in value:
                 value = value.replace("{{RANDOM_LOCATION}}", random.choice(self.location_pool))
             if "{{RANDOM_CITY}}" in value:

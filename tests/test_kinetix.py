@@ -195,10 +195,14 @@ class TestVariableManager:
         assert len(result) > 5
 
     def test_random_url_resolves(self):
+        """RANDOM_URL can be corpus-sampled from real mined telemetry (see
+        kinetix/intelligence/corpus_profiles/), which legitimately includes
+        plain http:// URLs -- not just the https-only static pool -- so this
+        must not assert a fixed scheme."""
         from kinetix.core.vars import VariableManager
         vm = VariableManager()
         result = vm.resolve("{{RANDOM_URL}}")
-        assert result.startswith("https://")
+        assert result.startswith("http://") or result.startswith("https://")
         assert "{{" not in result
 
     def test_random_ai_model_resolves(self):
