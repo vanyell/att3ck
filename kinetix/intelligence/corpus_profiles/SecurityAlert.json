@@ -2,10 +2,10 @@
   "fields": {
     "#attributes.xmlns": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 11,
+          "count": 28,
           "value": "http://schemas.microsoft.com/win/2004/08/events/event",
           "weight": 1.0
         }
@@ -13,52 +13,62 @@
     },
     "EventData.Action ID": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 6,
+          "count": 17,
           "value": "9",
-          "weight": 0.5455
+          "weight": 0.6071
         },
         {
-          "count": 4,
+          "count": 9,
           "value": "2",
-          "weight": 0.3636
+          "weight": 0.3214
         },
         {
-          "count": 1,
+          "count": 2,
           "value": "6",
-          "weight": 0.0909
+          "weight": 0.0714
         }
       ]
     },
     "EventData.Action Name": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 6,
+          "count": 12,
           "value": "%%887",
-          "weight": 0.5455
+          "weight": 0.4286
         },
         {
-          "count": 4,
+          "count": 8,
           "value": "%%809",
-          "weight": 0.3636
+          "weight": 0.2857
+        },
+        {
+          "count": 5,
+          "value": "Not Applicable",
+          "weight": 0.1786
+        },
+        {
+          "count": 2,
+          "value": "%%811",
+          "weight": 0.0714
         },
         {
           "count": 1,
-          "value": "%%811",
-          "weight": 0.0909
+          "value": "Quarantine",
+          "weight": 0.0357
         }
       ]
     },
     "EventData.Additional Actions ID": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 11,
+          "count": 28,
           "value": "0",
           "weight": 1.0
         }
@@ -66,10 +76,10 @@
     },
     "EventData.Additional Actions String": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 11,
+          "count": 28,
           "value": "No additional actions required",
           "weight": 1.0
         }
@@ -77,173 +87,213 @@
     },
     "EventData.Category ID": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 6,
-          "value": "8",
-          "weight": 0.5455
-        },
-        {
-          "count": 3,
+          "count": 12,
           "value": "34",
-          "weight": 0.2727
+          "weight": 0.4286
         },
         {
-          "count": 2,
+          "count": 12,
+          "value": "8",
+          "weight": 0.4286
+        },
+        {
+          "count": 4,
           "value": "6",
-          "weight": 0.1818
+          "weight": 0.1429
         }
       ]
     },
     "EventData.Category Name": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 6,
-          "value": "Trojan",
-          "weight": 0.5455
-        },
-        {
-          "count": 3,
+          "count": 12,
           "value": "Tool",
-          "weight": 0.2727
+          "weight": 0.4286
         },
         {
-          "count": 2,
+          "count": 12,
+          "value": "Trojan",
+          "weight": 0.4286
+        },
+        {
+          "count": 4,
           "value": "Backdoor",
-          "weight": 0.1818
+          "weight": 0.1429
         }
       ]
     },
     "EventData.Detection ID": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 3,
+          "count": 6,
           "value": "{37522D93-EBDD-4A5B-93B6-E984C9E3FD38}",
-          "weight": 0.2727
+          "weight": 0.2143
         },
         {
-          "count": 2,
+          "count": 4,
           "value": "{511224D4-1EB4-47B9-BC4A-37E21F923FED}",
-          "weight": 0.1818
+          "weight": 0.1429
         },
         {
-          "count": 2,
+          "count": 4,
           "value": "{8791B1FB-0FE7-412E-B084-524CB5A221F3}",
-          "weight": 0.1818
+          "weight": 0.1429
         },
         {
-          "count": 2,
+          "count": 4,
           "value": "{CEF4D8DA-15D6-4667-8E4C-12D19AB4EFED}",
-          "weight": 0.1818
+          "weight": 0.1429
+        },
+        {
+          "count": 4,
+          "value": "{F6272F78-9FD1-47D2-B206-89E0F0DCBDB9}",
+          "weight": 0.1429
         },
         {
           "count": 2,
-          "value": "{F6272F78-9FD1-47D2-B206-89E0F0DCBDB9}",
-          "weight": 0.1818
+          "value": "{82C6A580-0C4C-48BD-A0AC-6D3DE58FDABB}",
+          "weight": 0.0714
+        },
+        {
+          "count": 2,
+          "value": "{CF1B6DE9-9DA5-4BC8-A6F1-CE75B59116B5}",
+          "weight": 0.0714
+        },
+        {
+          "count": 2,
+          "value": "{B22D8A5F-600C-45FE-88B8-AB70561B9DCD}",
+          "weight": 0.0714
         }
       ]
     },
     "EventData.Detection Time": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 3,
+          "count": 6,
           "value": "2019-07-18T20:40:16.697Z",
-          "weight": 0.2727
+          "weight": 0.2143
         },
         {
-          "count": 2,
+          "count": 4,
           "value": "2019-07-18T20:40:00.580Z",
-          "weight": 0.1818
+          "weight": 0.1429
         },
         {
-          "count": 2,
+          "count": 4,
           "value": "2019-07-18T20:40:13.775Z",
-          "weight": 0.1818
+          "weight": 0.1429
         },
         {
-          "count": 2,
+          "count": 4,
           "value": "2019-07-18T20:40:18.385Z",
-          "weight": 0.1818
+          "weight": 0.1429
+        },
+        {
+          "count": 4,
+          "value": "2019-07-18T20:41:40.357Z",
+          "weight": 0.1429
         },
         {
           "count": 2,
-          "value": "2019-07-18T20:41:40.357Z",
-          "weight": 0.1818
+          "value": "2020-12-11T12:28:01.177Z",
+          "weight": 0.0714
+        },
+        {
+          "count": 2,
+          "value": "2020-12-11T12:28:01.490Z",
+          "weight": 0.0714
+        },
+        {
+          "count": 2,
+          "value": "2020-12-11T12:28:42.885Z",
+          "weight": 0.0714
         }
       ]
     },
     "EventData.Detection User": {
       "kind": "identifier",
-      "n": 11,
+      "n": 28,
       "shapes": [
         {
-          "count": 11,
+          "count": 22,
           "shape": "str:len_bucket=<=32",
-          "weight": 1.0
+          "weight": 0.7857
+        },
+        {
+          "count": 6,
+          "shape": "str:len_bucket=<=16",
+          "weight": 0.2143
         }
       ]
     },
     "EventData.Engine Version": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 7,
+          "count": 14,
           "value": "AM: 1.1.16100.4, NIS: 0.0.0.0",
-          "weight": 0.6364
+          "weight": 0.5
         },
         {
-          "count": 4,
+          "count": 8,
           "value": "AM: 1.1.16100.4, NIS: 1.1.16100.4",
-          "weight": 0.3636
+          "weight": 0.2857
+        },
+        {
+          "count": 6,
+          "value": "AM: 1.1.17600.5, NIS: 1.1.17600.5",
+          "weight": 0.2143
         }
       ]
     },
     "EventData.Error Code": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 9,
+          "count": 24,
           "value": "0x00000000",
-          "weight": 0.8182
+          "weight": 0.8571
         },
         {
-          "count": 2,
+          "count": 4,
           "value": "0x80508023",
-          "weight": 0.1818
+          "weight": 0.1429
         }
       ]
     },
     "EventData.Error Description": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 9,
+          "count": 24,
           "value": "The operation completed successfully. ",
-          "weight": 0.8182
+          "weight": 0.8571
         },
         {
-          "count": 2,
+          "count": 4,
           "value": "The program could not find the malware and other potentially unwanted software on this device. ",
-          "weight": 0.1818
+          "weight": 0.1429
         }
       ]
     },
     "EventData.Execution ID": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 11,
+          "count": 28,
           "value": "1",
           "weight": 1.0
         }
@@ -251,52 +301,67 @@
     },
     "EventData.Execution Name": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 11,
+          "count": 22,
           "value": "%%813",
-          "weight": 1.0
+          "weight": 0.7857
+        },
+        {
+          "count": 6,
+          "value": "Suspended",
+          "weight": 0.2143
         }
       ]
     },
     "EventData.FWLink": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 3,
+          "count": 6,
           "value": "https://go.microsoft.com/fwlink/?linkid=37020&name=HackTool:JS/Jsprat&threatid=2147708292&enterprise=0",
-          "weight": 0.2727
+          "weight": 0.2143
         },
         {
-          "count": 2,
+          "count": 4,
+          "value": "https://go.microsoft.com/fwlink/?linkid=37020&name=HackTool:Win32/Mimikatz.D&threatid=2147729891&enterprise=0",
+          "weight": 0.1429
+        },
+        {
+          "count": 4,
           "value": "https://go.microsoft.com/fwlink/?linkid=37020&name=Trojan:PowerShell/Powersploit.M&threatid=2147725349&enterprise=0",
-          "weight": 0.1818
+          "weight": 0.1429
         },
         {
-          "count": 2,
+          "count": 4,
           "value": "https://go.microsoft.com/fwlink/?linkid=37020&name=Trojan:XML/Exeselrun.gen!A&threatid=2147735426&enterprise=0",
-          "weight": 0.1818
+          "weight": 0.1429
         },
         {
-          "count": 2,
+          "count": 4,
           "value": "https://go.microsoft.com/fwlink/?linkid=37020&name=Backdoor:ASP/Ace.T&threatid=2147683177&enterprise=0",
-          "weight": 0.1818
+          "weight": 0.1429
+        },
+        {
+          "count": 4,
+          "value": "https://go.microsoft.com/fwlink/?linkid=37020&name=Trojan:Win32/Sehyioa.A!cl&threatid=2147726426&enterprise=0",
+          "weight": 0.1429
         },
         {
           "count": 2,
-          "value": "https://go.microsoft.com/fwlink/?linkid=37020&name=Trojan:Win32/Sehyioa.A!cl&threatid=2147726426&enterprise=0",
-          "weight": 0.1818
+          "value": "https://go.microsoft.com/fwlink/?linkid=37020&name=HackTool:Win64/Mikatz!dha&threatid=2147705511&enterprise=0",
+          "weight": 0.0714
         }
       ]
     },
     "EventData.Origin ID": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 11,
+          "count": 28,
           "value": "1",
           "weight": 1.0
         }
@@ -304,57 +369,77 @@
     },
     "EventData.Origin Name": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 11,
+          "count": 22,
           "value": "%%845",
-          "weight": 1.0
+          "weight": 0.7857
+        },
+        {
+          "count": 6,
+          "value": "Local machine",
+          "weight": 0.2143
         }
       ]
     },
     "EventData.Path": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 2,
+          "count": 4,
+          "value": "file:_C:\\Users\\admmig\\Documents\\mimikatz.exe",
+          "weight": 0.1429
+        },
+        {
+          "count": 4,
           "value": "file:_C:\\AtomicRedTeam\\atomic-red-team-master\\atomics\\T1056\\Get-Keystrokes.ps1",
-          "weight": 0.1818
+          "weight": 0.1429
         },
         {
-          "count": 2,
+          "count": 4,
           "value": "file:_C:\\AtomicRedTeam\\atomic-red-team-master\\atomics\\T1086\\payloads\\test.xsl",
-          "weight": 0.1818
+          "weight": 0.1429
         },
         {
-          "count": 2,
+          "count": 4,
           "value": "file:_C:\\AtomicRedTeam\\atomic-red-team-master\\atomics\\T1100\\shells\\cmd.aspx",
-          "weight": 0.1818
+          "weight": 0.1429
         },
         {
-          "count": 2,
+          "count": 4,
           "value": "file:_C:\\AtomicRedTeam\\atomic-red-team-master\\atomics\\T1218\\src\\Win32\\T1218-2.dll",
-          "weight": 0.1818
+          "weight": 0.1429
+        },
+        {
+          "count": 4,
+          "value": "containerfile:_C:\\AtomicRedTeam\\atomic-red-team-master\\atomics\\T1100\\shells\\b.jsp; file:_C:\\AtomicRedTeam\\atomic-red-team-master\\atomics\\T1100\\shells\\b.jsp->(SCRIPT0005); file:_C:\\AtomicRedTeam\\atomic-red-team-master\\atomics\\T1100\\shells\\b.jsp->(SCRIPT0037); file:_C:\\AtomicRedTeam\\atomic-red-team-master\\atomics\\T1100\\shells\\b.jsp->(SCRIPT0045); file:_C:\\AtomicRedTeam\\atomic-red-team-master\\atomics\\T1100\\shells\\b.jsp->(SCRIPT0065); file:_C:\\AtomicRedTeam\\atomic-red-team-master\\atomics\\T1100\\shells\\b.jsp->(SCRIPT0068)",
+          "weight": 0.1429
         },
         {
           "count": 2,
-          "value": "containerfile:_C:\\AtomicRedTeam\\atomic-red-team-master\\atomics\\T1100\\shells\\b.jsp; file:_C:\\AtomicRedTeam\\atomic-red-team-master\\atomics\\T1100\\shells\\b.jsp->(SCRIPT0005); file:_C:\\AtomicRedTeam\\atomic-red-team-master\\atomics\\T1100\\shells\\b.jsp->(SCRIPT0037); file:_C:\\AtomicRedTeam\\atomic-red-team-master\\atomics\\T1100\\shells\\b.jsp->(SCRIPT0045); file:_C:\\AtomicRedTeam\\atomic-red-team-master\\atomics\\T1100\\shells\\b.jsp->(SCRIPT0065); file:_C:\\AtomicRedTeam\\atomic-red-team-master\\atomics\\T1100\\shells\\b.jsp->(SCRIPT0068)",
-          "weight": 0.1818
+          "value": "file:_C:\\AtomicRedTeam\\atomic-red-team-master\\atomics\\T1100\\shells\\b.jsp->(SCRIPT0005)",
+          "weight": 0.0714
         },
         {
           "count": 1,
-          "value": "file:_C:\\AtomicRedTeam\\atomic-red-team-master\\atomics\\T1100\\shells\\b.jsp->(SCRIPT0005)",
-          "weight": 0.0909
+          "value": "file:_C:\\Users\\admmig\\Documents\\mimidrv.sys",
+          "weight": 0.0357
+        },
+        {
+          "count": 1,
+          "value": "file:_C:\\Users\\admmig\\Documents\\mimidrv.sys; file:_C:\\Users\\admmig\\Documents\\mimilib.dll",
+          "weight": 0.0357
         }
       ]
     },
     "EventData.Post Clean Status": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 11,
+          "count": 28,
           "value": "0",
           "weight": 1.0
         }
@@ -362,10 +447,10 @@
     },
     "EventData.Pre Execution Status": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 11,
+          "count": 28,
           "value": "0",
           "weight": 1.0
         }
@@ -373,32 +458,42 @@
     },
     "EventData.Process Name": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 11,
+          "count": 22,
           "value": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
-          "weight": 1.0
+          "weight": 0.7857
+        },
+        {
+          "count": 6,
+          "value": "C:\\Windows\\explorer.exe",
+          "weight": 0.2143
         }
       ]
     },
     "EventData.Product Name": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 11,
+          "count": 22,
           "value": "%%827",
-          "weight": 1.0
+          "weight": 0.7857
+        },
+        {
+          "count": 6,
+          "value": "Microsoft Defender Antivirus",
+          "weight": 0.2143
         }
       ]
     },
     "EventData.Product Version": {
       "kind": "identifier",
-      "n": 11,
+      "n": 28,
       "shapes": [
         {
-          "count": 11,
+          "count": 28,
           "shape": "fqdn:labels=4",
           "weight": 1.0
         }
@@ -406,58 +501,69 @@
     },
     "EventData.Remediation User": {
       "kind": "identifier",
-      "n": 5,
+      "n": 11,
       "shapes": [
         {
-          "count": 5,
+          "count": 11,
           "shape": "str:len_bucket=<=32",
+          "weight": 1.0
+        }
+      ]
+    },
+    "EventData.Security intelligence Version": {
+      "kind": "freeform",
+      "n": 6,
+      "values": [
+        {
+          "count": 6,
+          "value": "AV: 1.327.2245.0, AS: 1.327.2245.0, NIS: 1.327.2245.0",
           "weight": 1.0
         }
       ]
     },
     "EventData.Severity ID": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 8,
+          "count": 16,
           "value": "5",
-          "weight": 0.7273
+          "weight": 0.5714
         },
         {
-          "count": 3,
+          "count": 12,
           "value": "4",
-          "weight": 0.2727
+          "weight": 0.4286
         }
       ]
     },
     "EventData.Severity Name": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 8,
+          "count": 16,
           "value": "Severe",
-          "weight": 0.7273
+          "weight": 0.5714
         },
         {
-          "count": 3,
+          "count": 12,
           "value": "High",
-          "weight": 0.2727
+          "weight": 0.4286
         }
       ]
     },
     "EventData.Signature Version": {
       "kind": "freeform",
-      "n": 11,
+      "n": 22,
       "values": [
         {
-          "count": 7,
+          "count": 14,
           "value": "AV: 1.297.1333.0, AS: 1.297.1333.0, NIS: 0.0.0.0",
           "weight": 0.6364
         },
         {
-          "count": 4,
+          "count": 8,
           "value": "AV: 1.297.1333.0, AS: 1.297.1333.0, NIS: 1.297.1333.0",
           "weight": 0.3636
         }
@@ -465,10 +571,10 @@
     },
     "EventData.Source ID": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 11,
+          "count": 28,
           "value": "3",
           "weight": 1.0
         }
@@ -476,167 +582,197 @@
     },
     "EventData.Source Name": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 11,
+          "count": 22,
           "value": "%%818",
-          "weight": 1.0
+          "weight": 0.7857
+        },
+        {
+          "count": 6,
+          "value": "Real-Time Protection",
+          "weight": 0.2143
         }
       ]
     },
     "EventData.State": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 6,
+          "count": 17,
           "value": "1",
-          "weight": 0.5455
+          "weight": 0.6071
         },
         {
-          "count": 5,
+          "count": 11,
           "value": "2",
-          "weight": 0.4545
+          "weight": 0.3929
         }
       ]
     },
     "EventData.Status Code": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 6,
+          "count": 17,
           "value": "1",
-          "weight": 0.5455
+          "weight": 0.6071
         },
         {
-          "count": 3,
+          "count": 7,
           "value": "3",
-          "weight": 0.2727
+          "weight": 0.25
         },
         {
-          "count": 1,
+          "count": 2,
           "value": "103",
-          "weight": 0.0909
+          "weight": 0.0714
         },
         {
-          "count": 1,
+          "count": 2,
           "value": "5",
-          "weight": 0.0909
+          "weight": 0.0714
         }
       ]
     },
     "EventData.Threat ID": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 3,
+          "count": 6,
           "value": "2147708292",
-          "weight": 0.2727
+          "weight": 0.2143
         },
         {
-          "count": 2,
+          "count": 4,
+          "value": "2147729891",
+          "weight": 0.1429
+        },
+        {
+          "count": 4,
           "value": "2147725349",
-          "weight": 0.1818
+          "weight": 0.1429
         },
         {
-          "count": 2,
+          "count": 4,
           "value": "2147735426",
-          "weight": 0.1818
+          "weight": 0.1429
         },
         {
-          "count": 2,
+          "count": 4,
           "value": "2147683177",
-          "weight": 0.1818
+          "weight": 0.1429
+        },
+        {
+          "count": 4,
+          "value": "2147726426",
+          "weight": 0.1429
         },
         {
           "count": 2,
-          "value": "2147726426",
-          "weight": 0.1818
+          "value": "2147705511",
+          "weight": 0.0714
         }
       ]
     },
     "EventData.Threat Name": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 3,
+          "count": 6,
           "value": "HackTool:JS/Jsprat",
-          "weight": 0.2727
+          "weight": 0.2143
         },
         {
-          "count": 2,
+          "count": 4,
+          "value": "HackTool:Win32/Mimikatz.D",
+          "weight": 0.1429
+        },
+        {
+          "count": 4,
           "value": "Trojan:PowerShell/Powersploit.M",
-          "weight": 0.1818
+          "weight": 0.1429
         },
         {
-          "count": 2,
+          "count": 4,
           "value": "Trojan:XML/Exeselrun.gen!A",
-          "weight": 0.1818
+          "weight": 0.1429
         },
         {
-          "count": 2,
+          "count": 4,
           "value": "Backdoor:ASP/Ace.T",
-          "weight": 0.1818
+          "weight": 0.1429
+        },
+        {
+          "count": 4,
+          "value": "Trojan:Win32/Sehyioa.A!cl",
+          "weight": 0.1429
         },
         {
           "count": 2,
-          "value": "Trojan:Win32/Sehyioa.A!cl",
-          "weight": 0.1818
+          "value": "HackTool:Win64/Mikatz!dha",
+          "weight": 0.0714
         }
       ]
     },
     "EventData.Type ID": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 5,
+          "count": 14,
+          "value": "0",
+          "weight": 0.5
+        },
+        {
+          "count": 10,
           "value": "8",
-          "weight": 0.4545
+          "weight": 0.3571
         },
         {
           "count": 4,
-          "value": "0",
-          "weight": 0.3636
-        },
-        {
-          "count": 2,
           "value": "2",
-          "weight": 0.1818
+          "weight": 0.1429
         }
       ]
     },
     "EventData.Type Name": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 5,
+          "count": 10,
           "value": "%%862",
-          "weight": 0.4545
+          "weight": 0.3571
+        },
+        {
+          "count": 8,
+          "value": "%%822",
+          "weight": 0.2857
+        },
+        {
+          "count": 6,
+          "value": "Concrete",
+          "weight": 0.2143
         },
         {
           "count": 4,
-          "value": "%%822",
-          "weight": 0.3636
-        },
-        {
-          "count": 2,
           "value": "%%823",
-          "weight": 0.1818
+          "weight": 0.1429
         }
       ]
     },
     "System.Channel": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 11,
+          "count": 28,
           "value": "Microsoft-Windows-Windows Defender/Operational",
           "weight": 1.0
         }
@@ -644,18 +780,23 @@
     },
     "System.Computer": {
       "kind": "identifier",
-      "n": 11,
+      "n": 28,
       "shapes": [
         {
-          "count": 11,
+          "count": 22,
           "shape": "str:len_bucket=<=16",
-          "weight": 1.0
+          "weight": 0.7857
+        },
+        {
+          "count": 6,
+          "shape": "fqdn:labels=3",
+          "weight": 0.2143
         }
       ]
     },
     "System.Correlation.#attributes.ActivityID": {
       "kind": "identifier",
-      "n": 6,
+      "n": 14,
       "shapes": [
         {
           "count": 6,
@@ -666,114 +807,174 @@
     },
     "System.EventID": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 6,
+          "count": 17,
           "value": "1116",
-          "weight": 0.5455
+          "weight": 0.6071
         },
         {
-          "count": 5,
+          "count": 11,
           "value": "1117",
-          "weight": 0.4545
+          "weight": 0.3929
         }
       ]
     },
     "System.EventRecordID": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 1,
+          "count": 2,
           "value": "37",
-          "weight": 0.0909
+          "weight": 0.0714
         },
         {
-          "count": 1,
+          "count": 2,
           "value": "48",
-          "weight": 0.0909
+          "weight": 0.0714
         },
         {
-          "count": 1,
+          "count": 2,
           "value": "75",
-          "weight": 0.0909
+          "weight": 0.0714
         },
         {
-          "count": 1,
+          "count": 2,
           "value": "76",
-          "weight": 0.0909
+          "weight": 0.0714
         },
         {
-          "count": 1,
+          "count": 2,
           "value": "95",
-          "weight": 0.0909
+          "weight": 0.0714
         },
         {
-          "count": 1,
+          "count": 2,
           "value": "101",
-          "weight": 0.0909
+          "weight": 0.0714
         },
         {
-          "count": 1,
+          "count": 2,
           "value": "102",
-          "weight": 0.0909
+          "weight": 0.0714
         },
         {
-          "count": 1,
+          "count": 2,
           "value": "103",
-          "weight": 0.0909
+          "weight": 0.0714
         },
         {
-          "count": 1,
+          "count": 2,
           "value": "104",
-          "weight": 0.0909
+          "weight": 0.0714
         },
         {
-          "count": 1,
+          "count": 2,
           "value": "105",
-          "weight": 0.0909
+          "weight": 0.0714
+        },
+        {
+          "count": 2,
+          "value": "106",
+          "weight": 0.0714
         },
         {
           "count": 1,
-          "value": "106",
-          "weight": 0.0909
+          "value": "171",
+          "weight": 0.0357
+        },
+        {
+          "count": 1,
+          "value": "172",
+          "weight": 0.0357
+        },
+        {
+          "count": 1,
+          "value": "173",
+          "weight": 0.0357
+        },
+        {
+          "count": 1,
+          "value": "175",
+          "weight": 0.0357
+        },
+        {
+          "count": 1,
+          "value": "176",
+          "weight": 0.0357
+        },
+        {
+          "count": 1,
+          "value": "177",
+          "weight": 0.0357
         }
       ]
     },
     "System.Execution.#attributes.ProcessID": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 11,
+          "count": 22,
           "value": "6024",
-          "weight": 1.0
+          "weight": 0.7857
+        },
+        {
+          "count": 6,
+          "value": "4172",
+          "weight": 0.2143
         }
       ]
     },
     "System.Execution.#attributes.ThreadID": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 6,
+          "count": 12,
           "value": "6068",
-          "weight": 0.5455
+          "weight": 0.4286
         },
         {
-          "count": 5,
+          "count": 10,
           "value": "5500",
-          "weight": 0.4545
+          "weight": 0.3571
+        },
+        {
+          "count": 2,
+          "value": "3144",
+          "weight": 0.0714
+        },
+        {
+          "count": 1,
+          "value": "4384",
+          "weight": 0.0357
+        },
+        {
+          "count": 1,
+          "value": "5900",
+          "weight": 0.0357
+        },
+        {
+          "count": 1,
+          "value": "5324",
+          "weight": 0.0357
+        },
+        {
+          "count": 1,
+          "value": "924",
+          "weight": 0.0357
         }
       ]
     },
     "System.Keywords": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 11,
+          "count": 28,
           "value": "0x8000000000000000",
           "weight": 1.0
         }
@@ -781,26 +982,26 @@
     },
     "System.Level": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 6,
+          "count": 17,
           "value": "3",
-          "weight": 0.5455
+          "weight": 0.6071
         },
         {
-          "count": 5,
+          "count": 11,
           "value": "4",
-          "weight": 0.4545
+          "weight": 0.3929
         }
       ]
     },
     "System.Opcode": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 11,
+          "count": 28,
           "value": "0",
           "weight": 1.0
         }
@@ -808,21 +1009,26 @@
     },
     "System.Provider.#attributes.Guid": {
       "kind": "identifier",
-      "n": 11,
+      "n": 28,
       "shapes": [
         {
-          "count": 11,
+          "count": 22,
           "shape": "guid",
-          "weight": 1.0
+          "weight": 0.7857
+        },
+        {
+          "count": 6,
+          "shape": "str:len_bucket=<=64",
+          "weight": 0.2143
         }
       ]
     },
     "System.Provider.#attributes.Name": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 11,
+          "count": 28,
           "value": "Microsoft-Windows-Windows Defender",
           "weight": 1.0
         }
@@ -830,10 +1036,10 @@
     },
     "System.Security.#attributes.UserID": {
       "kind": "identifier",
-      "n": 11,
+      "n": 28,
       "shapes": [
         {
-          "count": 11,
+          "count": 28,
           "shape": "sid:parts=4",
           "weight": 1.0
         }
@@ -841,10 +1047,10 @@
     },
     "System.Task": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 11,
+          "count": 28,
           "value": "0",
           "weight": 1.0
         }
@@ -852,81 +1058,113 @@
     },
     "System.TimeCreated.#attributes.SystemTime": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 1,
+          "count": 2,
           "value": "2019-07-18T20:40:00.730676Z",
-          "weight": 0.0909
+          "weight": 0.0714
         },
         {
-          "count": 1,
+          "count": 2,
           "value": "2019-07-18T20:40:16.396422Z",
-          "weight": 0.0909
+          "weight": 0.0714
         },
         {
-          "count": 1,
+          "count": 2,
           "value": "2019-07-18T20:41:16.418508Z",
-          "weight": 0.0909
+          "weight": 0.0714
         },
         {
-          "count": 1,
+          "count": 2,
           "value": "2019-07-18T20:41:17.508276Z",
-          "weight": 0.0909
+          "weight": 0.0714
         },
         {
-          "count": 1,
+          "count": 2,
           "value": "2019-07-18T20:41:48.236136Z",
-          "weight": 0.0909
+          "weight": 0.0714
         },
         {
-          "count": 1,
+          "count": 2,
           "value": "2019-07-18T20:51:50.275470Z",
-          "weight": 0.0909
+          "weight": 0.0714
         },
         {
-          "count": 1,
+          "count": 2,
           "value": "2019-07-18T20:51:50.798994Z",
-          "weight": 0.0909
+          "weight": 0.0714
         },
         {
-          "count": 1,
+          "count": 2,
           "value": "2019-07-18T20:53:31.900809Z",
-          "weight": 0.0909
+          "weight": 0.0714
         },
         {
-          "count": 1,
+          "count": 2,
           "value": "2019-07-18T20:53:31.902610Z",
-          "weight": 0.0909
+          "weight": 0.0714
         },
         {
-          "count": 1,
+          "count": 2,
           "value": "2019-07-18T20:53:31.905406Z",
-          "weight": 0.0909
+          "weight": 0.0714
+        },
+        {
+          "count": 2,
+          "value": "2019-07-18T20:53:31.952568Z",
+          "weight": 0.0714
         },
         {
           "count": 1,
-          "value": "2019-07-18T20:53:31.952568Z",
-          "weight": 0.0909
+          "value": "2020-12-11T12:28:01.2990045Z",
+          "weight": 0.0357
+        },
+        {
+          "count": 1,
+          "value": "2020-12-11T12:28:01.5662923Z",
+          "weight": 0.0357
+        },
+        {
+          "count": 1,
+          "value": "2020-12-11T12:28:01.6511263Z",
+          "weight": 0.0357
+        },
+        {
+          "count": 1,
+          "value": "2020-12-11T12:28:43.0102967Z",
+          "weight": 0.0357
+        },
+        {
+          "count": 1,
+          "value": "2020-12-11T12:28:44.2711826Z",
+          "weight": 0.0357
+        },
+        {
+          "count": 1,
+          "value": "2020-12-11T12:28:44.3178756Z",
+          "weight": 0.0357
         }
       ]
     },
     "System.Version": {
       "kind": "freeform",
-      "n": 11,
+      "n": 28,
       "values": [
         {
-          "count": 11,
+          "count": 28,
           "value": "0",
           "weight": 1.0
         }
       ]
     }
   },
-  "mined_at": "2026-09-14T06:12:02.201358+00:00",
-  "record_count": 11,
+  "mined_at": "2026-09-14T06:31:49.708504+00:00",
+  "record_count": 28,
   "sources": {
-    "evtx-attack-samples/AutomatedTestingTools/WinDefender_Events_1117_1116_AtomicRedTeam.evtx": 11
+    "evtx-attack-samples/AutomatedTestingTools/WinDefender_Events_1117_1116_AtomicRedTeam.evtx": 11,
+    "hayabusa-sample-evtx/EVTX-ATTACK-SAMPLES/AutomatedTestingTools/WinDefender_Events_1117_1116_AtomicRedTeam.evtx": 11,
+    "hayabusa-sample-evtx/EVTX-to-MITRE-Attack/Antivirus/ID1116-1117-Defender threat detected.evtx": 6
   },
   "table": "SecurityAlert"
 }

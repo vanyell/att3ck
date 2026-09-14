@@ -2,10 +2,10 @@
   "fields": {
     "#attributes.xmlns": {
       "kind": "freeform",
-      "n": 1,
+      "n": 1734,
       "values": [
         {
-          "count": 1,
+          "count": 1734,
           "value": "http://schemas.microsoft.com/win/2004/08/events/event",
           "weight": 1.0
         }
@@ -13,21 +13,336 @@
     },
     "EventData.Image": {
       "kind": "freeform",
-      "n": 1,
+      "n": 1734,
       "values": [
         {
-          "count": 1,
+          "count": 516,
+          "value": "C:\\ProgramData\\Microsoft\\Windows Defender\\Platform\\4.18.2111.5-0\\MsMpEng.exe",
+          "weight": 0.2976
+        },
+        {
+          "count": 365,
+          "value": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+          "weight": 0.2105
+        },
+        {
+          "count": 160,
+          "value": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+          "weight": 0.0923
+        },
+        {
+          "count": 129,
+          "value": "C:\\Program Files\\Mozilla Firefox\\firefox.exe",
+          "weight": 0.0744
+        },
+        {
+          "count": 78,
+          "value": "C:\\Windows\\SystemApps\\Microsoft.Windows.Search_cw5n1h2txyewy\\SearchApp.exe",
+          "weight": 0.045
+        },
+        {
+          "count": 61,
           "value": "C:\\Windows\\System32\\svchost.exe",
-          "weight": 1.0
+          "weight": 0.0352
+        },
+        {
+          "count": 50,
+          "value": "C:\\Users\\user\\AppData\\Local\\Temp\\0cb1bbbb-88d4-11ec-89b1-080027dfe1cd\\Ninite.exe",
+          "weight": 0.0288
+        },
+        {
+          "count": 46,
+          "value": "C:\\Program Files\\Microsoft VS Code\\Code.exe",
+          "weight": 0.0265
+        },
+        {
+          "count": 41,
+          "value": "C:\\Program Files\\Mozilla Thunderbird\\thunderbird.exe",
+          "weight": 0.0236
+        },
+        {
+          "count": 31,
+          "value": "C:\\Program Files\\Opera\\opera.exe",
+          "weight": 0.0179
+        },
+        {
+          "count": 25,
+          "value": "C:\\Program Files (x86)\\Dropbox\\Client\\Dropbox.exe",
+          "weight": 0.0144
+        },
+        {
+          "count": 23,
+          "value": "C:\\Windows\\Sysmon64.exe",
+          "weight": 0.0133
+        },
+        {
+          "count": 20,
+          "value": "C:\\Windows\\System32\\msiexec.exe",
+          "weight": 0.0115
+        },
+        {
+          "count": 13,
+          "value": "C:\\Program Files\\iTunes\\iTunes.exe",
+          "weight": 0.0075
+        },
+        {
+          "count": 12,
+          "value": "C:\\Program Files (x86)\\Microsoft Office\\root\\Office16\\WINWORD.EXE",
+          "weight": 0.0069
+        },
+        {
+          "count": 11,
+          "value": "C:\\Users\\user\\AppData\\Roaming\\Spotify\\Spotify.exe",
+          "weight": 0.0063
+        },
+        {
+          "count": 10,
+          "value": "C:\\Program Files\\Zoom\\bin\\Zoom.exe",
+          "weight": 0.0058
+        },
+        {
+          "count": 9,
+          "value": "C:\\Program Files (x86)\\Dropbox\\Update\\DropboxUpdate.exe",
+          "weight": 0.0052
+        },
+        {
+          "count": 8,
+          "value": "\\\\VBoxSvr\\win10-cbu\\Ninite-Win10-Installer.exe",
+          "weight": 0.0046
+        },
+        {
+          "count": 8,
+          "value": "C:\\Program Files\\Common Files\\microsoft shared\\ClickToRun\\OfficeClickToRun.exe",
+          "weight": 0.0046
+        },
+        {
+          "count": 7,
+          "value": "C:\\Program Files (x86)\\Google\\Update\\GoogleUpdate.exe",
+          "weight": 0.004
+        },
+        {
+          "count": 7,
+          "value": "C:\\Windows\\System32\\smartscreen.exe",
+          "weight": 0.004
+        },
+        {
+          "count": 6,
+          "value": "C:\\Windows\\System32\\backgroundTaskHost.exe",
+          "weight": 0.0035
+        },
+        {
+          "count": 6,
+          "value": "E:\\Office\\Setup32.exe",
+          "weight": 0.0035
+        },
+        {
+          "count": 6,
+          "value": "C:\\Program Files (x86)\\Microsoft Office\\root\\Integration\\Addons\\OneDriveSetup.exe",
+          "weight": 0.0035
+        },
+        {
+          "count": 6,
+          "value": "C:\\Program Files\\Opera\\83.0.4254.27\\opera_autoupdate.exe",
+          "weight": 0.0035
+        },
+        {
+          "count": 5,
+          "value": "C:\\Program Files (x86)\\Foxit Software\\Foxit PDF Reader\\FoxitPDFReader.exe",
+          "weight": 0.0029
+        },
+        {
+          "count": 5,
+          "value": "C:\\Windows\\System32\\spoolsv.exe",
+          "weight": 0.0029
+        },
+        {
+          "count": 4,
+          "value": "C:\\Users\\user\\AppData\\Local\\Temp\\104AB9~2\\target.exe",
+          "weight": 0.0023
+        },
+        {
+          "count": 4,
+          "value": "C:\\Program Files\\Common Files\\microsoft shared\\ClickToRun\\OfficeC2RClient.exe",
+          "weight": 0.0023
+        },
+        {
+          "count": 4,
+          "value": "C:\\Users\\user\\AppData\\Local\\Microsoft\\OneDrive\\OneDrive.exe",
+          "weight": 0.0023
+        },
+        {
+          "count": 4,
+          "value": "C:\\Program Files\\Google\\Drive File Stream\\54.0.3.0\\GoogleDriveFS.exe",
+          "weight": 0.0023
+        },
+        {
+          "count": 3,
+          "value": "C:\\Windows\\explorer.exe",
+          "weight": 0.0017
+        },
+        {
+          "count": 3,
+          "value": "C:\\Program Files (x86)\\Foxit Software\\Foxit PDF Reader\\FoxitUpdater.exe",
+          "weight": 0.0017
+        },
+        {
+          "count": 3,
+          "value": "C:\\Windows\\System32\\taskhostw.exe",
+          "weight": 0.0017
+        },
+        {
+          "count": 3,
+          "value": "C:\\Program Files\\Mozilla Firefox\\pingsender.exe",
+          "weight": 0.0017
+        },
+        {
+          "count": 3,
+          "value": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+          "weight": 0.0017
+        },
+        {
+          "count": 3,
+          "value": "C:\\Program Files (x86)\\Microsoft Office\\root\\Office16\\msoia.exe",
+          "weight": 0.0017
+        },
+        {
+          "count": 2,
+          "value": "C:\\Windows\\system32\\backgroundTaskHost.exe",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "C:\\Users\\user\\AppData\\Local\\Temp\\7zS459C07D5\\setup.exe",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "C:\\Program Files\\Opera\\assistant\\browser_assistant.exe",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "C:\\Windows\\SysWOW64\\wermgr.exe",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "C:\\Windows\\ImmersiveControlPanel\\SystemSettings.exe",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "C:\\Program Files (x86)\\WinSCP\\WinSCP.exe",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "C:\\Program Files\\FileZilla FTP Client\\filezilla.exe",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "C:\\Users\\user\\AppData\\Roaming\\Foxit Software\\Addon\\Foxit PDF Reader\\FoxitPDFReaderUpdater.exe",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "C:\\Windows\\System32\\lsass.exe",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "C:\\eclipse\\eclipse.exe",
+          "weight": 0.0012
+        },
+        {
+          "count": 1,
+          "value": "C:\\TOOLS\\PsExec64.exe",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "C:\\Windows\\System32\\mousocoreworker.exe",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "<unknown process>",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\user\\AppData\\Local\\Temp\\is-55EH9.tmp\\target.tmp",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\user\\AppData\\Local\\Temp\\is-GLVF6.tmp\\target.tmp",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "C:\\Program Files (x86)\\Dropbox\\Update\\Install\\{0C36BF54-3B58-4D52-8737-84CA3B780BE8}\\DropboxClientInstaller.exe",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "C:\\Users\\user\\AppData\\Local\\Temp\\is-UGUPD.tmp\\CountInstallation.exe",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "C:\\Program Files (x86)\\Microsoft Office\\root\\Integration\\Integrator.exe",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "C:\\Program Files (x86)\\Microsoft Office\\root\\integration\\integrator.exe",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "C:\\Program Files\\paint.net\\paintdotnet.exe",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "C:\\Program Files\\Greenshot\\Greenshot.exe",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "C:\\Program Files (x86)\\Notepad++\\updater\\GUP.exe",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "C:\\Program Files\\PuTTY\\putty.exe",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "C:\\Program Files\\Audacity\\Audacity.exe",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "C:\\Program Files\\KeePass Password Safe 2\\KeePass.exe",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "C:\\Program Files (x86)\\Evernote\\Evernote\\Evernote.exe",
+          "weight": 0.0006
         }
       ]
     },
     "EventData.ProcessGuid": {
       "kind": "identifier",
-      "n": 1,
+      "n": 1734,
       "shapes": [
         {
-          "count": 1,
+          "count": 1734,
           "shape": "guid",
           "weight": 1.0
         }
@@ -35,76 +350,2792 @@
     },
     "EventData.ProcessId": {
       "kind": "freeform",
-      "n": 1,
+      "n": 1734,
       "values": [
         {
-          "count": 1,
+          "count": 516,
+          "value": "2356",
+          "weight": 0.2976
+        },
+        {
+          "count": 337,
+          "value": "9384",
+          "weight": 0.1943
+        },
+        {
+          "count": 129,
+          "value": "7528",
+          "weight": 0.0744
+        },
+        {
+          "count": 85,
+          "value": "8452",
+          "weight": 0.049
+        },
+        {
+          "count": 50,
+          "value": "6948",
+          "weight": 0.0288
+        },
+        {
+          "count": 46,
+          "value": "3192",
+          "weight": 0.0265
+        },
+        {
+          "count": 41,
+          "value": "3604",
+          "weight": 0.0236
+        },
+        {
+          "count": 36,
+          "value": "7124",
+          "weight": 0.0208
+        },
+        {
+          "count": 31,
+          "value": "7184",
+          "weight": 0.0179
+        },
+        {
+          "count": 28,
+          "value": "1544",
+          "weight": 0.0161
+        },
+        {
+          "count": 25,
+          "value": "6060",
+          "weight": 0.0144
+        },
+        {
+          "count": 21,
+          "value": "2364",
+          "weight": 0.0121
+        },
+        {
+          "count": 20,
+          "value": "3772",
+          "weight": 0.0115
+        },
+        {
+          "count": 18,
+          "value": "4128",
+          "weight": 0.0104
+        },
+        {
+          "count": 17,
+          "value": "5616",
+          "weight": 0.0098
+        },
+        {
+          "count": 17,
+          "value": "6700",
+          "weight": 0.0098
+        },
+        {
+          "count": 16,
+          "value": "660",
+          "weight": 0.0092
+        },
+        {
+          "count": 15,
+          "value": "6308",
+          "weight": 0.0087
+        },
+        {
+          "count": 14,
+          "value": "7140",
+          "weight": 0.0081
+        },
+        {
+          "count": 13,
+          "value": "9364",
+          "weight": 0.0075
+        },
+        {
+          "count": 12,
+          "value": "7676",
+          "weight": 0.0069
+        },
+        {
+          "count": 11,
+          "value": "2288",
+          "weight": 0.0063
+        },
+        {
+          "count": 8,
+          "value": "6548",
+          "weight": 0.0046
+        },
+        {
+          "count": 7,
+          "value": "7192",
+          "weight": 0.004
+        },
+        {
+          "count": 7,
+          "value": "776",
+          "weight": 0.004
+        },
+        {
+          "count": 6,
+          "value": "4476",
+          "weight": 0.0035
+        },
+        {
+          "count": 6,
+          "value": "7836",
+          "weight": 0.0035
+        },
+        {
+          "count": 6,
+          "value": "4412",
+          "weight": 0.0035
+        },
+        {
+          "count": 6,
+          "value": "9224",
+          "weight": 0.0035
+        },
+        {
+          "count": 5,
+          "value": "6008",
+          "weight": 0.0029
+        },
+        {
+          "count": 5,
+          "value": "6344",
+          "weight": 0.0029
+        },
+        {
+          "count": 5,
+          "value": "2004",
+          "weight": 0.0029
+        },
+        {
+          "count": 5,
+          "value": "1912",
+          "weight": 0.0029
+        },
+        {
+          "count": 5,
+          "value": "8044",
+          "weight": 0.0029
+        },
+        {
+          "count": 4,
+          "value": "6868",
+          "weight": 0.0023
+        },
+        {
+          "count": 4,
+          "value": "3084",
+          "weight": 0.0023
+        },
+        {
+          "count": 4,
+          "value": "972",
+          "weight": 0.0023
+        },
+        {
+          "count": 4,
+          "value": "6600",
+          "weight": 0.0023
+        },
+        {
+          "count": 3,
+          "value": "6888",
+          "weight": 0.0017
+        },
+        {
+          "count": 3,
+          "value": "4336",
+          "weight": 0.0017
+        },
+        {
+          "count": 3,
+          "value": "7340",
+          "weight": 0.0017
+        },
+        {
+          "count": 3,
+          "value": "4024",
+          "weight": 0.0017
+        },
+        {
+          "count": 3,
+          "value": "8588",
+          "weight": 0.0017
+        },
+        {
+          "count": 3,
+          "value": "7748",
+          "weight": 0.0017
+        },
+        {
+          "count": 3,
+          "value": "2096",
+          "weight": 0.0017
+        },
+        {
+          "count": 3,
+          "value": "3912",
+          "weight": 0.0017
+        },
+        {
+          "count": 3,
+          "value": "1380",
+          "weight": 0.0017
+        },
+        {
+          "count": 2,
           "value": "2428",
-          "weight": 1.0
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "1472",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "6436",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "1972",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "3576",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "5232",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "6204",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "6864",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "1252",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "6784",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "5712",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "5344",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "1716",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "7336",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "5804",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "8256",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "3748",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "7884",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "8128",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "9800",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "6772",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "3644",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "6820",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "8548",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "9396",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "3788",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "2144",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "7376",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "2224",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "5764",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "6100",
+          "weight": 0.0012
+        },
+        {
+          "count": 2,
+          "value": "5708",
+          "weight": 0.0012
+        },
+        {
+          "count": 1,
+          "value": "2124",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "1484",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "1916",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "3616",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "5124",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "3128",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "1652",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "6824",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "3280",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "1616",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "5756",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "4676",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "2996",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "7028",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "1952",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "980",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "2756",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "1276",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "5604",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "3840",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "5312",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "6848",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "6740",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "3296",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "8012",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "7060",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "8264",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "3648",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "2132",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "10200",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "9056",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "7508",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "4376",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "9588",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "9860",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "716",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "7344",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "8688",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "2612",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "8516",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "7572",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "2836",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "5380",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "4192",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "5412",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "7100",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "6372",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "3688",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "732",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "8284",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "7436",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "1032",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "724",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "8996",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "3784",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "8136",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "7656",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "5896",
+          "weight": 0.0006
         }
       ]
     },
     "EventData.QueryName": {
-      "kind": "freeform",
-      "n": 1,
-      "values": [
+      "kind": "identifier",
+      "n": 1734,
+      "shapes": [
         {
-          "count": 1,
-          "value": "wpad",
-          "weight": 1.0
+          "count": 1121,
+          "shape": "fqdn:labels=3",
+          "weight": 0.7099
+        },
+        {
+          "count": 398,
+          "shape": "fqdn:labels=4",
+          "weight": 0.2521
+        },
+        {
+          "count": 60,
+          "shape": "fqdn:labels=2",
+          "weight": 0.038
         }
       ]
     },
     "EventData.QueryResults": {
       "kind": "freeform",
-      "n": 1,
+      "n": 1734,
       "values": [
         {
-          "count": 1,
+          "count": 412,
           "value": "-",
-          "weight": 1.0
+          "weight": 0.5235
+        },
+        {
+          "count": 35,
+          "value": "192.168.0.1;192.168.0.1;fd00::3ea6:2fff:fe57:2ec6;2a02:908:187:f200:3ea6:2fff:fe57:2ec6;",
+          "weight": 0.0445
+        },
+        {
+          "count": 24,
+          "value": "type:  5 cs9.wac.phicdn.net;::ffff:93.184.220.29;",
+          "weight": 0.0305
+        },
+        {
+          "count": 10,
+          "value": "type:  5 client-env.dropbox-dns.com;::ffff:162.125.66.13;",
+          "weight": 0.0127
+        },
+        {
+          "count": 8,
+          "value": "type:  5 telemetry-incoming.r53-2.services.mozilla.com;type:  5 prod.ingestion-edge.prod.dataops.mozgcp.net;::ffff:34.120.208.123;",
+          "weight": 0.0102
+        },
+        {
+          "count": 7,
+          "value": "type:  5 ocsp.comodoca.com.cdn.cloudflare.net;::ffff:104.18.30.182;::ffff:104.18.31.182;",
+          "weight": 0.0089
+        },
+        {
+          "count": 7,
+          "value": "type:  5 ocsp-ds.ws.symantec.com.edgekey.net;type:  5 e8218.dscb1.akamaiedge.net;::ffff:23.51.123.27;",
+          "weight": 0.0089
+        },
+        {
+          "count": 5,
+          "value": "::1;::ffff:127.0.0.1;",
+          "weight": 0.0064
+        },
+        {
+          "count": 5,
+          "value": "type:  5 ocsp.akamai.certum.pl;type:  5 ocsp.certum.pl.edgekey.net;type:  5 e96763.dscb.akamaiedge.net;::ffff:23.53.43.88;::ffff:23.53.43.50;",
+          "weight": 0.0064
+        },
+        {
+          "count": 5,
+          "value": "type:  5 wd-prod-ss.trafficmanager.net;type:  5 wd-prod-ss-eu-west-2-fe.westeurope.cloudapp.azure.com;::ffff:20.73.128.142;",
+          "weight": 0.0064
+        },
+        {
+          "count": 5,
+          "value": "type:  5 prod.nexusrules.live.com.akadns.net;::ffff:52.109.12.19;",
+          "weight": 0.0064
+        },
+        {
+          "count": 4,
+          "value": "type:  5 settingsfd-geo.trafficmanager.net;::ffff:51.124.78.146;",
+          "weight": 0.0051
+        },
+        {
+          "count": 4,
+          "value": "type:  5 o.lencr.edgesuite.net;type:  5 a1887.dscq.akamai.net;::ffff:184.24.77.48;::ffff:184.24.77.54;",
+          "weight": 0.0051
+        },
+        {
+          "count": 4,
+          "value": "type:  5 a-0001.a-afdentry.net.trafficmanager.net;type:  5 www-bing-com.dual-a-0001.a-msedge.net;type:  5 dual-a-0001.dc-msedge.net;::ffff:13.107.22.200;::ffff:131.253.33.200;",
+          "weight": 0.0051
+        },
+        {
+          "count": 4,
+          "value": "type:  5 d.v.dropbox.com;type:  5 d-edge.v.dropbox.com;::ffff:162.125.6.20;",
+          "weight": 0.0051
+        },
+        {
+          "count": 4,
+          "value": "10.0.2.15;",
+          "weight": 0.0051
+        },
+        {
+          "count": 4,
+          "value": "type:  5 api-msn-com.a-0003.a-msedge.net;type:  5 a-0003.a-msedge.net;::ffff:204.79.197.203;",
+          "weight": 0.0051
+        },
+        {
+          "count": 4,
+          "value": "type:  5 afdo-tas-offload.trafficmanager.net;type:  5 e-0009.e-msedge.net;::ffff:13.107.5.88;",
+          "weight": 0.0051
+        },
+        {
+          "count": 3,
+          "value": "type:  5 global.prd.cdn.globalsign.com;type:  5 cdn.globalsigncdn.com.cdn.cloudflare.net;::ffff:104.18.20.226;::ffff:104.18.21.226;",
+          "weight": 0.0038
+        },
+        {
+          "count": 3,
+          "value": "type:  5 global.prd.cdn.globalsign.com;type:  5 cdn.globalsigncdn.com.cdn.cloudflare.net;::ffff:104.18.21.226;::ffff:104.18.20.226;",
+          "weight": 0.0038
+        },
+        {
+          "count": 3,
+          "value": "type:  5 submit-target.osp.opera.software;type:  5 submit.geo.opera.com;type:  5 submit-am4.osp.opera.software;::ffff:82.145.217.121;",
+          "weight": 0.0038
+        },
+        {
+          "count": 3,
+          "value": "type:  5 g.msn.com;type:  5 g-msn-com-nsatc.trafficmanager.net;::ffff:52.142.114.176;",
+          "weight": 0.0038
+        },
+        {
+          "count": 3,
+          "value": "type:  5 oneclient.sfx.ms.edgekey.net;type:  5 e9659.dspg.akamaiedge.net;::ffff:23.35.237.43;",
+          "weight": 0.0038
+        },
+        {
+          "count": 3,
+          "value": "type:  5 ocsp.comodoca.com.cdn.cloudflare.net;::ffff:104.18.31.182;::ffff:104.18.30.182;",
+          "weight": 0.0038
+        },
+        {
+          "count": 3,
+          "value": "type:  5 cs22.wpc.v0cdn.net;152.199.19.160;",
+          "weight": 0.0038
+        },
+        {
+          "count": 3,
+          "value": "::ffff:142.250.186.131;",
+          "weight": 0.0038
+        },
+        {
+          "count": 3,
+          "value": "142.250.186.131;",
+          "weight": 0.0038
+        },
+        {
+          "count": 3,
+          "value": "type:  5 fp-vp.ec.azureedge.net;type:  5 cs9.wpc.v0cdn.net;::ffff:152.199.19.161;",
+          "weight": 0.0038
+        },
+        {
+          "count": 3,
+          "value": "type:  5 t-ring.t-9999.t-msedge.net;type:  5 t-9999.t-msedge.net;::ffff:13.107.246.254;",
+          "weight": 0.0038
+        },
+        {
+          "count": 3,
+          "value": "type:  5 spo-ring.spo-9999.spo-msedge.net;type:  5 spo-9999.spo-msedge.net;::ffff:13.107.136.254;",
+          "weight": 0.0038
+        },
+        {
+          "count": 3,
+          "value": "type:  5 cfl.dropboxstatic.com.cdn.cloudflare.net;104.16.100.29;104.16.99.29;",
+          "weight": 0.0038
+        },
+        {
+          "count": 3,
+          "value": "type:  5 edge-block-debug-env.dropbox-dns.com;::ffff:162.125.66.17;",
+          "weight": 0.0038
+        },
+        {
+          "count": 3,
+          "value": "type:  5 wd-prod-ss.trafficmanager.net;type:  5 wd-prod-ss-eu-west-1-fe.westeurope.cloudapp.azure.com;::ffff:20.73.130.64;",
+          "weight": 0.0038
+        },
+        {
+          "count": 3,
+          "value": "type:  5 wd-prod-ss.trafficmanager.net;type:  5 wd-prod-ss-eu-north-2-fe.northeurope.cloudapp.azure.com;::ffff:20.82.250.189;",
+          "weight": 0.0038
+        },
+        {
+          "count": 2,
+          "value": "::ffff:72.44.35.62;::ffff:34.225.141.152;",
+          "weight": 0.0025
+        },
+        {
+          "count": 2,
+          "value": "type:  5 fe3.delivery.mp.microsoft.com;type:  5 glb.cws.prod.dcat.dsp.trafficmanager.net;::ffff:52.242.97.97;",
+          "weight": 0.0025
+        },
+        {
+          "count": 2,
+          "value": "type:  5 wu-bg-shim.trafficmanager.net;type:  5 download.windowsupdate.com.edgesuite.net;type:  5 a767.dspw65.akamai.net;::ffff:23.55.161.142;::ffff:23.55.161.162;",
+          "weight": 0.0025
+        },
+        {
+          "count": 2,
+          "value": "::ffff:49.12.121.47;",
+          "weight": 0.0025
+        },
+        {
+          "count": 2,
+          "value": "type:  5 crt.comodoca.com;::ffff:91.199.212.52;",
+          "weight": 0.0025
+        },
+        {
+          "count": 2,
+          "value": "type:  5 go.microsoft.com.edgekey.net;type:  5 e11290.dspg.akamaiedge.net;::ffff:23.203.70.208;",
+          "weight": 0.0025
+        },
+        {
+          "count": 2,
+          "value": "type:  5 ocsp.comodoca.com.cdn.cloudflare.net;104.18.31.182;104.18.30.182;",
+          "weight": 0.0025
+        },
+        {
+          "count": 2,
+          "value": "type:  5 ocsp.comodoca.com.cdn.cloudflare.net;104.18.30.182;104.18.31.182;",
+          "weight": 0.0025
+        },
+        {
+          "count": 2,
+          "value": "type:  5 global.prd.cdn.globalsign.com;type:  5 cdn.globalsigncdn.com.cdn.cloudflare.net;104.18.20.226;104.18.21.226;",
+          "weight": 0.0025
+        },
+        {
+          "count": 2,
+          "value": "type:  5 o.lencr.edgesuite.net;type:  5 a1887.dscq.akamai.net;::ffff:184.24.77.54;::ffff:184.24.77.48;",
+          "weight": 0.0025
+        },
+        {
+          "count": 2,
+          "value": "::ffff:142.250.186.99;",
+          "weight": 0.0025
+        },
+        {
+          "count": 2,
+          "value": "::ffff:34.104.35.123;",
+          "weight": 0.0025
+        },
+        {
+          "count": 2,
+          "value": "type:  5 client-env.dropbox-dns.com;162.125.66.13;",
+          "weight": 0.0025
+        },
+        {
+          "count": 2,
+          "value": "type:  5 c-ring.c-9999.c-msedge.net;type:  5 c-9999.dc-msedge.net;::ffff:13.107.12.254;",
+          "weight": 0.0025
+        },
+        {
+          "count": 2,
+          "value": "type:  5 b-ring.b-9999.b-msedge.net;type:  5 b-9999.b-msedge.net;::ffff:13.107.6.254;",
+          "weight": 0.0025
+        },
+        {
+          "count": 2,
+          "value": "type:  5 a-ring.a-9999.a-msedge.net;type:  5 a-9999.a-msedge.net;::ffff:204.79.197.254;",
+          "weight": 0.0025
+        },
+        {
+          "count": 2,
+          "value": "type:  5 kb-dashboard-us.connectedpdf.com;type:  5 dashboard-us-lb.connectedpdf.com;20.62.223.48;",
+          "weight": 0.0025
+        },
+        {
+          "count": 2,
+          "value": "type:  5 crl-symcprod.digicert.com;type:  5 cs9.wac.phicdn.net;::ffff:93.184.220.29;",
+          "weight": 0.0025
+        },
+        {
+          "count": 2,
+          "value": "type:  5 settingsfd-geo.trafficmanager.net;::ffff:20.73.194.208;",
+          "weight": 0.0025
+        },
+        {
+          "count": 2,
+          "value": "type:  5 d.v.dropbox.com;type:  5 d-edge.v.dropbox.com;::ffff:162.125.7.20;",
+          "weight": 0.0025
+        },
+        {
+          "count": 2,
+          "value": "type:  5 www-msn-com.a-0003.a-msedge.net;type:  5 icePrime.a-0003.dc-msedge.net;type:  5 a-0003.dc-msedge.net;::ffff:131.253.33.203;",
+          "weight": 0.0025
+        },
+        {
+          "count": 2,
+          "value": "type:  5 assets.msn.com.edgekey.net;type:  5 e28578.dscd.akamaiedge.net;::ffff:23.11.206.17;::ffff:23.11.206.74;",
+          "weight": 0.0025
+        },
+        {
+          "count": 1,
+          "value": "10.23.42.38;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 wildcard.weather.microsoft.com.edgekey.net;type:  5 e15275.g.akamaiedge.net;::ffff:23.203.78.112;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 wu-bg-shim.trafficmanager.net;type:  5 download.windowsupdate.com.edgesuite.net;type:  5 a767.dspw65.akamai.net;::ffff:23.11.206.211;::ffff:23.11.206.226;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 a-0001.a-afdentry.net.trafficmanager.net;type:  5 www-bing-com.dual-a-0001.a-msedge.net;type:  5 dual-a-0001.dc-msedge.net;::ffff:131.253.33.200;::ffff:13.107.22.200;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 arc.trafficmanager.net;type:  5 iris-de-prod-azsc-uks.uksouth.cloudapp.azure.com;::ffff:20.50.102.62;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 fe2cr.update.msft.com.trafficmanager.net;::ffff:20.83.81.161;::ffff:52.249.36.205;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 global.asimov.events.data.trafficmanager.net;type:  5 onedscolprdneu02.northeurope.cloudapp.azure.com;::ffff:20.50.80.209;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "::ffff:18.66.92.70;::ffff:18.66.92.28;::ffff:18.66.92.207;::ffff:18.66.92.73;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "::ffff:18.66.137.71;::ffff:18.66.137.97;::ffff:18.66.137.10;::ffff:18.66.137.148;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "::ffff:18.66.137.148;::ffff:18.66.137.10;::ffff:18.66.137.71;::ffff:18.66.137.97;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "::ffff:52.222.250.154;::ffff:52.222.250.82;::ffff:52.222.250.142;::ffff:52.222.250.24;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 s3-1-w.amazonaws.com;type:  5 s3-w.us-east-1.amazonaws.com;::ffff:52.216.92.27;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 wu-fg-shim.trafficmanager.net;type:  5 wu.azureedge.net;type:  5 wu.ec.azureedge.net;type:  5 bg.apr-52dd2-0503.edgecastdns.net;type:  5 hlb.apr-52dd2-0.edgecastdns.net;type:  5 cs11.wpc.v0cdn.net;::ffff:93.184.221.240;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 arc.trafficmanager.net;type:  5 iris-de-prod-azsc-neu.northeurope.cloudapp.azure.com;::ffff:20.82.209.183;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 ris-prod.trafficmanager.net;type:  5 asf-ris-prod-neu.northeurope.cloudapp.azure.com;::ffff:40.112.88.60;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 download-cdn.prod.mozaws.net;::ffff:99.86.2.60;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 eu.get.opera.com;::ffff:185.26.182.71;::ffff:185.26.182.72;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 global.asimov.events.data.trafficmanager.net;type:  5 onedscolprdwus13.westus.cloudapp.azure.com;::ffff:20.189.173.14;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 s3-1-w.amazonaws.com;type:  5 s3-w.us-east-1.amazonaws.com;::ffff:52.217.10.196;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "::ffff:142.250.185.238;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 pki-goog.l.google.com;::ffff:142.250.185.227;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 global.asimov.events.data.trafficmanager.net;type:  5 onedscolprdwus10.westus.cloudapp.azure.com;::ffff:20.189.173.11;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "::ffff:140.82.121.4;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 tsfe.trafficmanager.net;::ffff:20.54.110.119;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "::ffff:185.199.109.133;::ffff:185.199.110.133;::ffff:185.199.111.133;::ffff:185.199.108.133;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 geo.prod.do.dsp.trafficmanager.net;type:  5 array502.prod.do.dsp.mp.microsoft.com;::ffff:52.179.216.235;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 kv501.prod.do.dsp.mp.microsoft.com.edgekey.net;type:  5 e10370.g.akamaiedge.net;::ffff:23.37.239.177;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 cp501.prod.do.dsp.mp.microsoft.com.edgekey.net;type:  5 e10370.g.akamaiedge.net;::ffff:23.37.239.177;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 win8-emdlws-main.trafficmanager.net;type:  5 emdl.ws.microsoft.com.edgesuite.net;type:  5 a1158.g.akamai.net;::ffff:23.216.77.21;::ffff:23.216.77.25;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 au.au-msedge.net;type:  5 elasticShed.au.au-msedge.net;type:  5 afdap.au.au-msedge.net;type:  5 au.c-0001.c-msedge.net;type:  5 edgereturn.audownload.windowsupdate.nsatc.net;type:  5 edgehop.audownload.windowsupdate.nsatc.net;type:  5 au.download.windowsupdate.com.hwcdn.net;type:  5 cds.d2s7q6s2.hwcdn.net;::ffff:209.197.3.8;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 eu2-autoupdate.opera.com;::ffff:82.145.216.19;::ffff:82.145.216.20;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 global.asimov.events.data.trafficmanager.net;type:  5 onedscolprdwus06.westus.cloudapp.azure.com;::ffff:20.189.173.7;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 ninite-mirror.nyc3.cdn.digitaloceanspaces.com;type:  5 cds.b5g9b8e4.hwcdn.net;::ffff:205.185.216.10;::ffff:205.185.216.42;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 crl.root-x1.letsencrypt.org.edgekey.net;type:  5 e8652.dscx.akamaiedge.net;::ffff:104.117.200.9;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "::ffff:13.225.80.85;::ffff:13.225.80.15;::ffff:13.225.80.53;::ffff:13.225.80.13;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "::ffff:143.204.214.169;::ffff:143.204.214.142;::ffff:143.204.214.141;::ffff:143.204.214.74;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 msftstorebg.s.llnwi.net;::ffff:41.63.96.128;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 global.asimov.events.data.trafficmanager.net;type:  5 onedscolprdcus13.centralus.cloudapp.azure.com;::ffff:52.182.143.211;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 features.geo.opera.com;type:  5 ams-features.opera-api.com;type:  5 ams.lb.opera.technology;::ffff:185.26.182.112;::ffff:185.26.182.93;::ffff:185.26.182.111;::ffff:185.26.182.94;::ffff:185.26.182.106;::ffff:185.26.182.118;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 global.asimov.events.data.trafficmanager.net;type:  5 onedscolprdcus01.centralus.cloudapp.azure.com;::ffff:52.182.141.63;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 dualstack.python.map.fastly.net;::ffff:151.101.112.223;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 sourceforge.mirror.iweb.ca;::ffff:192.175.120.182;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "::ffff:159.65.89.65;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "::ffff:49.12.202.237;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 voidtools.com;::ffff:162.211.80.236;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "::ffff:93.93.131.124;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 rarlab.com;::ffff:51.195.68.162;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 cdn.digicertcdn.com;::ffff:104.18.11.39;::ffff:104.18.10.39;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "::ffff:178.33.105.203;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "::ffff:138.68.32.225;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 cutepdf.com;::ffff:64.34.201.145;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 wd-prod-cp.trafficmanager.net;type:  5 wd-prod-cp-eu-north-2-fe.northeurope.cloudapp.azure.com;::ffff:20.82.207.122;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "::ffff:64.50.233.100;::ffff:64.50.236.52;::ffff:140.211.166.134;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "::ffff:51.15.9.231;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "::ffff:52.222.233.247;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 scdnco.spotify.map.fastly.net;::ffff:199.232.138.248;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 cs22.wpc.v0cdn.net;::ffff:152.199.19.160;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 endpoint920510.ec.azureedge.net;type:  5 cs22.wpc.v0cdn.net;::ffff:152.199.19.160;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 cdn1.evernote.com.edgekey.net;type:  5 e7641.d.akamaiedge.net;::ffff:2.18.161.190;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "::ffff:18.66.96.144;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 global.asimov.events.data.trafficmanager.net;type:  5 onedscolprdjpe05.japaneast.cloudapp.azure.com;::ffff:40.79.189.59;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 fe2cr.update.msft.com.trafficmanager.net;::ffff:52.254.114.64;::ffff:20.62.190.184;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 ocsp.akamai.certum.pl;type:  5 ocsp.certum.pl.edgekey.net;type:  5 e96763.dscb.akamaiedge.net;::ffff:23.53.43.50;::ffff:23.53.43.88;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 secure-appldnld.apple.com.akadns.net;type:  5 secure-appldnld.apple.com.edgekey.net;type:  5 e6931.dsce9.akamaiedge.net;::ffff:95.101.186.117;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 crl.akamai.certum.pl;type:  5 crl.certum.pl.edgekey.net;type:  5 e83157.dscb.akamaiedge.net;::ffff:23.53.43.9;::ffff:23.53.43.50;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "::ffff:88.198.21.111;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 master.gnome.org;::ffff:8.43.85.16;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "::ffff:185.3.234.216;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 ocsp.godaddy.com.akadns.net;::ffff:192.124.249.36;::ffff:192.124.249.22;::ffff:192.124.249.23;::ffff:192.124.249.24;::ffff:192.124.249.41;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 devicemetadataservice.prod.trafficmanager.net;type:  5 vmss-prod-eus.eastus.cloudapp.azure.com;::ffff:52.188.50.245;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "49.12.202.237;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 rarlab.com;51.195.68.162;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "93.93.131.124;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 sourceforge.mirror.iweb.ca;192.175.120.182;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "138.68.32.225;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "178.33.105.203;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 fp-vp.ec.azureedge.net;type:  5 cs9.wpc.v0cdn.net;152.199.19.161;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 cutepdf.com;64.34.201.145;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 go.microsoft.com.edgekey.net;type:  5 e11290.dspg.akamaiedge.net;23.203.70.208;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "49.12.121.47;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 devicemetadataservice.prod.trafficmanager.net;type:  5 vmss-prod-eus.eastus.cloudapp.azure.com;52.188.50.245;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "64.50.233.100;64.50.236.52;140.211.166.134;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 ocsp.godaddy.com.akadns.net;192.124.249.36;192.124.249.22;192.124.249.23;192.124.249.24;192.124.249.41;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "185.3.234.216;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "51.15.9.231;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 voidtools.com;162.211.80.236;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 cs9.wac.phicdn.net;93.184.220.29;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "185.199.109.133;185.199.110.133;185.199.111.133;185.199.108.133;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 endpoint920510.ec.azureedge.net;type:  5 cs22.wpc.v0cdn.net;152.199.19.160;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 fp-vp-nocache.ec.azureedge.net;type:  5 cs9.wpc.v0cdn.net;152.199.19.161;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "88.198.21.111;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "159.65.89.65;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 master.gnome.org;8.43.85.16;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 global.prd.cdn.globalsign.com;type:  5 cdn.globalsigncdn.com.cdn.cloudflare.net;104.18.21.226;104.18.20.226;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 fe3.delivery.mp.microsoft.com;type:  5 glb.cws.prod.dcat.dsp.trafficmanager.net;52.242.97.97;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 ftp6.gwdg.de;::ffff:134.76.12.6;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 ocsp.telesec.de;::ffff:217.170.186.111;::ffff:80.158.61.91;::ffff:80.158.50.254;::ffff:217.170.186.122;::ffff:80.158.59.63;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "::ffff:193.174.13.86;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 dlc-shim.trafficmanager.net;type:  5 main.dl.ms.akadns.net;type:  5 download.microsoft.com.edgekey.net;type:  5 e3673.dscg.akamaiedge.net;::ffff:23.35.236.109;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 2-01-5830-0005.cdx.cedexis.net;type:  5 4316b.wpc.azureedge.net;type:  5 cs10.wpc.v0cdn.net;::ffff:68.232.34.200;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "::ffff:216.105.38.12;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 clients.l.google.com;::ffff:216.58.212.142;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 mirror3.rafal.ca;::ffff:207.210.46.249;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 www-google-analytics.l.google.com;::ffff:142.250.184.206;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "193.174.13.86;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 mirror3.rafal.ca;207.210.46.249;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 2-01-5830-0005.cdx.cedexis.net;type:  5 4316b.wpc.azureedge.net;type:  5 cs10.wpc.v0cdn.net;68.232.34.200;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "216.105.38.12;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 ftp6.gwdg.de;134.76.12.6;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 www-google-analytics.l.google.com;142.250.184.206;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 ocsp.telesec.de;217.170.186.111;80.158.61.91;80.158.50.254;217.170.186.122;80.158.59.63;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 clients.l.google.com;216.58.212.142;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 prod.inkscape.map.fastly.net;::ffff:151.101.114.217;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 global.asimov.events.data.trafficmanager.net;type:  5 onedscolprdeus03.eastus.cloudapp.azure.com;::ffff:20.42.73.24;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 wd-prod-cp.trafficmanager.net;type:  5 wd-prod-cp-eu-west-2-fe.westeurope.cloudapp.azure.com;::ffff:20.82.19.171;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 api-msn-com.a-0003.a-msedge.net;type:  5 icePrime.a-0003.dc-msedge.net;type:  5 a-0003.dc-msedge.net;::ffff:131.253.33.203;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 fp-afd.afd.azureedge.us;type:  5 afd.msedge.azure.us;type:  5 t-0001.msedge.azure.us;type:  5 eafd-defaultvips-3p-gov.usgovtrafficmanager.net;type:  5 eafd-ffgov-sn02.elasticafd.msedge.azure.us;::ffff:20.140.56.68;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 fp-vp-nocache.ec.azureedge.net;type:  5 cs9.wpc.v0cdn.net;::ffff:152.199.19.161;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 sin-mvp.trafficmanager.net;::ffff:52.98.33.226;::ffff:52.98.54.130;::ffff:40.99.10.82;::ffff:40.99.8.194;::ffff:40.99.10.98;::ffff:52.98.33.162;::ffff:40.99.10.114;::ffff:40.99.10.18;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 devicemetadataservice.prod.trafficmanager.net;type:  5 vmss-prod-weu.westeurope.cloudapp.azure.com;::ffff:20.86.173.234;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 dns-lb01.foxitservice.com;::ffff:64.71.129.109;::ffff:184.105.233.221;::ffff:64.62.151.62;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 cws-site-1191008954.us-east-1.elb.amazonaws.com;::ffff:52.86.66.46;::ffff:54.162.141.238;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 cws-site-1191008954.us-east-1.elb.amazonaws.com;52.86.66.46;54.162.141.238;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 dns-lb01.foxitservice.com;64.71.129.109;184.105.233.221;64.62.151.62;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 t8.v.dropbox.com;::ffff:162.125.19.9;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 clients.l.google.com;::ffff:142.250.181.238;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 blobcollector.events.data.trafficmanager.net;type:  5 onedsblobprdcus17.centralus.cloudapp.azure.com;::ffff:13.89.179.12;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 wd-prod-cp.trafficmanager.net;type:  5 wd-prod-cp-eu-north-3-fe.northeurope.cloudapp.azure.com;::ffff:20.93.58.141;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 crl.akamai.certum.pl;type:  5 crl.certum.pl.edgekey.net;type:  5 e83157.dscb.akamaiedge.net;::ffff:23.53.43.50;::ffff:23.53.43.9;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 twc.trafficmanager.net;::ffff:40.119.148.38;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 login.msa.msidentity.com;type:  5 www.tm.lg.prod.aadmsa.akadns.net;type:  5 www.a.lg.prod.aadmsa.akadns.net;type:  5 default.a.lg.prod.aadmsa.akadns.net;type:  5 prda.aadg.msidentity.com;type:  5 www.tm.a.prd.aadg.akadns.net;::ffff:20.190.159.134;::ffff:40.126.31.139;::ffff:40.126.31.137;::ffff:40.126.31.4;::ffff:40.126.31.1;::ffff:40.126.31.8;::ffff:20.190.159.136;::ffff:40.126.31.135;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 storecatalogrevocation.storequality.microsoft.com.edgekey.net;type:  5 e10198.b.akamaiedge.net;::ffff:96.16.129.38;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 consumer-licensing-aks2aks.md.mp.microsoft.com.akadns.net;type:  5 consumer-licensing-aks2aks-europe.md.mp.microsoft.com.akadns.net;type:  5 eus2.frontdoor.licensing.commerce.microsoft.com;::ffff:20.72.78.248;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 global.asimov.events.data.trafficmanager.net;type:  5 onedscolprdwus01.westus.cloudapp.azure.com;::ffff:20.189.173.2;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 login.msa.msidentity.com;type:  5 www.tm.lg.prod.aadmsa.akadns.net;type:  5 www.a.lg.prod.aadmsa.akadns.net;type:  5 default.a.lg.prod.aadmsa.akadns.net;type:  5 prda.aadg.msidentity.com;type:  5 www.tm.a.prd.aadg.akadns.net;type:  5 www.current.a.prd.aadg.akadns.net;::ffff:40.126.31.141;::ffff:40.126.31.137;::ffff:20.190.159.138;::ffff:20.190.159.136;::ffff:20.190.159.132;::ffff:40.126.31.4;::ffff:40.126.31.6;::ffff:20.190.159.134;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 www-msn-com.a-0003.a-msedge.net;type:  5 a-0003.a-msedge.net;::ffff:204.79.197.203;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 c-msn-com-nsatc.trafficmanager.net;::ffff:52.142.114.2;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "::ffff:13.32.121.37;::ffff:13.32.121.72;::ffff:13.32.121.17;::ffff:13.32.121.21;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "::ffff:18.66.92.28;::ffff:18.66.92.73;::ffff:18.66.92.70;::ffff:18.66.92.207;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 c-bing-com.a-0001.a-msedge.net;type:  5 dual-a-0001.a-msedge.net;::ffff:204.79.197.200;::ffff:13.107.21.200;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "::ffff:18.66.137.97;::ffff:18.66.137.148;::ffff:18.66.137.10;::ffff:18.66.137.71;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "::ffff:18.66.137.97;::ffff:18.66.137.71;::ffff:18.66.137.10;::ffff:18.66.137.148;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 global.asimov.events.data.trafficmanager.net;type:  5 onedscolprdweu04.westeurope.cloudapp.azure.com;::ffff:20.50.201.200;",
+          "weight": 0.0013
+        },
+        {
+          "count": 1,
+          "value": "type:  5 a1834.dspg2.akamai.net;::ffff:23.216.77.206;::ffff:23.216.77.201;",
+          "weight": 0.0013
         }
       ]
     },
     "EventData.QueryStatus": {
       "kind": "freeform",
-      "n": 1,
+      "n": 1734,
       "values": [
         {
-          "count": 1,
+          "count": 1322,
+          "value": "0",
+          "weight": 0.7624
+        },
+        {
+          "count": 365,
+          "value": "9701",
+          "weight": 0.2105
+        },
+        {
+          "count": 34,
+          "value": "9501",
+          "weight": 0.0196
+        },
+        {
+          "count": 11,
           "value": "9003",
-          "weight": 1.0
+          "weight": 0.0063
+        },
+        {
+          "count": 1,
+          "value": "9560",
+          "weight": 0.0006
+        },
+        {
+          "count": 1,
+          "value": "1460",
+          "weight": 0.0006
         }
       ]
     },
     "EventData.RuleName": {
       "kind": "freeform",
-      "n": 1,
+      "n": 1734,
       "values": [
         {
-          "count": 1,
+          "count": 1734,
           "value": "-",
+          "weight": 1.0
+        }
+      ]
+    },
+    "EventData.User": {
+      "kind": "identifier",
+      "n": 1731,
+      "shapes": [
+        {
+          "count": 1731,
+          "shape": "str:len_bucket=<=32",
           "weight": 1.0
         }
       ]
     },
     "EventData.UtcTime": {
       "kind": "freeform",
-      "n": 1,
+      "n": 1734,
       "values": [
         {
-          "count": 1,
+          "count": 10,
+          "value": "2022-02-08 11:46:52.273",
+          "weight": 0.0311
+        },
+        {
+          "count": 10,
+          "value": "2022-02-08 11:46:52.275",
+          "weight": 0.0311
+        },
+        {
+          "count": 9,
+          "value": "2022-02-08 11:46:52.271",
+          "weight": 0.028
+        },
+        {
+          "count": 9,
+          "value": "2022-02-08 11:46:52.274",
+          "weight": 0.028
+        },
+        {
+          "count": 9,
+          "value": "2022-02-08 11:46:52.276",
+          "weight": 0.028
+        },
+        {
+          "count": 9,
+          "value": "2022-02-08 11:46:52.280",
+          "weight": 0.028
+        },
+        {
+          "count": 9,
+          "value": "2022-02-08 11:46:52.281",
+          "weight": 0.028
+        },
+        {
+          "count": 8,
+          "value": "2022-02-08 11:46:52.269",
+          "weight": 0.0248
+        },
+        {
+          "count": 8,
+          "value": "2022-02-08 11:46:52.278",
+          "weight": 0.0248
+        },
+        {
+          "count": 7,
+          "value": "2022-02-08 11:46:52.277",
+          "weight": 0.0217
+        },
+        {
+          "count": 7,
+          "value": "2022-02-08 11:46:52.279",
+          "weight": 0.0217
+        },
+        {
+          "count": 7,
+          "value": "2022-02-08 11:49:12.053",
+          "weight": 0.0217
+        },
+        {
+          "count": 6,
+          "value": "2022-02-08 11:46:52.272",
+          "weight": 0.0186
+        },
+        {
+          "count": 5,
+          "value": "2022-02-08 11:54:12.011",
+          "weight": 0.0155
+        },
+        {
+          "count": 5,
+          "value": "2022-02-08 11:54:12.014",
+          "weight": 0.0155
+        },
+        {
+          "count": 4,
+          "value": "2022-02-08 11:52:11.468",
+          "weight": 0.0124
+        },
+        {
+          "count": 3,
+          "value": "2022-02-08 11:46:52.270",
+          "weight": 0.0093
+        },
+        {
+          "count": 3,
+          "value": "2022-02-08 11:49:12.052",
+          "weight": 0.0093
+        },
+        {
+          "count": 3,
+          "value": "2022-02-08 11:49:12.056",
+          "weight": 0.0093
+        },
+        {
+          "count": 3,
+          "value": "2022-02-08 11:52:11.466",
+          "weight": 0.0093
+        },
+        {
+          "count": 3,
+          "value": "2022-02-08 11:52:11.467",
+          "weight": 0.0093
+        },
+        {
+          "count": 2,
           "value": "2020-10-20 11:50:59.461",
-          "weight": 1.0
+          "weight": 0.0062
+        },
+        {
+          "count": 2,
+          "value": "2022-02-08 11:46:52.268",
+          "weight": 0.0062
+        },
+        {
+          "count": 2,
+          "value": "2022-02-08 11:48:41.619",
+          "weight": 0.0062
+        },
+        {
+          "count": 2,
+          "value": "2022-02-08 11:49:12.051",
+          "weight": 0.0062
+        },
+        {
+          "count": 2,
+          "value": "2022-02-08 11:49:12.057",
+          "weight": 0.0062
+        },
+        {
+          "count": 2,
+          "value": "2022-02-08 11:52:11.469",
+          "weight": 0.0062
+        },
+        {
+          "count": 1,
+          "value": "2021-12-04 21:19:10.604",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 08:13:59.419",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 08:13:59.472",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 08:14:01.515",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 08:14:02.272",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 08:14:02.544",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 08:14:03.401",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 08:14:04.293",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:41:23.361",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:41:23.653",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:41:27.794",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:41:27.872",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:41:28.081",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:41:28.425",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:41:28.486",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:41:28.544",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:41:28.610",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:41:28.976",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:41:29.259",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:41:30.470",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:41:33.465",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:41:33.940",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:41:33.989",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:41:34.556",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:41:34.931",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:41:42.421",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:41:42.490",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:41:44.112",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:41:44.253",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:41:50.812",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:41:56.933",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:41:57.013",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:41:57.117",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:41:57.563",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:41:57.638",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:42:06.599",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:42:07.353",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:42:07.775",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:42:07.865",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:42:08.162",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:42:08.711",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:42:09.110",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:42:09.493",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:42:09.732",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:42:10.452",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:42:10.459",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:42:10.763",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:42:10.849",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:42:12.723",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:42:12.799",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:42:13.083",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:42:13.232",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:42:13.298",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:42:16.421",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:42:21.133",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:42:22.600",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:42:28.407",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:42:47.088",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:42:50.270",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:42:50.312",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:42:54.129",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:42:54.377",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:42:56.757",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:42:56.936",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:43:04.012",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:43:04.659",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:43:04.944",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:43:07.195",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:43:09.623",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:43:11.064",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:43:11.151",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:43:11.198",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:43:12.105",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:43:21.234",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:43:29.540",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:43:45.206",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:44:08.741",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:44:19.531",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:44:19.618",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:44:20.565",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:44:26.993",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:44:27.223",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:44:27.410",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:44:27.456",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:44:31.648",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:44:44.411",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:44:49.256",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:44:58.578",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:45:02.905",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:45:07.952",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:45:17.603",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:45:33.828",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:45:44.601",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:45:44.820",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:45:50.757",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:45:50.823",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:46:01.598",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:46:04.042",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:46:04.205",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:46:04.396",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:46:05.613",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:46:16.137",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:46:22.761",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:46:23.125",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:46:25.283",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:46:38.304",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:46:39.592",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:46:40.261",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:46:47.259",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:46:50.450",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:46:50.504",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:46:52.282",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:47:39.396",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:47:39.490",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:47:39.550",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:47:53.930",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:47:55.500",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:48:19.544",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:48:19.820",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:48:30.669",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:48:31.173",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:48:45.754",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:48:59.214",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:49:10.288",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:49:12.054",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:49:20.997",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:49:33.636",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:49:33.684",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:49:34.297",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:49:49.929",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:50:00.225",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:50:34.546",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:50:38.424",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:51:02.033",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:51:02.225",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:52:11.465",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:52:12.910",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:52:21.345",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:52:30.029",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:52:38.314",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:52:38.920",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:52:57.106",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:52:59.589",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:52:59.710",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:53:03.769",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:53:04.419",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:53:04.434",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:53:04.466",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:53:04.519",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:53:04.541",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:53:04.591",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:53:04.622",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:53:04.624",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:53:04.656",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:53:04.684",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:53:04.708",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:53:04.709",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:53:10.445",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:53:11.965",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:53:48.895",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:53:51.533",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:54:04.579",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:54:05.056",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:54:05.793",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:54:05.935",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:54:12.013",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:54:18.320",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:54:18.823",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:54:18.883",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:54:19.282",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:54:19.739",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:54:19.801",
+          "weight": 0.0031
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08 11:54:22.396",
+          "weight": 0.0031
         }
       ]
     },
     "System.Channel": {
       "kind": "freeform",
-      "n": 1,
+      "n": 1734,
       "values": [
         {
-          "count": 1,
+          "count": 1734,
           "value": "Microsoft-Windows-Sysmon/Operational",
           "weight": 1.0
         }
@@ -112,21 +3143,26 @@
     },
     "System.Computer": {
       "kind": "identifier",
-      "n": 1,
+      "n": 1734,
       "shapes": [
         {
-          "count": 1,
+          "count": 1733,
           "shape": "str:len_bucket=<=16",
-          "weight": 1.0
+          "weight": 0.9994
+        },
+        {
+          "count": 1,
+          "shape": "fqdn:labels=3",
+          "weight": 0.0006
         }
       ]
     },
     "System.EventID": {
       "kind": "freeform",
-      "n": 1,
+      "n": 1734,
       "values": [
         {
-          "count": 1,
+          "count": 1734,
           "value": "22",
           "weight": 1.0
         }
@@ -134,43 +3170,1073 @@
     },
     "System.EventRecordID": {
       "kind": "freeform",
-      "n": 1,
+      "n": 1734,
       "values": [
         {
-          "count": 1,
+          "count": 2,
           "value": "1084",
-          "weight": 1.0
+          "weight": 0.01
+        },
+        {
+          "count": 1,
+          "value": "48607",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "841683",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "841684",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "842483",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "843740",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "844536",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "844537",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "844697",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "845040",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "845041",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "845265",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "845266",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "845267",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "845268",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "845293",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "845294",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "845295",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "845585",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "845873",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "845874",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "846979",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "846980",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "846981",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "847064",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "847065",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "847641",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "847713",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "847714",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "847756",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "848162",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "849231",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "849232",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "849233",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "849234",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "849539",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "850015",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "850210",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "850211",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "850423",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "850424",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "850425",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "850426",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "850556",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "850557",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "850851",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "850852",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "850905",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "850906",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "851249",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "851250",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "851335",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "851336",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "851578",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "851630",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "852164",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "852166",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "852405",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "853165",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "853266",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "853267",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "853273",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "853274",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "853458",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "853459",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "854539",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "854540",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "854586",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "854663",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "854867",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "854931",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "854932",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "854933",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "854934",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "855040",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "855247",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "856321",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "857672",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "858147",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "858148",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "859272",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "859638",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "859639",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "859675",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "859676",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "861352",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "862700",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "863507",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "863789",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "865067",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "868098",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "873216",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "879276",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "881161",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "881937",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "882914",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "883354",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "885179",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "886422",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "887219",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "887220",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "887221",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "889552",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "890611",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "890612",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "891239",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "895039",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "895218",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "895219",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "896902",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898756",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898780",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898781",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898782",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898783",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898784",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898785",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898786",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898787",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898788",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898789",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898790",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898791",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898792",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898793",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898794",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898795",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898796",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898797",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898798",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898799",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898800",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898801",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898802",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898803",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898804",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898805",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898806",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898807",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898808",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898809",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898810",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898811",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898812",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898813",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898814",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898815",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898816",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898817",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898818",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898819",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898820",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898821",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898822",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898823",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898824",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898825",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898826",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898827",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898828",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898829",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898830",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898831",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898832",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898833",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898834",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898835",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898836",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898837",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898838",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898839",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898840",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898841",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898842",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898843",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898844",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898845",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898846",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898847",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898848",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898849",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898850",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898851",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898852",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898853",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898854",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898855",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898856",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898857",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898858",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "898859",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "899052",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "899053",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "899054",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "899055",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "899056",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "899057",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "899058",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "899059",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "899060",
+          "weight": 0.005
         }
       ]
     },
     "System.Execution.#attributes.ProcessID": {
       "kind": "freeform",
-      "n": 1,
+      "n": 1734,
       "values": [
         {
-          "count": 1,
+          "count": 1631,
+          "value": "2364",
+          "weight": 0.9406
+        },
+        {
+          "count": 100,
+          "value": "2144",
+          "weight": 0.0577
+        },
+        {
+          "count": 2,
           "value": "7212",
-          "weight": 1.0
+          "weight": 0.0012
+        },
+        {
+          "count": 1,
+          "value": "1048",
+          "weight": 0.0006
         }
       ]
     },
     "System.Execution.#attributes.ThreadID": {
       "kind": "freeform",
-      "n": 1,
+      "n": 1734,
       "values": [
         {
-          "count": 1,
+          "count": 1624,
+          "value": "6500",
+          "weight": 0.9366
+        },
+        {
+          "count": 100,
+          "value": "1964",
+          "weight": 0.0577
+        },
+        {
+          "count": 7,
+          "value": "2040",
+          "weight": 0.004
+        },
+        {
+          "count": 2,
           "value": "1320",
-          "weight": 1.0
+          "weight": 0.0012
+        },
+        {
+          "count": 1,
+          "value": "1700",
+          "weight": 0.0006
         }
       ]
     },
     "System.Keywords": {
       "kind": "freeform",
-      "n": 1,
+      "n": 1734,
       "values": [
         {
-          "count": 1,
+          "count": 1734,
           "value": "0x8000000000000000",
           "weight": 1.0
         }
@@ -178,10 +4244,10 @@
     },
     "System.Level": {
       "kind": "freeform",
-      "n": 1,
+      "n": 1734,
       "values": [
         {
-          "count": 1,
+          "count": 1734,
           "value": "4",
           "weight": 1.0
         }
@@ -189,10 +4255,10 @@
     },
     "System.Opcode": {
       "kind": "freeform",
-      "n": 1,
+      "n": 1734,
       "values": [
         {
-          "count": 1,
+          "count": 1734,
           "value": "0",
           "weight": 1.0
         }
@@ -200,10 +4266,10 @@
     },
     "System.Provider.#attributes.Guid": {
       "kind": "identifier",
-      "n": 1,
+      "n": 1734,
       "shapes": [
         {
-          "count": 1,
+          "count": 1734,
           "shape": "guid",
           "weight": 1.0
         }
@@ -211,10 +4277,10 @@
     },
     "System.Provider.#attributes.Name": {
       "kind": "freeform",
-      "n": 1,
+      "n": 1734,
       "values": [
         {
-          "count": 1,
+          "count": 1734,
           "value": "Microsoft-Windows-Sysmon",
           "weight": 1.0
         }
@@ -222,10 +4288,10 @@
     },
     "System.Security.#attributes.UserID": {
       "kind": "identifier",
-      "n": 1,
+      "n": 1734,
       "shapes": [
         {
-          "count": 1,
+          "count": 1734,
           "shape": "sid:parts=4",
           "weight": 1.0
         }
@@ -233,10 +4299,10 @@
     },
     "System.Task": {
       "kind": "freeform",
-      "n": 1,
+      "n": 1734,
       "values": [
         {
-          "count": 1,
+          "count": 1734,
           "value": "22",
           "weight": 1.0
         }
@@ -244,31 +4310,1029 @@
     },
     "System.TimeCreated.#attributes.SystemTime": {
       "kind": "freeform",
-      "n": 1,
+      "n": 1734,
       "values": [
         {
-          "count": 1,
+          "count": 2,
           "value": "2020-10-20T11:51:01.476722Z",
-          "weight": 1.0
+          "weight": 0.01
+        },
+        {
+          "count": 1,
+          "value": "2021-12-04T21:19:17.757697Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:41:19.092213Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:41:19.092233Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:41:21.091546Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:41:22.125041Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:41:23.106968Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:41:23.107153Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:41:23.291079Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:41:25.310914Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:41:25.310931Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:41:28.780513Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:41:28.780559Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:41:28.780591Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:41:28.780620Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:41:29.794993Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:41:29.795032Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:41:29.795089Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:41:30.812490Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:41:31.825658Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:41:31.825764Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:41:34.817988Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:41:34.818063Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:41:34.818196Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:41:36.833220Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:41:36.833283Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:41:43.395532Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:41:44.413557Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:41:44.413585Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:41:45.428484Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:41:52.489699Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:41:57.915748Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:41:57.915768Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:41:57.915780Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:41:57.915791Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:41:58.913034Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:42:07.551439Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:42:08.551885Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:42:08.551907Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:42:09.552026Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:42:09.552066Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:42:09.552094Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:42:09.552240Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:42:10.554413Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:42:10.554454Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:42:11.567486Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:42:11.567503Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:42:12.573548Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:42:12.573562Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:42:13.604830Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:42:13.604851Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:42:14.615679Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:42:14.615708Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:42:15.617083Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:42:16.617907Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:42:23.073718Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:42:24.086770Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:42:30.383556Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:42:49.027917Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:42:52.260893Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:42:52.260922Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:42:55.123731Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:42:56.136094Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:42:58.730338Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:42:58.730372Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:43:04.997527Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:43:04.997551Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:43:06.011319Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:43:09.213881Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:43:11.591614Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:43:12.620143Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:43:12.620172Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:43:12.620205Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:43:12.620226Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:43:23.199313Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:43:31.573251Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:43:47.214834Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:44:10.651463Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:44:20.535039Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:44:20.540457Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:44:22.567302Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:44:27.988667Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:44:27.988842Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:44:28.989698Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:44:28.989725Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:44:33.660084Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:44:46.394470Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:44:51.255995Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:45:00.597796Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:45:04.909825Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:45:09.941852Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:45:19.600333Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:45:35.835268Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:45:45.541341Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:45:46.542543Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:45:51.747304Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:45:52.762091Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:03.616793Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:05.009781Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:06.024350Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:06.024366Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:06.024378Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:18.120904Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:24.710614Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:24.710631Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:27.244797Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:40.289169Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:41.289107Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:41.289138Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:49.228169Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:51.429421Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430207Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430231Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430250Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430256Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430264Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430273Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430280Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430347Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430355Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430361Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430367Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430375Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430381Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430390Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430396Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430405Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430413Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430420Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430428Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430439Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430447Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430456Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430467Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430476Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430485Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430492Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430499Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430509Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430515Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430523Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430530Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430537Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430544Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430550Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430557Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430564Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430571Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430588Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430596Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430603Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430610Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430616Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430623Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430684Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430692Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430699Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430706Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430714Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430721Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430727Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430735Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430741Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430748Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430754Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430761Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430767Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430773Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430781Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430788Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430794Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430800Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430809Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430816Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430822Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430829Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430835Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430842Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430850Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430860Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430870Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430880Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430891Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430902Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430912Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430940Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430951Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.430962Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.431003Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.431010Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:52.431017Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:53.445591Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:53.445611Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:53.445624Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:53.445632Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:53.445640Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:53.445647Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:53.445655Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:53.445662Z",
+          "weight": 0.005
+        },
+        {
+          "count": 1,
+          "value": "2022-02-08T11:46:53.445669Z",
+          "weight": 0.005
         }
       ]
     },
     "System.Version": {
       "kind": "freeform",
-      "n": 1,
+      "n": 1734,
       "values": [
         {
-          "count": 1,
+          "count": 1734,
           "value": "5",
           "weight": 1.0
         }
       ]
     }
   },
-  "mined_at": "2026-09-14T06:12:04.102169+00:00",
-  "record_count": 1,
+  "mined_at": "2026-09-14T06:33:04.483683+00:00",
+  "record_count": 1734,
   "sources": {
-    "evtx-attack-samples/Privilege Escalation/Sysmon_UACME_64.evtx": 1
+    "evtx-attack-samples/Privilege Escalation/Sysmon_UACME_64.evtx": 1,
+    "evtx-baseline/win10-client/Logs_Client/Microsoft-Windows-Sysmon%4Operational.evtx": 1731,
+    "hayabusa-sample-evtx/EVTX-ATTACK-SAMPLES/Privilege Escalation/Sysmon_UACME_64.evtx": 1,
+    "hayabusa-sample-evtx/EVTX-to-MITRE-Attack/EVTX_full_APT_attack_steps/ID11,13,17,18-PSexec as system execution.evtx": 1
   },
   "table": "DnsEvents"
 }

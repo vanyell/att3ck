@@ -309,6 +309,29 @@ EVTX_TABLE_MAP: Dict[Any, str] = {
     # --- Detections / AV ---
     ("Microsoft-Windows-Windows Defender", 1116): "SecurityAlert",  # malware detected
     ("Microsoft-Windows-Windows Defender", 1117): "SecurityAlert",  # remediation action taken
+    # --- Sysmon (goodware baseline corpus surfaced these) ---
+    ("Microsoft-Windows-Sysmon", 9): "DeviceEvents",   # RawAccessRead
+    ("Microsoft-Windows-Sysmon", 26): "DeviceFileEvents",  # FileDeleteDetected (archived)
+    # --- Security-Auditing (goodware baseline corpus surfaced these) ---
+    ("Microsoft-Windows-Security-Auditing", 4907): "DeviceEvents",  # object auditing settings changed
+    ("Microsoft-Windows-Security-Auditing", 4674): "DeviceEvents",  # privileged operation attempted on object
+    ("Microsoft-Windows-Security-Auditing", 5447): "DeviceNetworkEvents",  # WFP filter added
+    # --- App/package install lifecycle (Store, AppX, MSI-Agent) ---
+    ("Microsoft-Windows-Install-Agent", 2005): "DeviceEvents",
+    ("Microsoft-Windows-Install-Agent", 2006): "DeviceEvents",
+    ("Microsoft-Windows-Install-Agent", 2007): "DeviceEvents",
+    ("Microsoft-Windows-Store", 8001): "DeviceEvents",
+    ("Microsoft-Windows-Store", 8002): "DeviceEvents",
+    ("Microsoft-Windows-Store", 8011): "DeviceEvents",
+    ("Microsoft-Windows-AppXDeployment", 325): "DeviceEvents",
+    ("Microsoft-Windows-AppXDeployment-Server", 603): "DeviceEvents",
+    ("Microsoft-Windows-AppXDeployment-Server", 607): "DeviceEvents",
+    ("Microsoft-Windows-AppXDeployment-Server", 10001): "DeviceEvents",
+    ("Microsoft-Windows-StateRepository", 271): "DeviceEvents",
+    ("Microsoft-Windows-Windows Firewall With Advanced Security", 2004): "DeviceNetworkEvents",  # firewall rule added
+    ("Service Control Manager", 7036): "DeviceEvents",  # service started/stopped
+    ("Service Control Manager", 7040): "DeviceEvents",  # service start type changed
+    ("Service Control Manager", 7045): "DeviceEvents",  # service installed
     # --- Low-signal system/service noise -> generic catch-all ---
     ("Microsoft-Windows-RPC", 1): "DeviceEvents",
     ("Microsoft-Windows-RPC", 5): "DeviceEvents",
@@ -316,8 +339,6 @@ EVTX_TABLE_MAP: Dict[Any, str] = {
     ("Microsoft-Windows-RPC", 9): "DeviceEvents",
     ("Microsoft-Windows-RPC", 14): "DeviceEvents",
     ("Microsoft-Windows-RPC", 16): "DeviceEvents",
-    ("Service Control Manager", 7036): "DeviceEvents",  # service started/stopped
-    ("Service Control Manager", 7045): "DeviceEvents",  # service installed
     ("MsiInstaller", 1040): "DeviceEvents",
     ("MsiInstaller", 1042): "DeviceEvents",
     ("Microsoft-Windows-DistributedCOM", 10016): "DeviceEvents",
@@ -508,8 +529,16 @@ def infer_table(record: Dict[str, Any], table_field: Optional[str], default_tabl
 @click.option("--output-dir", type=click.Path(path_type=Path), default=Path("kinetix/intelligence/corpus_profiles"),
               help="Directory to write/merge corpus_profiles/<table>.json into.")
 @click.option("--dry-run", is_flag=True, help="Parse and report without writing any profile files.")
+@click.option("--include-unclassified", is_flag=True,
+              help="Also write one profile file per unmapped (Provider, EventID) combo. "
+                   "Off by default: a broad EVTX corpus (esp. a goodware baseline full of "
+                   "installed-software telemetry) can surface hundreds of one-off providers "
+                   "that clutter corpus_profiles/ without ever being sampled -- confirmed "
+                   "against a real ~1000-file corpus during development, which produced "
+                   "~960 such one- or two-record files. Records are still counted and "
+                   "reported (stderr) either way so you know what to extend EVTX_TABLE_MAP with.")
 def main(input_path: Path, fmt: str, default_table: Optional[str], table_field: Optional[str],
-         source_label: Optional[str], output_dir: Path, dry_run: bool) -> None:
+         source_label: Optional[str], output_dir: Path, dry_run: bool, include_unclassified: bool) -> None:
     """Mine field-value distributions out of a sample log corpus file."""
     if fmt != "evtx" and not default_table and not table_field:
         raise click.UsageError("pass either --table (homogeneous file) or --table-field (mixed file)")
@@ -527,11 +556,15 @@ def main(input_path: Path, fmt: str, default_table: Optional[str], table_field: 
             table = infer_table(record, table_field, default_table)
         if table.startswith("Unclassified"):
             unclassified[table] += 1
+            if not include_unclassified:
+                total += 1
+                continue
         per_table_records[table].append(record)
         total += 1
-    click.echo(f"Loaded {total} records across {len(per_table_records)} table(s).")
+    click.echo(f"Loaded {total} records across {len(per_table_records) + (0 if include_unclassified else len(unclassified))} table(s).")
     if unclassified:
-        click.echo("  Unmapped (Provider, EventID) combos -- extend EVTX_TABLE_MAP for these:", err=True)
+        verb = "written as separate profiles" if include_unclassified else "skipped, not written (pass --include-unclassified to keep them)"
+        click.echo(f"  Unmapped (Provider, EventID) combos -- {verb}. Extend EVTX_TABLE_MAP for these:", err=True)
         for table, count in unclassified.most_common():
             click.echo(f"    {table}: {count} records", err=True)
 
