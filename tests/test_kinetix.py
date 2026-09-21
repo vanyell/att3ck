@@ -1246,6 +1246,122 @@ class TestNoiseTemplateLoading:
         assert "does_not_exist.json" in caplog.text
 
 
+class TestSyslogFormat:
+    """RFC 3164 carries no year ('%b %d %H:%M:%S'), so a backdated --sim-start
+    was silently re-dated to the ingest year by the receiving collector, while
+    the JSON and CEF feeds from the same run carried the correct year."""
+
+    @pytest.fixture(autouse=True)
+    def _reset_format(self):
+        from kinetix.schemas import base
+        yield
+        base.set_syslog_format("rfc3164")
+
+    def test_rfc3164_is_the_default_and_omits_the_year(self):
+        from datetime import datetime, timezone
+        from kinetix.schemas.base import format_syslog
+
+        dt = datetime(2025, 1, 5, 14, 30, 0, tzinfo=timezone.utc)
+        line = format_syslog(38, dt, "WS-01", "sshd", 4242, "hello")
+
+        assert line.startswith("<38>Jan 05 14:30:00 WS-01 sshd[4242]: ")
+        assert "2025" not in line
+
+    def test_rfc5424_preserves_the_year(self):
+        from datetime import datetime, timezone
+        from kinetix.schemas.base import format_syslog, set_syslog_format
+
+        set_syslog_format("rfc5424")
+        dt = datetime(2025, 1, 5, 14, 30, 0, tzinfo=timezone.utc)
+        line = format_syslog(38, dt, "WS-01", "sshd", 4242, "hello")
+
+        assert line.startswith("<38>1 2025-01-05T14:30:00")
+        assert "hello" in line
+
+    def test_event_syslog_output_honours_the_selected_format(self):
+        """The 30 to_syslog() overrides all funnel through format_syslog, so
+        switching the format must reach real events, not just the helper."""
+        from datetime import datetime, timezone
+        from kinetix.schemas.linux import LinuxAuthEvent
+        from kinetix.schemas.base import set_syslog_format
+
+        e = LinuxAuthEvent(hostname="srv-01", user_name="alice",
+                           ProcessId=4242, Message="Accepted password for alice",
+                           timestamp=datetime(2025, 1, 5, 14, 30, tzinfo=timezone.utc))
+        assert "2025" not in e.to_syslog()
+
+        set_syslog_format("rfc5424")
+        assert "2025-01-05T14:30:00" in e.to_syslog()
+
+    def test_backdated_sim_start_under_rfc3164_warns(self):
+        from click.testing import CliRunner
+        from main import main
+
+        result = CliRunner().invoke(
+            main, ["--sim-clock", "--sim-start", "2021-01-05", "--sim-days", "1", "--duration", "5"]
+        )
+
+        assert "rfc5424" in result.output.lower()
+
+
+class TestOutputOrdering:
+    """SimulatedClock.advance() hands out monotonic timestamps under a lock,
+    but workers write in completion order, so a sim-clock run's files were
+    ~11% out of order with backward jumps of several minutes."""
+
+    def _write(self, path, timestamps):
+        import orjson
+        with open(path, "wb") as f:
+            for ts in timestamps:
+                f.write(orjson.dumps({"TimeGenerated": ts, "Type": "T"}) + b"\n")
+
+    def test_sort_orders_a_shuffled_file_in_place(self, tmp_path):
+        from main import _sort_jsonl_by_timestamp
+
+        p = tmp_path / "DnsEvents.json"
+        self._write(p, [
+            "2026-09-18T10:00:05+00:00",
+            "2026-09-18T10:00:01+00:00",
+            "2026-09-18T10:00:09+00:00",
+            "2026-09-18T10:00:03+00:00",
+        ])
+
+        _sort_jsonl_by_timestamp(str(p))
+
+        import json
+        got = [json.loads(l)["TimeGenerated"] for l in p.read_text().splitlines() if l.strip()]
+        assert got == sorted(got)
+        assert len(got) == 4
+
+    def test_sort_preserves_every_line(self, tmp_path):
+        import random
+        from main import _sort_jsonl_by_timestamp
+
+        p = tmp_path / "SigninLogs.json"
+        stamps = [f"2026-09-18T10:{m:02d}:{s:02d}+00:00" for m in range(20) for s in range(30)]
+        shuffled = stamps[:]
+        random.shuffle(shuffled)
+        self._write(p, shuffled)
+
+        _sort_jsonl_by_timestamp(str(p))
+
+        import json
+        got = [json.loads(l)["TimeGenerated"] for l in p.read_text().splitlines() if l.strip()]
+        assert got == sorted(stamps)
+
+    def test_sort_leaves_unparseable_lines_in_place_without_crashing(self, tmp_path):
+        from main import _sort_jsonl_by_timestamp
+
+        p = tmp_path / "Broken.json"
+        p.write_text('{"TimeGenerated": "2026-09-18T10:00:05+00:00"}\nnot json\n'
+                     '{"TimeGenerated": "2026-09-18T10:00:01+00:00"}\n')
+
+        _sort_jsonl_by_timestamp(str(p))
+
+        lines = [l for l in p.read_text().splitlines() if l.strip()]
+        assert len(lines) == 3, "sorting must not drop malformed lines"
+
+
 class TestSimDaysValidation:
     def test_non_positive_sim_days_exits_with_a_message(self):
         from click.testing import CliRunner

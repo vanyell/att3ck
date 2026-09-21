@@ -114,6 +114,8 @@ identifiable by their `killchain_phase` and `mitre` tags.
 | `--sim-clock` | `False` | Simulated-clock mode: stamp events across a virtual multi-day window (diurnal + weekend-aware pacing via `TemporalEngine`) instead of real wall-clock time, so a realistic historical baseline can be generated in a short run |
 | `--sim-days` | `7.0` | Span of simulated time to generate when `--sim-clock` is set |
 | `--sim-start` | `None` (= now − `--sim-days`) | ISO start timestamp for `--sim-clock`, e.g. `2026-09-01` or `2026-09-01T00:00:00` |
+| `--syslog-format` | `rfc3164` | Wire format for syslog output — `rfc3164` or `rfc5424` |
+| `--sort-output` | on for `--sim-clock`, else off | Rewrite each JSON feed in `TimeGenerated` order after the run |
 | `--help` | | Show full usage |
 
 ### Simulated-Clock Baseline Generation
@@ -150,6 +152,24 @@ to a handful of events, so `TimingProfile.weekend_shaping` defaults to off and
 is *inversely* proportional to `avg_delay_seconds`: **raise**
 `avg_delay_seconds` (via a custom `TimingProfile`) or shrink `--sim-days` to
 generate less. Lowering it makes the run substantially larger.
+
+**Output ordering.** Workers write in completion order, not timestamp order,
+so a sim-clock run's files come out inverted — measured at 11.3% of lines with
+backward jumps of up to 11 minutes on a 3-day window. Sentinel, Splunk and
+Wazuh all index on the timestamp field and don't care, but anything that reads
+the file as a stream does. `--sort-output` (on by default under `--sim-clock`)
+rewrites each JSON feed in `TimeGenerated` order once the run finishes, using a
+chunked external merge sort so peak memory stays bounded regardless of window
+size. Verified at 0 inversions across 449,260 lines. Pass `--no-sort-output`
+to skip it; the CEF, syslog and EVTX feeds keep write order either way.
+
+**Backdated windows and syslog.** RFC 3164's timestamp (`%b %d %H:%M:%S`) has
+no year, so a `--sim-start` in a prior year is silently re-dated to the ingest
+year by the receiving collector, while the JSON and CEF feeds from the same run
+carry the correct year. Kinetix warns when the window falls outside the current
+year; pass `--syslog-format rfc5424` for full ISO 8601 timestamps that survive
+ingest. RFC 3164 remains the default because Wazuh's built-in decoders are
+written against it.
 
 `--sim-clock` also disables log rotation, because rotating mid-run would
 delete the oldest part of the very window you asked for — and would do it

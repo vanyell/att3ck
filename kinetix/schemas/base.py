@@ -35,7 +35,26 @@ def syslog_timestamp(dt: Optional[datetime] = None) -> str:
         dt = datetime.now(timezone.utc)
     return dt.strftime("%b %d %H:%M:%S")
 
+# Wire format for every to_syslog() implementation. RFC 3164 stays the default
+# because Wazuh's built-in decoders are written against it, but its timestamp
+# carries no year, so a backdated window (--sim-start in a prior year) is
+# silently re-dated to the ingest year by the collector. RFC 5424 timestamps
+# are full ISO 8601 and survive that. Set once at startup via main().
+_SYSLOG_FORMAT = "rfc3164"
+
+
+def set_syslog_format(fmt: str) -> None:
+    global _SYSLOG_FORMAT
+    if fmt not in ("rfc3164", "rfc5424"):
+        raise ValueError(f"Unsupported syslog format: {fmt}")
+    _SYSLOG_FORMAT = fmt
+
+
 def format_syslog(priority: int, dt: datetime, hostname: str, proc: str, pid: int, msg: str) -> str:
+    if _SYSLOG_FORMAT == "rfc5424":
+        # <PRI>VERSION TIMESTAMP HOSTNAME APP-NAME PROCID MSGID STRUCTURED-DATA MSG
+        ts = (dt or datetime.now(timezone.utc)).isoformat()
+        return f"<{priority}>1 {ts} {hostname} {proc} {pid} - - {msg}"
     return f"<{priority}>{syslog_timestamp(dt)} {hostname} {proc}[{pid}]: {msg}"
 
 # Windows Event Log helpers

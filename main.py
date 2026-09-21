@@ -8,6 +8,7 @@ import signal
 import sys
 import threading
 import random
+import orjson
 from logging.handlers import RotatingFileHandler
 from rich.console import Console
 from rich.logging import RichHandler
@@ -211,6 +212,95 @@ def _rotation_limits(sim_clock: bool) -> tuple:
     return _DEFAULT_MAX_BYTES, _DEFAULT_BACKUP_COUNT
 
 
+_SORT_CHUNK_LINES = 200_000
+
+
+def _sort_jsonl_by_timestamp(path: str) -> None:
+    """Rewrite a JSON-lines log file in TimeGenerated order.
+
+    Workers write in completion order, not timestamp order, so a sim-clock
+    run's files come out ~11% inverted with backward jumps of minutes. This
+    is a chunked external merge sort: each chunk is sorted in memory and
+    spilled to a temp file, then the chunks are merged back, so peak memory
+    is bounded by _SORT_CHUNK_LINES rather than the file size. Lines that
+    cannot be parsed keep their position relative to the preceding record
+    instead of being dropped.
+    """
+    import heapq
+    import tempfile
+
+    def key_of(line: str, previous):
+        try:
+            return orjson.loads(line).get("TimeGenerated") or previous
+        except orjson.JSONDecodeError:
+            return previous
+
+    spills = []
+    try:
+        with open(path, "r", encoding="utf-8") as src:
+            chunk, seq, previous = [], 0, ""
+            def flush():
+                nonlocal chunk
+                if not chunk:
+                    return
+                chunk.sort(key=lambda r: (r[0], r[1]))
+                tmp = tempfile.NamedTemporaryFile(
+                    mode="w", encoding="utf-8", delete=False,
+                    dir=os.path.dirname(path) or ".", suffix=".sorttmp")
+                for k, i, ln in chunk:
+                    tmp.write(f"{k}\t{i}\t{ln}\n")
+                tmp.close()
+                spills.append(tmp.name)
+                chunk = []
+
+            for line in src:
+                line = line.rstrip("\n")
+                if not line.strip():
+                    continue
+                previous = key_of(line, previous)
+                chunk.append((previous, seq, line))
+                seq += 1
+                if len(chunk) >= _SORT_CHUNK_LINES:
+                    flush()
+            flush()
+
+        if not spills:
+            return
+
+        streams = [open(s, "r", encoding="utf-8") for s in spills]
+        try:
+            def rows(fh):
+                for raw in fh:
+                    k, i, ln = raw.rstrip("\n").split("\t", 2)
+                    yield (k, int(i), ln)
+            merged = heapq.merge(*(rows(fh) for fh in streams), key=lambda r: (r[0], r[1]))
+            with open(path, "w", encoding="utf-8") as dst:
+                for _, _, ln in merged:
+                    dst.write(ln + "\n")
+        finally:
+            for fh in streams:
+                fh.close()
+    finally:
+        for s in spills:
+            try:
+                os.unlink(s)
+            except OSError:
+                pass
+
+
+def _sort_output_logs(output_dir: str) -> int:
+    """Sort every JSON-lines feed in output_dir. Returns the file count."""
+    import glob
+    count = 0
+    for path in sorted(glob.glob(os.path.join(output_dir, "*.json"))):
+        try:
+            _sort_jsonl_by_timestamp(path)
+            count += 1
+        except OSError as e:
+            logger.warning(f"Could not sort {path}: {e}")
+    return count
+
+
 def _load_noise_scenario_templates(paths: list) -> list:
     """Flatten stage events from noise scenario JSON files into a weighted
     template pool. 'multiply' on an event is treated as a sampling weight
@@ -288,13 +378,20 @@ def _generate_baseline_noise(count: int, var_manager: VariableManager) -> list:
 @click.option("--sim-clock", is_flag=True, help="Simulated-clock mode: stamp events across a virtual multi-day window (diurnal + weekend-aware pacing) instead of real wall-clock time, so a realistic historical baseline can be generated in a short run.")
 @click.option("--sim-days", type=float, default=7.0, help="Span of simulated time to generate when --sim-clock is set (default 7 days).")
 @click.option("--sim-start", default=None, help="ISO start timestamp for --sim-clock (e.g. 2026-09-01 or 2026-09-01T00:00:00). Defaults to (now - sim-days), so the window ends at the current time.")
-def main(scenario, output_dir, temporal, stress, duration, baseline_ratio, syslog_host, syslog_port, syslog_proto, sim_clock, sim_days, sim_start):
+@click.option("--syslog-format", type=click.Choice(["rfc3164", "rfc5424"]), default="rfc3164", help="Wire format for syslog output. rfc3164 (default) matches Wazuh's built-in decoders but carries no year, so a backdated --sim-start is re-dated to the ingest year; rfc5424 uses full ISO 8601 timestamps and preserves it.")
+@click.option("--sort-output/--no-sort-output", default=None, help="Rewrite each JSON feed in TimeGenerated order once the run finishes. Defaults on for --sim-clock (workers write in completion order, leaving the window ~11%% inverted) and off otherwise.")
+def main(scenario, output_dir, temporal, stress, duration, baseline_ratio, syslog_host, syslog_port, syslog_proto, sim_clock, sim_days, sim_start, syslog_format, sort_output):
     """
     Kinetix: High-Performance Synthetic Log Generator for SIEM Validation.
     Generates JSON (Azure Sentinel parity) and CEF logs simultaneously.
     """
     console.print("[bold blue]Kinetix Log Generator[/bold blue]")
-    
+
+    from kinetix.schemas.base import set_syslog_format
+    set_syslog_format(syslog_format)
+    if sort_output is None:
+        sort_output = bool(sim_clock)
+
     start_time = time.time()
     if duration > 0 and duration < 5:
         logger.warning(f"Requested duration {duration}s is below minimum for stability. Bumping to 5s.")
@@ -350,6 +447,15 @@ def main(scenario, output_dir, temporal, stress, duration, baseline_ratio, syslo
         console.print(f"[bold magenta]Simulated clock: {start_dt.isoformat()} -> {end_dt.isoformat()} ({sim_days}d simulated, diurnal + weekend pacing)[/bold magenta]")
         if not temporal_engine:
             console.print("[yellow]--sim-clock without --temporal has no diurnal/weekend shaping; falling back to a fixed per-event delay.[/yellow]")
+        # RFC 3164 has no year field, so a window outside the current year is
+        # silently re-dated to the ingest year by the receiving collector.
+        current_year = datetime.now(timezone.utc).year
+        if syslog_format == "rfc3164" and (start_dt.year != current_year or end_dt.year != current_year):
+            console.print(
+                f"[bold yellow]Window spans {start_dt.year}–{end_dt.year} but RFC 3164 syslog carries no year: "
+                f"the syslog feed will be re-dated to {current_year} on ingest. "
+                f"Pass --syslog-format rfc5424 to preserve it (JSON and CEF are unaffected).[/bold yellow]"
+            )
 
     # 3. Initialize Engine
     engine = KinetixEngine(
@@ -458,6 +564,12 @@ def main(scenario, output_dir, temporal, stress, duration, baseline_ratio, syslo
         console.print("[bold yellow]Waiting for remaining events to be written...[/bold yellow]")
         engine.wait_for_completion(timeout=5)
         console.print("[bold green]Simulation complete![/bold green]")
+
+        if sort_output:
+            console.print("[dim]Sorting output by timestamp...[/dim]")
+            sorted_count = _sort_output_logs(output_dir)
+            console.print(f"[dim]Sorted {sorted_count} JSON feed(s) into TimeGenerated order.[/dim]")
+
         console.print(f"Logs saved to: [cyan]{output_dir}/[/cyan]")
 
     except KeyboardInterrupt:
