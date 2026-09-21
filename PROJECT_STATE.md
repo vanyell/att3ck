@@ -48,14 +48,6 @@ Total Pydantic models: 19 (+4).
    - 11 benign event templates: Outlook browse, Teams chat, Chrome browsing, OneDrive sync, etc.
    - Events interleaved in main loop with uniform random distribution
 
-3. ~~**Detection Annotation Framework** (`--annotate` CLI flag)~~ — **removed 2026-09-21.**
-   It never functioned: `expected_detection`/`detection_guidance` were listed in
-   `_INTERNAL_FIELDS` and stripped from `Kinetix_Unified.json`, which the sidecar
-   pass then re-read looking for exactly those fields, so no annotation file was
-   ever written. The flag, both schema fields and the scenario metadata were
-   removed rather than repaired. Malicious events remain identifiable via
-   `killchain_phase` and `mitre`.
-
 #### Variable Engine Enhancements
 - `VariableManager` in `kinetix/core/vars.py` now calls `ContextGenerator._set_persona_vars()` at session start
 - Persona templates resolve to role-consistent values across all events in a cycle

@@ -707,7 +707,7 @@ These four JSON-field rules assume `<log_format>json</log_format>` is pointed at
    - Install the AMA extension on your VM or Arc-enabled server
    - Create a **Data Collection Rule (DCR)** in Azure portal:
      - **Data source**: Custom JSON logs
-     - **File pattern**: `/path/to/att3ck/logs/[!Kinetix]*.json` (exclude annotation sidecar)
+     - **File pattern**: `/path/to/att3ck/logs/[!Kinetix]*.json` (per-table files only — excludes the `Kinetix_Unified.*` feeds, which would double-ingest every event)
      - **Transform**: `source` (passthrough — fields already match Sentinel schema aliases)
      - **Destination**: Select the target table (`DeviceProcessEvents`, `SigninLogs`, `EmailEvents`, etc.)
 
@@ -1005,9 +1005,6 @@ To run a specific test class:
 
 # Persona integration tests
 ./venv/bin/python -m pytest tests/ -v -k "TestPersonaVariables"
-
-# Detection annotation tests
-./venv/bin/python -m pytest tests/ -v -k "TestExpectedDetectionField"
 
 # New scenario loading tests
 ./venv/bin/python -m pytest tests/ -v -k "TestNewScenarioLoading"

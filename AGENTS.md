@@ -47,6 +47,6 @@ No linter, formatter, or typecheck tool is configured in pyproject.toml. Run tes
 
 ## Testing
 
-All tests live in `tests/test_kinetix.py`. Test classes cover: schema validation, variable resolution, multiply uniqueness, output formats (CEF/Syslog/EVT), scenario loading, Markov transitions, killchain propagation, persona integration, detection annotations.
+All tests live in `tests/test_kinetix.py`. Test classes cover: schema validation, variable resolution, multiply uniqueness, output formats (CEF/Syslog/EVT), scenario loading, Markov transitions, killchain propagation, persona integration, corpus integrity, calendar shaping, sim-clock rotation.
 
 Python >=3.12 required. Dependencies: pydantic, orjson, numpy, click, rich.
