@@ -6,10 +6,8 @@ import pytest
 import json
 import os
 import copy
-import threading
 import uuid
 from pathlib import Path
-from datetime import timezone
 
 # --- Unit Validation Tests ---
 
@@ -396,8 +394,8 @@ class TestNewSchemas:
         assert ev.source == "Firewall"
 
     def test_web_server_event_creates(self):
-        from kinetix.schemas.app import webServerEvent
-        ev = webServerEvent(url="/login", http_method="POST", status_code=200, user_agent="curl/8", response_time_ms=45)
+        from kinetix.schemas.app import WebServerEvent
+        ev = WebServerEvent(url="/login", http_method="POST", status_code=200, user_agent="curl/8", response_time_ms=45)
         assert ev.event_type == "W3CIISLog"
         assert ev.source == "Web"
 
@@ -811,13 +809,13 @@ class TestTemporalEngine:
         from kinetix.core.temporal import TemporalEngine
         te = TemporalEngine()
         next_type = te.get_next_event_type("SigninLogs")
-        assert next_type in ["DeviceProcessEvents", "OfficeActivity", "AzureActivity", None]
+        assert next_type in ["DeviceProcessEvents", "OfficeActivity", "AzureActivity"]
 
     def test_process_triggers_follow_up(self):
         from kinetix.core.temporal import TemporalEngine
         te = TemporalEngine()
         next_type = te.get_next_event_type("DeviceProcessEvents")
-        assert next_type in ["CommonSecurityLog", "DeviceFileEvents", "DnsEvents", None]
+        assert next_type in ["CommonSecurityLog", "DeviceFileEvents", "DnsEvents"]
 
     def test_unknown_event_returns_none(self):
         from kinetix.core.temporal import TemporalEngine

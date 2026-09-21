@@ -21,7 +21,7 @@
       { "source": "audit", "event_type": "directory_audit", "OperationName": "UserDeleted", "severity": "medium" },
       { "source": "identity_logon", "event_type": "authentication", "ResultType": "0", "UserPrincipalName": "user@onprem.local", "ClientAppUsed": "Kerberos" },
       { "source": "office365", "event_type": "office_activity", "Workload": "SharePoint", "Operation": "FileDownloaded", "ItemType": "File", "UserId": "user@tenant.com", "ClientIP": "1.2.3.4" },
-      { "source": "mdo_email", "event_type": "email_event", "severity": "high", "Sender": "pish@scam.com", "Recipient": "victim@tenant.com", "Subject": "FREE MONEY", "Action": "Delivered" },
+      { "source": "mdo_email", "event_type": "email_event", "severity": "high", "Sender": "pish@scam.com", "Recipient": "target@litware.com", "Subject": "FREE MONEY", "Action": "Delivered" },
       { "source": "mdo_attachment", "event_type": "email_attachment", "severity": "high", "FileName": "invoice.zip", "Verdict": "Malicious" },
       { "source": "cloud_activity", "event_type": "cloud_activity", "OperationName": "ReadSecret", "ResourceId": "/subscriptions/xxx/KeyVault/vault-01", "Caller": "attacker@tenant.com", "severity": "medium" },
       { "source": "cloud_app", "event_type": "cloud_app_event", "AppName": "Salesforce", "ActionType": "RecordExport", "severity": "low" },

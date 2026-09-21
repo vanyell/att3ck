@@ -23,7 +23,7 @@ def retest_phase2():
     
     try:
         subprocess.run(
-            [sys.executable, "main.py", "--scenario", scenario, "--temporal"],
+            [sys.executable, "main.py", "--scenario", scenario, "--temporal", "--duration", "30"],
             check=True,
             capture_output=True,
             text=True
@@ -54,7 +54,7 @@ def retest_phase2():
     else:
         print("✅ Markov Branching Verified: Follow-up events detected.")
         for e in events:
-            print(f"     -> {e['event_type']} (Depth: {e.get('depth', 0)})")
+            print(f"     -> {e.get('Type', e.get('event_type', 'unknown'))} (Depth: {e.get('depth', 0)})")
 
     # Validation 2: Temporal Realism (Expect duration > 2 seconds per event if after hours)
     # At 1 AM, delay is 0.2 * 10 = 2.0s per event.

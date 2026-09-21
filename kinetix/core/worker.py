@@ -42,8 +42,9 @@ class LogWorker(threading.Thread):
                     # Sleep in short increments so we can be interrupted by stop_event
                     slept = 0.0
                     while slept < delay and not self.stop_event.is_set():
-                        time.sleep(min(0.1, delay - slept))
-                        slept += 0.1
+                        step = min(0.1, delay - slept)
+                        time.sleep(step)
+                        slept += step
                 
                 # 3. Markov Branching - Generate follow-up noisy events
                 MAX_MARKOV_DEPTH = 3

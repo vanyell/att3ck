@@ -2,7 +2,7 @@ from typing import Optional, Literal
 from pydantic import Field
 from kinetix.schemas.base import BaseLogEvent, syslog_priority, format_syslog, format_evt_xml, evt_level
 
-class webServerEvent(BaseLogEvent):
+class WebServerEvent(BaseLogEvent):
     source: Literal["Web"] = Field("Web", alias="SourceSystem")
     event_type: Literal["W3CIISLog"] = Field("W3CIISLog", alias="Type")
     

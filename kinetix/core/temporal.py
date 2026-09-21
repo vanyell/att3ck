@@ -1,5 +1,4 @@
 import random
-import math
 import logging
 import uuid
 from datetime import datetime
@@ -122,7 +121,7 @@ class TemporalEngine:
                     action="allowed",
                     protocol="TCP",
                     source_port=random.randint(49152, 65535),
-                    dest_port=443 if not context["dest_ip"] else 80
+                    dest_port=80 if not context["dest_ip"] else 443
                 )
             elif next_type == "DeviceFileEvents":
                 return FileEvent(

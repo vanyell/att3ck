@@ -1,4 +1,6 @@
 import random
+import ipaddress
+from typing import List
 
 class UserPersona:
     def __init__(self, username: str, role: str, department: str, domain: str,
@@ -33,6 +35,10 @@ class ContextGenerator:
         UserPersona("intern_1", "Intern", "Engineering", "litware.com", "DEV-WS-05"),
     ]
 
+    INTERNAL_SUBNETS = ["10.0.0.0/24", "192.168.1.0/24", "172.16.5.0/24"]
+    EXTERNAL_IPS = ["8.8.8.8", "203.0.113.5", "198.51.100.12", "45.33.22.11"]
+    _subnet_hosts_cache: dict = {}
+
     @classmethod
     def get_persona(cls, username: str = None) -> UserPersona:
         if username:
@@ -40,3 +46,39 @@ class ContextGenerator:
                 if p.username == username:
                     return p
         return random.choice(cls.PERSONAS)
+
+    @classmethod
+    def get_random_user(cls) -> str:
+        return random.choice(cls.PERSONAS).username
+
+    @classmethod
+    def get_random_email(cls) -> str:
+        p = random.choice(cls.PERSONAS)
+        return p.email
+
+    @classmethod
+    def get_random_hostname(cls) -> str:
+        return random.choice(cls.PERSONAS).typical_host
+
+    @classmethod
+    def get_random_internal_ip(cls) -> str:
+        subnet_str = random.choice(cls.INTERNAL_SUBNETS)
+        if subnet_str not in cls._subnet_hosts_cache:
+            cls._subnet_hosts_cache[subnet_str] = list(ipaddress.ip_network(subnet_str).hosts())
+        hosts = cls._subnet_hosts_cache[subnet_str]
+        return str(random.choice(hosts[:100]))
+
+    @classmethod
+    def get_random_external_ip(cls) -> str:
+        return random.choice(cls.EXTERNAL_IPS)
+
+    @classmethod
+    def get_random_tactic_variation(cls, base_cmd: str) -> str:
+        variations = [
+            f"{base_cmd}",
+            f"{base_cmd} /quiet",
+            f"{base_cmd} --silent -force",
+            f"cmd.exe /c \"{base_cmd}\"",
+            f"powershell -ExecutionPolicy Bypass -Command \"{base_cmd}\""
+        ]
+        return random.choice(variations)
