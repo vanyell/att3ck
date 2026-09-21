@@ -6,14 +6,16 @@ from typing import List, Optional
 from kinetix.core.worker import LogWorker
 from kinetix.outputs.base import OutputProvider
 from kinetix.core.temporal import TemporalEngine
+from kinetix.core.simclock import SimulatedClock
 
 logger = logging.getLogger(__name__)
 
 class KinetixEngine:
-    def __init__(self, output_providers: List[OutputProvider], worker_count: int = 4, temporal_engine: Optional[TemporalEngine] = None):
+    def __init__(self, output_providers: List[OutputProvider], worker_count: int = 4, temporal_engine: Optional[TemporalEngine] = None, sim_clock: Optional[SimulatedClock] = None):
         self.output_providers = output_providers
         self.worker_count = worker_count
         self.temporal_engine = temporal_engine or TemporalEngine()
+        self.sim_clock = sim_clock
         self.event_queue = queue.Queue(maxsize=10000)
         self.workers: List[LogWorker] = []
         self._stop_event = threading.Event()
@@ -34,7 +36,8 @@ class KinetixEngine:
                 input_queue=self.event_queue,
                 output_providers=self.output_providers,
                 stop_event=self._stop_event,
-                temporal_engine=self.temporal_engine
+                temporal_engine=self.temporal_engine,
+                sim_clock=self.sim_clock
             )
             worker.start()
             self.workers.append(worker)

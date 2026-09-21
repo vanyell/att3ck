@@ -6,17 +6,25 @@ from typing import List, Optional
 from kinetix.schemas.base import BaseLogEvent
 from kinetix.outputs.base import OutputProvider
 from kinetix.core.temporal import TemporalEngine
+from kinetix.core.simclock import SimulatedClock
 
 logger = logging.getLogger(__name__)
 
+# Datetime fields (beyond `timestamp`) that some schemas stamp with
+# datetime.now() at construction time. When a SimulatedClock is active these
+# are shifted by the same offset as `timestamp` so an event's internal times
+# stay consistent with its simulated position instead of leaking real "now".
+_SECONDARY_TIME_FIELDS = ("start_time", "end_time", "last_modified_time")
+
 class LogWorker(threading.Thread):
     def __init__(
-        self, 
-        worker_id: int, 
-        input_queue: queue.Queue, 
+        self,
+        worker_id: int,
+        input_queue: queue.Queue,
         output_providers: List[OutputProvider],
         stop_event: threading.Event,
-        temporal_engine: Optional[TemporalEngine] = None
+        temporal_engine: Optional[TemporalEngine] = None,
+        sim_clock: Optional[SimulatedClock] = None
     ):
         super().__init__(name=f"Worker-{worker_id}")
         self.worker_id = worker_id
@@ -24,6 +32,7 @@ class LogWorker(threading.Thread):
         self.output_providers = output_providers
         self.stop_event = stop_event
         self.temporal_engine = temporal_engine
+        self.sim_clock = sim_clock
         self.event_count = 0  # Track throughput
 
     def run(self):
@@ -37,7 +46,20 @@ class LogWorker(threading.Thread):
             
             try:
                 # 2. Temporal Enrichment - Spacing out events realistically
-                if self.temporal_engine:
+                if self.sim_clock:
+                    # Simulated-clock mode: advance a virtual timeline instead
+                    # of sleeping in real time, so a multi-day/week baseline
+                    # can be generated far faster than wall-clock would allow.
+                    delay = self.temporal_engine.calculate_delay(self.sim_clock.current) \
+                        if self.temporal_engine else 1.0
+                    old_ts = event.timestamp
+                    new_ts = self.sim_clock.advance(delay)
+                    offset = new_ts - old_ts
+                    event.timestamp = new_ts
+                    for field in _SECONDARY_TIME_FIELDS:
+                        if hasattr(event, field):
+                            setattr(event, field, getattr(event, field) + offset)
+                elif self.temporal_engine:
                     delay = self.temporal_engine.calculate_delay(event.timestamp)
                     # Sleep in short increments so we can be interrupted by stop_event
                     slept = 0.0

@@ -8,6 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Run with Duration**: `python3 main.py --duration <seconds>`
 - **SOC Training Mode**: `python3 main.py --baseline-ratio 0.95 --annotate --scenario scenarios/name.json`
 - **Stress Test**: `python3 main.py --stress --scenario scenarios/name.json`
+- **Simulated-Clock Baseline** (multi-day history in a short run): `python3 main.py --sim-clock --sim-days 14 --baseline-ratio 0.95 --scenario scenarios/name.json`
 - **Run Tests**: `pytest`
 - **Run Single Test Class**: `pytest tests/test_kinetix.py -k "TestEmailEvent or TestCloudAppEvent"`
 - **Full Test Suite**: `pytest -v`

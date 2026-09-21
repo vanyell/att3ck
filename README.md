@@ -113,7 +113,37 @@ This generates 95% benign noise interleaved with attacks, plus a `Kinetix_Annota
 | `--syslog-host` | `None` | If set, also stream every event's RFC 3164 syslog representation live over the network to this host (e.g. a Wazuh manager's `<remote>` syslog collector, or a local rsyslog instance) |
 | `--syslog-port` | `514` | Destination port for `--syslog-host` |
 | `--syslog-proto` | `udp` | Transport for `--syslog-host` — `udp` or `tcp` |
+| `--sim-clock` | `False` | Simulated-clock mode: stamp events across a virtual multi-day window (diurnal + weekend-aware pacing via `TemporalEngine`) instead of real wall-clock time, so a realistic historical baseline can be generated in a short run |
+| `--sim-days` | `7.0` | Span of simulated time to generate when `--sim-clock` is set |
+| `--sim-start` | `None` (= now − `--sim-days`) | ISO start timestamp for `--sim-clock`, e.g. `2026-09-01` or `2026-09-01T00:00:00` |
 | `--help` | | Show full usage |
+
+### Simulated-Clock Baseline Generation
+
+By default, event timestamps are wall-clock (`datetime.now()`), so building a
+realistic multi-day/multi-week baseline for Wazuh threshold tuning would mean
+running the generator continuously for that many real days. `--sim-clock`
+decouples timestamps from wall-clock time: each event is stamped with a
+virtual timestamp that advances by `TemporalEngine`'s diurnal- and
+weekend-aware delay (business hours vs. after-hours vs. Sat/Sun), while the
+generator itself runs at full throughput with no artificial sleeps. This lets
+you produce a full week (or more) of realistically-paced historical log data
+in minutes instead of days.
+
+```bash
+# Generate 14 simulated days of 95% benign / 5% attack traffic, ending "now"
+./venv/bin/python main.py \
+  --sim-clock --sim-days 14 \
+  --scenario scenarios/linux_ssh_bruteforce.json \
+  --baseline-ratio 0.95 --annotate
+```
+
+`--duration` still acts as a real-time safety cap if set; otherwise the run
+stops once the simulated window is fully filled. Note that at the default
+`avg_delay_seconds` (dense, workstation-scale pacing), a multi-week window can
+generate a very large volume of events — lower `avg_delay_seconds` (via a
+custom `TimingProfile`) or shrink `--sim-days` if disk usage becomes a
+concern.
 
 ## Scenario Catalog
 

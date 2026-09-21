@@ -186,6 +186,43 @@ _BENIGN_NOISE_TEMPLATES = [
 ]
 
 
+# Additional benign-noise sources: full scenario files with richer, more
+# varied event shapes (cross-platform + collaboration/SaaS noise) than the
+# small inline pool above. Loaded once and cached so --baseline-ratio draws
+# from a much wider corpus instead of cycling the same ~15 templates.
+_NOISE_SCENARIO_FILES = ["scenarios/benign_noise.json", "scenarios/cross_platform_noise.json"]
+_EXTRA_NOISE_TEMPLATES_CACHE = None
+
+
+def _load_noise_scenario_templates(paths: list) -> list:
+    """Flatten stage events from noise scenario JSON files into a weighted
+    template pool. 'multiply' on an event is treated as a sampling weight
+    (expanded by duplication) rather than a literal event count."""
+    templates = []
+    for path in paths:
+        if not os.path.exists(path):
+            continue
+        try:
+            with open(path, "r") as f:
+                data = json.load(f)
+        except (OSError, json.JSONDecodeError) as e:
+            logging.getLogger(__name__).warning(f"Failed to load noise scenario {path}: {e}")
+            continue
+        for stage_data in data:
+            for e_raw in stage_data.get("events", []):
+                weight = max(1, min(e_raw.get("multiply", 1), 20))
+                tpl = {k: v for k, v in e_raw.items() if k != "multiply"}
+                templates.extend([tpl] * weight)
+    return templates
+
+
+def _get_noise_template_pool() -> list:
+    global _EXTRA_NOISE_TEMPLATES_CACHE
+    if _EXTRA_NOISE_TEMPLATES_CACHE is None:
+        _EXTRA_NOISE_TEMPLATES_CACHE = _load_noise_scenario_templates(_NOISE_SCENARIO_FILES)
+    return _BENIGN_NOISE_TEMPLATES + _EXTRA_NOISE_TEMPLATES_CACHE
+
+
 def _generate_baseline_noise(count: int, var_manager: VariableManager) -> list:
     import copy
     from kinetix.schemas.base import BaseLogEvent
@@ -196,9 +233,10 @@ def _generate_baseline_noise(count: int, var_manager: VariableManager) -> list:
     from kinetix.schemas.app import WebServerEvent, DatabaseEvent
 
     event_registry = _build_event_registry()
+    pool = _get_noise_template_pool()
     events = []
     for _ in range(count):
-        tpl = random.choice(_BENIGN_NOISE_TEMPLATES)
+        tpl = random.choice(pool)
         resolved = var_manager.resolve(copy.deepcopy(tpl))
         params = resolved.copy()
         params.pop("source", None)
@@ -223,7 +261,10 @@ def _generate_baseline_noise(count: int, var_manager: VariableManager) -> list:
 @click.option("--syslog-host", default=None, help="If set, also stream events as real RFC 3164 syslog over the network to this host (e.g. a Wazuh manager's syslog collector, or a local rsyslog instance).")
 @click.option("--syslog-port", type=int, default=514, help="Destination port for --syslog-host.")
 @click.option("--syslog-proto", type=click.Choice(["udp", "tcp"]), default="udp", help="Transport for --syslog-host.")
-def main(scenario, output_dir, temporal, stress, duration, baseline_ratio, annotate, syslog_host, syslog_port, syslog_proto):
+@click.option("--sim-clock", is_flag=True, help="Simulated-clock mode: stamp events across a virtual multi-day window (diurnal + weekend-aware pacing) instead of real wall-clock time, so a realistic historical baseline can be generated in a short run.")
+@click.option("--sim-days", type=float, default=7.0, help="Span of simulated time to generate when --sim-clock is set (default 7 days).")
+@click.option("--sim-start", default=None, help="ISO start timestamp for --sim-clock (e.g. 2026-09-01 or 2026-09-01T00:00:00). Defaults to (now - sim-days), so the window ends at the current time.")
+def main(scenario, output_dir, temporal, stress, duration, baseline_ratio, annotate, syslog_host, syslog_port, syslog_proto, sim_clock, sim_days, sim_start):
     """
     Kinetix: High-Performance Synthetic Log Generator for SIEM Validation.
     Generates JSON (Azure Sentinel parity) and CEF logs simultaneously.
@@ -256,11 +297,33 @@ def main(scenario, output_dir, temporal, stress, duration, baseline_ratio, annot
         delay = 0.01 if stress else 0.2
         temporal_engine = TemporalEngine(profile=TimingProfile(avg_delay_seconds=delay))
 
+    # 2b. Initialize Simulated Clock (multi-day baseline mode)
+    clock = None
+    if sim_clock:
+        from datetime import datetime, timedelta, timezone
+        from kinetix.core.simclock import SimulatedClock
+        if sim_start:
+            try:
+                start_dt = datetime.fromisoformat(sim_start)
+            except ValueError:
+                console.print(f"[bold red]Invalid --sim-start '{sim_start}'; expected ISO format, e.g. 2026-09-01 or 2026-09-01T00:00:00[/bold red]")
+                sys.exit(1)
+            if start_dt.tzinfo is None:
+                start_dt = start_dt.replace(tzinfo=timezone.utc)
+        else:
+            start_dt = datetime.now(timezone.utc) - timedelta(days=sim_days)
+        end_dt = start_dt + timedelta(days=sim_days)
+        clock = SimulatedClock(start=start_dt, end=end_dt)
+        console.print(f"[bold magenta]Simulated clock: {start_dt.isoformat()} -> {end_dt.isoformat()} ({sim_days}d simulated, diurnal + weekend pacing)[/bold magenta]")
+        if not temporal_engine:
+            console.print("[yellow]--sim-clock without --temporal has no diurnal/weekend shaping; falling back to a fixed per-event delay.[/yellow]")
+
     # 3. Initialize Engine
     engine = KinetixEngine(
         output_providers=output_providers,
         worker_count=8 if stress else 2,
-        temporal_engine=temporal_engine
+        temporal_engine=temporal_engine,
+        sim_clock=clock
     )
 
     engine.start()
@@ -280,7 +343,9 @@ def main(scenario, output_dir, temporal, stress, duration, baseline_ratio, annot
     try:
         # 5. Execute Simulation Loop
         
-        if duration == 0:
+        if clock:
+            console.print(f"[bold cyan]Mode: Simulated clock ({sim_days}d virtual, runs until the window is filled{f' or {duration}s real time elapses' if duration > 0 else ''})[/bold cyan]")
+        elif duration == 0:
             console.print("[bold yellow]Mode: Infinite (Run until Ctrl+C)[/bold yellow]")
         else:
             console.print(f"[bold cyan]Mode: Timed ({duration}s)[/bold cyan]")
@@ -318,23 +383,38 @@ def main(scenario, output_dir, temporal, stress, duration, baseline_ratio, annot
                     console.print(f"[dim]Injected {noise_count} benign noise events[/dim]")
 
             attack_chain = AttackChain(
-                scenario_id=var_manager.session_vars["SESSION_ID"][:8], 
-                name=f"Simulation Cycle ({time.strftime('%H:%M:%S')})", 
+                scenario_id=var_manager.session_vars["SESSION_ID"][:8],
+                name=f"Simulation Cycle ({time.strftime('%H:%M:%S')})",
                 stages=all_stages,
-                stress=stress,
+                # Simulated-clock mode paces via the virtual clock, not real
+                # sleeps, so skip the real-time inter-stage delay too.
+                stress=stress or bool(clock),
             )
-            
+
             console.print(f"[green]Executing chain: {attack_chain.name}[/green]")
             attack_chain.run(engine, stop_event=shutdown_requested)
-            
+
+            if clock:
+                # Drain this cycle's events before checking/advancing further so
+                # clock.current reflects what's actually been timestamped and
+                # written, not just enqueued — otherwise cycles would keep
+                # generating far past the simulated window before we noticed.
+                engine.wait_for_completion()
+                console.print(f"[dim]Simulated clock at {clock.current.isoformat()} ({clock.progress() * 100:.1f}% of window)[/dim]")
+                if clock.finished():
+                    console.print("[bold yellow]Simulated window filled. Draining queue and shutting down...[/bold yellow]")
+                    shutdown_requested.set()
+                    engine._stop_event.set()
+                    break
+
             elapsed = time.time() - start_time
             if duration > 0 and elapsed >= duration:
                 console.print("[bold yellow]Duration reached. Draining queue and shutting down...[/bold yellow]")
                 shutdown_requested.set()
                 engine._stop_event.set()
                 break
-            
-            if duration == 0 and not shutdown_requested.is_set():
+
+            if not clock and duration == 0 and not shutdown_requested.is_set():
                 # Interruptible breather between cycles
                 for _ in range(10):
                     if shutdown_requested.is_set():

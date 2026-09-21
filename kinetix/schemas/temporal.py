@@ -8,6 +8,7 @@ class TimingProfile(BaseModel):
     working_hours_start: int = 9  # 09:00
     working_hours_end: int = 17   # 17:00
     after_hours_multiplier: float = 0.1  # 10% activity at night
+    weekend_multiplier: float = 0.15  # 15% activity on Sat/Sun
     stealth_mode: bool = False
 
 class MarkovTransition(BaseModel):

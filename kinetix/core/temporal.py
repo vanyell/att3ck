@@ -58,7 +58,11 @@ class TemporalEngine:
         if not (self.profile.working_hours_start <= hour < self.profile.working_hours_end):
             # Outside working hours
             base = base / self.profile.after_hours_multiplier
-            
+
+        # 2b. Day-of-Week Multiplier (Sat=5, Sun=6)
+        if current_time.weekday() >= 5:
+            base = base / self.profile.weekend_multiplier
+
         # 3. Gaussian Jitter
         # Mean = base, StdDev = base * jitter_percent
         std_dev = base * self.profile.jitter_percent
