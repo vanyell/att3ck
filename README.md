@@ -236,12 +236,19 @@ Persona templates (`{{PERSONA_*}}`) return consistent identity attributes across
 | Source | License (per GitHub, checked 2026-09-21) |
 |--------|---------|
 | [sbousseaden/EVTX-ATTACK-SAMPLES](https://github.com/sbousseaden/EVTX-ATTACK-SAMPLES) | GPL-3.0 |
-| [Yamato-Security/hayabusa-sample-evtx](https://github.com/Yamato-Security/hayabusa-sample-evtx) | **None declared** — no LICENSE file/SPDX id on the repo, so default "all rights reserved" terms apply |
+| [Yamato-Security/hayabusa-sample-evtx](https://github.com/Yamato-Security/hayabusa-sample-evtx) | None declared — accepted for internal-only use, see below |
 | [NextronSystems/evtx-baseline](https://github.com/NextronSystems/evtx-baseline) | Apache-2.0 |
 
 Only aggregated, weighted field-value pools are shipped in `corpus_profiles/*.json` — never raw EVTX records. Fields the miner classifies as identifiers (IPs, `ip:port`, hostnames, usernames, `DOMAIN\user` account strings, emails, GUIDs, SIDs) are reduced to a structural shape token before counting, never stored as real values; `tests/test_kinetix.py::TestCorpusIntegrity` enforces this as a regression guard against any future re-mining run reintroducing a leak.
 
-**Open item — hayabusa-sample-evtx has no declared license.** Its repository carries no LICENSE file or SPDX identifier, so GitHub's default terms apply: viewing/forking is permitted, but no redistribution or derivative-work rights are granted absent an explicit license. `DeviceEvents.json` currently includes data mined from this source. Before this shipped externally to a client, GSEC should either (a) get explicit permission from Yamato-Security, (b) re-derive that profile from a permissively-licensed EVTX corpus instead, or (c) confirm aggregated statistical summaries fall outside the scope of what a license would restrict — that determination should come from someone who can make that legal/licensing call, not be assumed here.
+**hayabusa-sample-evtx licensing — resolved for internal use (2026-09-21).** Its repository carries no LICENSE file or SPDX identifier, so GitHub's default terms apply: viewing/forking is permitted, but no redistribution or derivative-work rights are granted absent an explicit license. `DeviceEvents.json` includes data mined from this source.
+
+GSEC has decided this is acceptable **for internal use only**, on this reasoning:
+- `corpus_profiles/*.json` never contains raw EVTX records or literal log text — it holds aggregated, weighted field-value frequency counts, a statistical transformation derived from the source data rather than a reproduction of it.
+- The source material itself is machine-generated Windows Event Log output from a sandboxed test VM; the log content carries at most thin copyright protection, and Yamato-Security's own contribution is curating/publishing the sample set, not authoring the log text.
+- Nothing derived from this source is distributed, sold, or delivered outside GSEC — it stays inside an internal tool used for GSEC's own SOC training and SIEM validation work.
+
+This determination is a risk-based internal call, not a legal opinion, and it does **not** carry over automatically if the scope changes. Re-open this question (and get qualified legal/licensing sign-off before proceeding) if this tool, its output, or `corpus_profiles/DeviceEvents.json` specifically is ever: shared with or delivered to a client, open-sourced or published externally, or incorporated into a commercial product or paid service.
 
 ## Scenario JSON Format
 
