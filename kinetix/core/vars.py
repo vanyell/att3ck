@@ -170,8 +170,17 @@ class VariableManager:
         pairs = CORPUS_FIELD_CANDIDATES.get(placeholder)
         if pairs:
             value = self._corpus.sample_first(pairs)
-            if value is not None and (validator is None or validator(value)):
-                return value
+            if value is not None:
+                # Every Kinetix output format is line-oriented (JSON Lines,
+                # CEF, syslog, "single-line" EVTX) -- a mined value with
+                # embedded newlines (e.g. a multi-line PowerShell
+                # ScriptBlockText) would otherwise split into multiple lines
+                # and corrupt every line-based parser/ingestion pipeline
+                # downstream, even though XML/JSON escaping handles the
+                # special characters correctly.
+                value = " ".join(value.split())
+                if validator is None or validator(value):
+                    return value
         return random.choice(pool)
 
     def resolve(self, value: any) -> any:

@@ -203,6 +203,22 @@ class TestVariableManager:
         assert result.startswith("http://") or result.startswith("https://")
         assert "{{" not in result
 
+    def test_corpus_backed_placeholders_are_single_line(self):
+        """Every Kinetix output format is line-oriented (JSON Lines, CEF,
+        syslog, "single-line" EVTX). A mined value with an embedded newline
+        (e.g. DeviceEvents.EventData.ScriptBlockText, which is frequently a
+        multi-line PowerShell script in the real corpus) would otherwise
+        split into multiple lines and corrupt every downstream line-based
+        parser -- confirmed via a real end-to-end main.py run producing
+        malformed EVT XML lines before this was fixed in _corpus_or_pool."""
+        from kinetix.core.vars import VariableManager
+        vm = VariableManager()
+        for _ in range(50):
+            for placeholder in ("RANDOM_UA", "RANDOM_URL", "RANDOM_COMMANDLINE",
+                                 "RANDOM_FILE_PATH", "RANDOM_REGISTRY_VALUE", "RANDOM_SCRIPT_BLOCK"):
+                result = vm.resolve("{{" + placeholder + "}}")
+                assert "\n" not in result and "\r" not in result, f"{placeholder} resolved to a multi-line value: {result!r}"
+
     def test_random_ai_model_resolves(self):
         from kinetix.core.vars import VariableManager
         vm = VariableManager()
