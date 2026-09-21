@@ -1068,3 +1068,48 @@ class TestNewScenarioLoading:
     def test_cross_tenant_sync_loads(self):
         stages = self._load_scenario("scenarios/cross_tenant_sync_attack.json")
         assert len(stages) == 5
+
+
+# --- Corpus Integrity Tests ---
+# Guards the invariant documented in kinetix/intelligence/corpus.py and
+# scripts/mine_corpus.py: freeform value pools must never carry real
+# identifier-shaped values (IPs, IP:port, accounts, GUIDs, emails, SIDs).
+# Regression test for a real leak found during a corpus review: mined
+# EventData.ClientIP/username/jobOwner fields carried raw sandbox IPs and
+# "DOMAIN\\user" account strings that the (older) miner classifier missed.
+class TestCorpusIntegrity:
+    def _iter_freeform_values(self):
+        from kinetix.intelligence.corpus import DEFAULT_PROFILE_DIR
+
+        for path in sorted(DEFAULT_PROFILE_DIR.glob("*.json")):
+            data = json.loads(path.read_text(encoding="utf-8"))
+            for field_name, entry in data.get("fields", {}).items():
+                if entry.get("kind") != "freeform":
+                    continue
+                for row in entry.get("values", []):
+                    value = row.get("value")
+                    if isinstance(value, str):
+                        yield path.name, field_name, value
+
+    def test_no_identifier_shaped_values_in_freeform_pools(self):
+        from scripts.mine_corpus import (
+            _IPV4_RE, _IPV4_PORT_RE, _IPV6_PORT_RE, _GUID_RE, _EMAIL_RE, _SID_RE, _ACCOUNT_RE,
+        )
+
+        def is_identifier_shaped(value: str) -> bool:
+            return bool(
+                _IPV4_RE.match(value)
+                or _IPV4_PORT_RE.match(value)
+                or _IPV6_PORT_RE.match(value)
+                or _GUID_RE.match(value)
+                or _EMAIL_RE.match(value)
+                or _SID_RE.match(value)
+                or _ACCOUNT_RE.match(value)
+            )
+
+        leaks = [
+            (fname, field, value)
+            for fname, field, value in self._iter_freeform_values()
+            if is_identifier_shaped(value)
+        ]
+        assert leaks == [], f"Identifier-shaped values leaked into freeform corpus pools: {leaks[:10]}"

@@ -164,6 +164,14 @@ _BENIGN_NOISE_TEMPLATES = [
     {"event_type": "network_connection", "source": "Firewall", "DeviceAction": "allowed", "Protocol": "TCP", "SourcePort": "{{RANDOM_PORT}}", "DestinationPort": 80, "DestinationIP": "13.107.21.200", "severity": "informational"},
     {"event_type": "file_system", "source": "endpoint", "ActionType": "FileCreated", "FileName": "report.docx", "FolderPath": "C:\\Users\\Public\\Documents", "severity": "informational"},
     {"event_type": "file_system", "source": "endpoint", "ActionType": "FileModified", "FileName": "budget.xlsx", "FolderPath": "C:\\Users\\Public\\Documents", "severity": "informational"},
+    # Corpus-backed noise: pulls real mined command-line/file-path/script-block
+    # shapes (see kinetix/core/vars.py:CORPUS_FIELD_CANDIDATES) instead of a
+    # single fixed value, so repeated baseline noise generation doesn't
+    # produce identical process/file/script content every run.
+    {"event_type": "process_creation", "source": "endpoint", "FileName": "cmd.exe", "FolderPath": "C:\\Windows\\System32", "ProcessId": "{{RANDOM_PID}}", "ProcessCommandLine": "{{RANDOM_COMMANDLINE}}", "severity": "informational"},
+    {"event_type": "file_system", "source": "endpoint", "ActionType": "FileCreated", "FileName": "{{RANDOM_FILE_PATH}}", "FolderPath": "C:\\ProgramData", "severity": "informational"},
+    {"event_type": "process_creation", "source": "endpoint", "FileName": "powershell.exe", "FolderPath": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0", "ProcessId": "{{RANDOM_PID}}", "ProcessCommandLine": "{{RANDOM_SCRIPT_BLOCK}}", "severity": "informational"},
+    {"event_type": "registry", "source": "endpoint", "action_type": "RegistryValueSet", "key_path": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", "value_name": "Updater", "value_data": "{{RANDOM_REGISTRY_VALUE}}", "severity": "informational"},
 ]
 
 

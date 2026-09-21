@@ -25,6 +25,19 @@ CORPUS_FIELD_CANDIDATES = {
         ("W3CIISLog", "csUriStem"),
         ("DeviceNetworkEvents", "EventData.url"),  # from mined BITS-Client EVTX records
     ],
+    "RANDOM_COMMANDLINE": [
+        ("DeviceProcessEvents", "EventData.CommandLine"),
+        ("DeviceProcessEvents", "EventData.ParentCommandLine"),
+    ],
+    "RANDOM_FILE_PATH": [
+        ("DeviceFileEvents", "EventData.TargetFilename"),
+    ],
+    "RANDOM_REGISTRY_VALUE": [
+        ("DeviceRegistryEvents", "EventData.Details"),
+    ],
+    "RANDOM_SCRIPT_BLOCK": [
+        ("DeviceEvents", "EventData.ScriptBlockText"),
+    ],
 }
 
 class VariableManager:
@@ -91,6 +104,31 @@ class VariableManager:
         self.ai_model_pool = ["GPT-4o", "GPT-4o-mini", "Claude-3.5-Sonnet", "Claude-3-Opus",
                               "Gemini-2.0-Ultra", "Gemini-2.0-Flash", "Llama-3.1-405B",
                               "Llama-3.1-70B", "Mistral-Large-2", "DeepSeek-R1", "Cohere-Command-R+"]
+        # Fallback pools for corpus-backed placeholders below. Corpus-sampled
+        # values (real mined telemetry) can look "attack-like" even when
+        # mined from goodware baselines -- e.g. a legitimate CommandLine can
+        # include obfuscation-looking flags -- that's expected/desired here,
+        # since realism (not tameness) is the point of mining a corpus.
+        self.commandline_pool = [
+            "powershell.exe -NoProfile -ExecutionPolicy Bypass -Command Get-Process",
+            "cmd.exe /c whoami /all",
+            "C:\\Windows\\System32\\svchost.exe -k netsvcs",
+            "rundll32.exe shell32.dll,ShellExec_RunDLL",
+        ]
+        self.file_path_pool = [
+            "C:\\Users\\Public\\Downloads\\report.pdf",
+            "C:\\Windows\\Temp\\update.tmp",
+            "C:\\ProgramData\\update_cache\\payload.dat",
+        ]
+        self.registry_value_pool = [
+            "C:\\Windows\\System32\\svchost.exe",
+            "%SystemRoot%\\system32\\rundll32.exe",
+            "1",
+        ]
+        self.script_block_pool = [
+            "Get-Process | Where-Object {$_.CPU -gt 100}",
+            "Invoke-WebRequest -Uri https://example.com/tool.ps1 -OutFile tool.ps1",
+        ]
 
     def _set_persona_vars(self):
         persona = ContextGenerator.get_persona()
@@ -186,7 +224,23 @@ class VariableManager:
                 value = value.replace("{{RANDOM_PORT}}", str(random.randint(49152, 65535)))
             if "{{RANDOM_INT}}" in value:
                 value = value.replace("{{RANDOM_INT}}", str(random.randint(100000, 999999)))
-            
+            if "{{RANDOM_COMMANDLINE}}" in value:
+                value = value.replace("{{RANDOM_COMMANDLINE}}", self._corpus_or_pool(
+                    "RANDOM_COMMANDLINE", self.commandline_pool
+                ))
+            if "{{RANDOM_FILE_PATH}}" in value:
+                value = value.replace("{{RANDOM_FILE_PATH}}", self._corpus_or_pool(
+                    "RANDOM_FILE_PATH", self.file_path_pool
+                ))
+            if "{{RANDOM_REGISTRY_VALUE}}" in value:
+                value = value.replace("{{RANDOM_REGISTRY_VALUE}}", self._corpus_or_pool(
+                    "RANDOM_REGISTRY_VALUE", self.registry_value_pool
+                ))
+            if "{{RANDOM_SCRIPT_BLOCK}}" in value:
+                value = value.replace("{{RANDOM_SCRIPT_BLOCK}}", self._corpus_or_pool(
+                    "RANDOM_SCRIPT_BLOCK", self.script_block_pool
+                ))
+
         elif isinstance(value, dict):
             return {k: self.resolve(v) for k, v in value.items()}
         elif isinstance(value, list):

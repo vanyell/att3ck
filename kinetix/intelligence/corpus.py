@@ -15,11 +15,14 @@ constructing a full simulation context.
 """
 
 import json
+import logging
 from functools import lru_cache
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 import random
+
+logger = logging.getLogger(__name__)
 
 DEFAULT_PROFILE_DIR = Path(__file__).parent / "corpus_profiles"
 
@@ -38,7 +41,8 @@ class CorpusProfile:
             for path in sorted(directory.glob("*.json")):
                 try:
                     data = json.loads(path.read_text(encoding="utf-8"))
-                except (json.JSONDecodeError, OSError):
+                except (json.JSONDecodeError, OSError) as exc:
+                    logger.warning("Skipping unreadable corpus profile %s: %s", path, exc)
                     continue
                 table = data.get("table") or path.stem
                 tables[table] = data

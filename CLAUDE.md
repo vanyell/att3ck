@@ -33,7 +33,8 @@ Scenario JSON $\rightarrow$ Variable Substitution (incl. persona resolution) $\r
 
 ### Template Variables
 - **Persona templates** (session-stable): `{{PERSONA_USER}}`, `{{PERSONA_HOST}}`, `{{PERSONA_EMAIL}}`, `{{PERSONA_ROLE}}`, `{{PERSONA_DEPT}}`, `{{PERSONA_DOMAIN}}`, `{{PERSONA_IS_ADMIN}}`, `{{PERSONA_IS_SENSITIVE}}`
-- **Random generators** (per-call): `{{RANDOM_IP}}`, `{{RANDOM_USER}}`, `{{RANDOM_HOST}}`, `{{RANDOM_EMAIL}}`, `{{RANDOM_UA}}`, `{{RANDOM_URL}}`, `{{RANDOM_AI_MODEL}}`, `{{RANDOM_LOCATION}}`, `{{RANDOM_CITY}}`, `{{RANDOM_ORG}}`, `{{RANDOM_PID}}`, `{{RANDOM_PORT}}`, `{{RANDOM_GUID}}`, `{{RANDOM_INT}}`, `{{RANDOM_LINUX_HOST}}`, `{{RANDOM_MAC_HOST}}`
+- **Random generators** (per-call): `{{RANDOM_IP}}`, `{{RANDOM_USER}}`, `{{RANDOM_HOST}}`, `{{RANDOM_EMAIL}}`, `{{RANDOM_UA}}`, `{{RANDOM_URL}}`, `{{RANDOM_AI_MODEL}}`, `{{RANDOM_LOCATION}}`, `{{RANDOM_CITY}}`, `{{RANDOM_ORG}}`, `{{RANDOM_PID}}`, `{{RANDOM_PORT}}`, `{{RANDOM_GUID}}`, `{{RANDOM_INT}}`, `{{RANDOM_LINUX_HOST}}`, `{{RANDOM_MAC_HOST}}`, `{{RANDOM_COMMANDLINE}}`, `{{RANDOM_FILE_PATH}}`, `{{RANDOM_REGISTRY_VALUE}}`, `{{RANDOM_SCRIPT_BLOCK}}`
+- **Corpus-backed generators**: `RANDOM_UA`, `RANDOM_URL`, `RANDOM_COMMANDLINE`, `RANDOM_FILE_PATH`, `RANDOM_REGISTRY_VALUE`, and `RANDOM_SCRIPT_BLOCK` prefer real mined EVTX corpus values (see `kinetix/intelligence/corpus_profiles/`, `kinetix/core/vars.py:CORPUS_FIELD_CANDIDATES`) and fall back to a small static pool when the corpus has no data for that field.
 - **Session variables**: `{{SESSION_ID}}`, `{{CNC_IP}}`, `{{MALICIOUS_DOMAIN}}`, `{{MALICIOUS_URL}}`, `{{DEEPFAKE_PHONE}}`
 
 ### Key Files for Phase 4

@@ -6418,307 +6418,297 @@
         {
           "count": 262,
           "value": "svcctl",
-          "weight": 0.3764
+          "weight": 0.3837
         },
         {
           "count": 19,
           "value": "Users\\admmig\\Desktop",
-          "weight": 0.0273
+          "weight": 0.0278
         },
         {
           "count": 18,
           "value": "\\",
-          "weight": 0.0259
+          "weight": 0.0264
         },
         {
           "count": 16,
           "value": "winreg",
-          "weight": 0.023
+          "weight": 0.0234
         },
         {
           "count": 9,
           "value": "Users\\Administrator\\Recent",
-          "weight": 0.0129
+          "weight": 0.0132
         },
         {
           "count": 9,
           "value": "Users\\Administrator\\Desktop",
-          "weight": 0.0129
+          "weight": 0.0132
         },
         {
           "count": 9,
           "value": "Users\\admmig\\Recent",
-          "weight": 0.0129
+          "weight": 0.0132
         },
         {
           "count": 9,
           "value": "Users\\All Users\\Recent",
-          "weight": 0.0129
+          "weight": 0.0132
         },
         {
           "count": 9,
           "value": "Users\\All Users\\Desktop",
-          "weight": 0.0129
+          "weight": 0.0132
         },
         {
           "count": 9,
           "value": "Users\\Default\\Recent",
-          "weight": 0.0129
+          "weight": 0.0132
         },
         {
           "count": 9,
           "value": "Users\\Default\\Desktop",
-          "weight": 0.0129
+          "weight": 0.0132
         },
         {
           "count": 9,
           "value": "Users\\Default User\\Recent",
-          "weight": 0.0129
+          "weight": 0.0132
         },
         {
           "count": 9,
           "value": "Users\\Default User\\Desktop",
-          "weight": 0.0129
+          "weight": 0.0132
         },
         {
           "count": 9,
           "value": "Users\\hack1\\Recent",
-          "weight": 0.0129
+          "weight": 0.0132
         },
         {
           "count": 9,
           "value": "Users\\hack1\\Desktop",
-          "weight": 0.0129
+          "weight": 0.0132
         },
         {
           "count": 9,
           "value": "Users\\Public\\Recent",
-          "weight": 0.0129
+          "weight": 0.0132
         },
         {
           "count": 9,
           "value": "Users\\Public\\Desktop",
-          "weight": 0.0129
+          "weight": 0.0132
         },
         {
           "count": 9,
           "value": "__1619090610.0007844",
-          "weight": 0.0129
+          "weight": 0.0132
         },
         {
           "count": 8,
           "value": "Windows\\ServiceProfiles\\ADSync\\AppData\\Local\\Microsoft\\Credentials",
-          "weight": 0.0115
+          "weight": 0.0117
         },
         {
           "count": 8,
           "value": "srvsvc",
-          "weight": 0.0115
-        },
-        {
-          "count": 7,
-          "value": "Users\\admmig",
-          "weight": 0.0101
+          "weight": 0.0117
         },
         {
           "count": 5,
           "value": "Users\\admmig\\Desktop\\Impacket secret dump.evtx",
-          "weight": 0.0072
+          "weight": 0.0073
         },
         {
           "count": 5,
           "value": "Users",
-          "weight": 0.0072
+          "weight": 0.0073
         },
         {
           "count": 3,
           "value": "Windows\\Temp\\2V7Be7Gq.dmp",
-          "weight": 0.0043
+          "weight": 0.0044
         },
         {
           "count": 3,
           "value": "Sysmon\\desktop.ini",
-          "weight": 0.0043
+          "weight": 0.0044
         },
         {
           "count": 3,
           "value": "spoolss",
-          "weight": 0.0043
+          "weight": 0.0044
         },
         {
           "count": 3,
           "value": "Windows\\System32\\Drivers\\etc",
-          "weight": 0.0043
+          "weight": 0.0044
         },
         {
           "count": 3,
           "value": "Temp\\bouWFQYO.tmp",
-          "weight": 0.0043
+          "weight": 0.0044
         },
         {
           "count": 3,
           "value": "Users\\admmig\\Desktop\\desktop.ini",
-          "weight": 0.0043
+          "weight": 0.0044
         },
         {
           "count": 3,
           "value": "USERS\\ADMMIG\\DESKTOP",
-          "weight": 0.0043
+          "weight": 0.0044
         },
         {
           "count": 2,
           "value": "SYSTEM32\\BTeHLZkJ.tmp",
-          "weight": 0.0029
+          "weight": 0.003
         },
         {
           "count": 2,
           "value": "SYSTEM32\\NMdzZfem.tmp",
-          "weight": 0.0029
+          "weight": 0.003
         },
         {
           "count": 2,
           "value": "SYSTEM32\\oyCCGQai.tmp",
-          "weight": 0.0029
+          "weight": 0.003
         },
         {
           "count": 2,
           "value": "SYSTEM32\\AqdQWnLE.tmp",
-          "weight": 0.0029
+          "weight": 0.003
         },
         {
           "count": 2,
           "value": "Users\\Administrator\\AppData\\Local\\Google\\Chrome\\User Data\\Default",
-          "weight": 0.0029
+          "weight": 0.003
         },
         {
           "count": 2,
           "value": "Users\\admmig\\AppData\\Local\\Google\\Chrome\\User Data\\Default",
-          "weight": 0.0029
+          "weight": 0.003
         },
         {
           "count": 2,
           "value": "Users\\All Users\\AppData\\Local\\Google\\Chrome\\User Data\\Default",
-          "weight": 0.0029
+          "weight": 0.003
         },
         {
           "count": 2,
           "value": "Users\\Default\\AppData\\Local\\Google\\Chrome\\User Data\\Default",
-          "weight": 0.0029
+          "weight": 0.003
         },
         {
           "count": 2,
           "value": "Users\\Default User\\AppData\\Local\\Google\\Chrome\\User Data\\Default",
-          "weight": 0.0029
+          "weight": 0.003
         },
         {
           "count": 2,
           "value": "Users\\hack1\\AppData\\Local\\Google\\Chrome\\User Data\\Default",
-          "weight": 0.0029
+          "weight": 0.003
         },
         {
           "count": 2,
           "value": "Users\\Public\\AppData\\Local\\Google\\Chrome\\User Data\\Default",
-          "weight": 0.0029
+          "weight": 0.003
         },
         {
           "count": 2,
           "value": "Users\\Administrator\\AppData\\Local\\mRemoteNG",
-          "weight": 0.0029
+          "weight": 0.003
         },
         {
           "count": 2,
           "value": "Users\\Administrator\\AppData\\Roaming\\mRemoteNG",
-          "weight": 0.0029
+          "weight": 0.003
         },
         {
           "count": 2,
           "value": "Users\\admmig\\AppData\\Local\\mRemoteNG",
-          "weight": 0.0029
+          "weight": 0.003
         },
         {
           "count": 2,
           "value": "Users\\admmig\\AppData\\Roaming\\mRemoteNG",
-          "weight": 0.0029
+          "weight": 0.003
         },
         {
           "count": 2,
           "value": "Users\\All Users\\AppData\\Local\\mRemoteNG",
-          "weight": 0.0029
+          "weight": 0.003
         },
         {
           "count": 2,
           "value": "Users\\All Users\\AppData\\Roaming\\mRemoteNG",
-          "weight": 0.0029
+          "weight": 0.003
         },
         {
           "count": 2,
           "value": "Users\\Default\\AppData\\Local\\mRemoteNG",
-          "weight": 0.0029
+          "weight": 0.003
         },
         {
           "count": 2,
           "value": "Users\\Default\\AppData\\Roaming\\mRemoteNG",
-          "weight": 0.0029
+          "weight": 0.003
         },
         {
           "count": 2,
           "value": "Users\\Default User\\AppData\\Local\\mRemoteNG",
-          "weight": 0.0029
+          "weight": 0.003
         },
         {
           "count": 2,
           "value": "Users\\Default User\\AppData\\Roaming\\mRemoteNG",
-          "weight": 0.0029
+          "weight": 0.003
         },
         {
           "count": 2,
           "value": "Users\\hack1\\AppData\\Local\\mRemoteNG",
-          "weight": 0.0029
+          "weight": 0.003
         },
         {
           "count": 2,
           "value": "Users\\hack1\\AppData\\Roaming\\mRemoteNG",
-          "weight": 0.0029
+          "weight": 0.003
         },
         {
           "count": 2,
           "value": "Users\\Public\\AppData\\Local\\mRemoteNG",
-          "weight": 0.0029
+          "weight": 0.003
         },
         {
           "count": 2,
           "value": "Users\\Public\\AppData\\Roaming\\mRemoteNG",
-          "weight": 0.0029
+          "weight": 0.003
         },
         {
           "count": 2,
           "value": "Windows\\System32\\Drivers\\etc\\hosts",
-          "weight": 0.0029
+          "weight": 0.003
         },
         {
           "count": 2,
           "value": "SYSTEM32",
-          "weight": 0.0029
+          "weight": 0.003
         },
         {
           "count": 2,
           "value": "samr",
-          "weight": 0.0029
+          "weight": 0.003
         },
         {
           "count": 2,
           "value": "Users\\desktop.ini",
-          "weight": 0.0029
-        },
-        {
-          "count": 2,
-          "value": "USERS\\ADMMIG",
-          "weight": 0.0029
+          "weight": 0.003
         },
         {
           "count": 2,
           "value": "USERS\\ADMMIG\\DESKTOP\\DESKTOP.INI",
-          "weight": 0.0029
+          "weight": 0.003
         },
         {
           "count": 1,
@@ -6728,11 +6718,6 @@
         {
           "count": 1,
           "value": "Windows\\System32\\Drivers\\etc\\hosts:Zone.Identifier",
-          "weight": 0.0014
-        },
-        {
-          "count": 1,
-          "value": "Windows\\System32",
           "weight": 0.0014
         },
         {
@@ -14868,45 +14853,8 @@
       ]
     },
     "EventData.jobOwner": {
-      "kind": "freeform",
-      "n": 994,
-      "values": [
-        {
-          "count": 606,
-          "value": "MSEDGEWIN10\\IEUser",
-          "weight": 0.6097
-        },
-        {
-          "count": 174,
-          "value": "NT AUTHORITY\\SYSTEM",
-          "weight": 0.1751
-        },
-        {
-          "count": 82,
-          "value": "NT AUTHORITY\\NETWORK SERVICE",
-          "weight": 0.0825
-        },
-        {
-          "count": 74,
-          "value": "NT AUTHORITY\\LOCAL SERVICE",
-          "weight": 0.0744
-        },
-        {
-          "count": 52,
-          "value": "DESKTOP-A8CALR3\\user",
-          "weight": 0.0523
-        },
-        {
-          "count": 4,
-          "value": "OFFSEC\\admmig",
-          "weight": 0.004
-        },
-        {
-          "count": 2,
-          "value": "hns\\Administrator",
-          "weight": 0.002
-        }
-      ]
+      "kind": "identifier",
+      "n": 994
     },
     "EventData.jobTitle": {
       "kind": "freeform",
@@ -16330,20 +16278,8 @@
       ]
     },
     "EventData.string2": {
-      "kind": "freeform",
-      "n": 6,
-      "values": [
-        {
-          "count": 4,
-          "value": "IEWIN7\\IEUser",
-          "weight": 0.6667
-        },
-        {
-          "count": 2,
-          "value": "OFFSEC\\admmig",
-          "weight": 0.3333
-        }
-      ]
+      "kind": "identifier",
+      "n": 6
     },
     "EventData.transferId": {
       "kind": "identifier",
@@ -16858,15 +16794,8 @@
       ]
     },
     "EventData.username": {
-      "kind": "freeform",
-      "n": 6,
-      "values": [
-        {
-          "count": 6,
-          "value": "iewin7\\ieuser",
-          "weight": 1.0
-        }
-      ]
+      "kind": "identifier",
+      "n": 6
     },
     "ProcessingErrorData.DataItemName": {
       "kind": "freeform",

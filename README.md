@@ -222,8 +222,26 @@ This generates 95% benign noise interleaved with attacks, plus a `Kinetix_Annota
 | `{{RANDOM_INT}}` | Per-call | `483920` |
 | `{{RANDOM_LINUX_HOST}}` | Per-call | `web-01.prod`, `db-02.prod` |
 | `{{RANDOM_MAC_HOST}}` | Per-call | `MBP-Jsmith`, `Mac-mini-03` |
+| `{{RANDOM_COMMANDLINE}}` | Per-call, corpus-backed | `"C:\Windows\system32\cmd.exe" /c ...` |
+| `{{RANDOM_FILE_PATH}}` | Per-call, corpus-backed | `C:\ProgramData\USOPrivate\UpdateStore\store.db-journal` |
+| `{{RANDOM_REGISTRY_VALUE}}` | Per-call, corpus-backed | `QWORD (0x00000000-0x000556c2)` |
+| `{{RANDOM_SCRIPT_BLOCK}}` | Per-call, corpus-backed | `Get-Process \| Where-Object {$_.CPU -gt 100}` |
 
 Persona templates (`{{PERSONA_*}}`) return consistent identity attributes across all events within a single simulation cycle. Use these for scenarios where user identity correlation is important (e.g., the same user who received a phishing email later authenticates from an attacker IP). Random generators (`{{RANDOM_*}}`) produce a new value per template call.
+
+### Corpus-Backed Realism & Data Sources
+
+`{{RANDOM_UA}}`, `{{RANDOM_URL}}`, `{{RANDOM_COMMANDLINE}}`, `{{RANDOM_FILE_PATH}}`, `{{RANDOM_REGISTRY_VALUE}}`, and `{{RANDOM_SCRIPT_BLOCK}}` preferentially sample from a corpus of field-value distributions mined from real EVTX telemetry, falling back to a small static pool when the corpus has no data for that field (see `kinetix/core/vars.py:CORPUS_FIELD_CANDIDATES`). The mined corpus lives at `kinetix/intelligence/corpus_profiles/*.json` and was produced offline by `scripts/mine_corpus.py` from three public sample corpora:
+
+| Source | License (per GitHub, checked 2026-09-21) |
+|--------|---------|
+| [sbousseaden/EVTX-ATTACK-SAMPLES](https://github.com/sbousseaden/EVTX-ATTACK-SAMPLES) | GPL-3.0 |
+| [Yamato-Security/hayabusa-sample-evtx](https://github.com/Yamato-Security/hayabusa-sample-evtx) | **None declared** — no LICENSE file/SPDX id on the repo, so default "all rights reserved" terms apply |
+| [NextronSystems/evtx-baseline](https://github.com/NextronSystems/evtx-baseline) | Apache-2.0 |
+
+Only aggregated, weighted field-value pools are shipped in `corpus_profiles/*.json` — never raw EVTX records. Fields the miner classifies as identifiers (IPs, `ip:port`, hostnames, usernames, `DOMAIN\user` account strings, emails, GUIDs, SIDs) are reduced to a structural shape token before counting, never stored as real values; `tests/test_kinetix.py::TestCorpusIntegrity` enforces this as a regression guard against any future re-mining run reintroducing a leak.
+
+**Open item — hayabusa-sample-evtx has no declared license.** Its repository carries no LICENSE file or SPDX identifier, so GitHub's default terms apply: viewing/forking is permitted, but no redistribution or derivative-work rights are granted absent an explicit license. `DeviceEvents.json` currently includes data mined from this source. Before this shipped externally to a client, GSEC should either (a) get explicit permission from Yamato-Security, (b) re-derive that profile from a permissively-licensed EVTX corpus instead, or (c) confirm aggregated statistical summaries fall outside the scope of what a license would restrict — that determination should come from someone who can make that legal/licensing call, not be assumed here.
 
 ## Scenario JSON Format
 

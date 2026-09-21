@@ -55,10 +55,21 @@ IDENTIFIER_NAME_HINTS = (
 )
 
 _IPV4_RE = re.compile(r"^\d{1,3}(\.\d{1,3}){3}$")
+_IPV4_PORT_RE = re.compile(r"^\d{1,3}(\.\d{1,3}){3}:\d+$")
+_IPV6_PORT_RE = re.compile(r"^\[[0-9a-fA-F:.]+\]:\d+$")
 _GUID_RE = re.compile(r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 _EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 _FQDN_RE = re.compile(r"^[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)+$")
 _SID_RE = re.compile(r"^S-1-5-[\d-]+$")
+# Windows "DOMAIN\user" / "HOST\user" account form -- exactly one backslash,
+# and neither side looks like a filesystem path or command segment (no dots,
+# since real NetBIOS domain/host/account names never contain one, but
+# executables/scripts/paths reliably do -- e.g. "cmd.exe\1" or "Import-Module
+# .\Invoke-Obfuscation.psd1" would otherwise false-positive here). Confirmed
+# against mined DeviceNetworkEvents data during development:
+# EventData.jobOwner/username carried real account names like
+# "MSEDGEWIN10\IEUser" that the name-hint check alone missed.
+_ACCOUNT_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9 _-]{0,63}\\[A-Za-z0-9][A-Za-z0-9 _-]{0,63}$")
 
 # Freeform fields that should be pooled by *value* even though the name might
 # look identifier-ish (e.g. "user_agent" contains no PII by itself).
@@ -96,7 +107,15 @@ def classify_field(name: str, value: Any) -> str:
     where the override token was otherwise winning and pooling raw GUIDs.
     """
     if isinstance(value, str):
-        if _IPV4_RE.match(value) or _GUID_RE.match(value) or _EMAIL_RE.match(value) or _SID_RE.match(value):
+        if (
+            _IPV4_RE.match(value)
+            or _IPV4_PORT_RE.match(value)
+            or _IPV6_PORT_RE.match(value)
+            or _GUID_RE.match(value)
+            or _EMAIL_RE.match(value)
+            or _SID_RE.match(value)
+            or _ACCOUNT_RE.match(value)
+        ):
             return "identifier"
     tokens = set(_tokenize(name))
     if tokens & set(FREEFORM_NAME_OVERRIDES):
@@ -114,6 +133,12 @@ def shape_token(value: Any) -> str:
         return type(value).__name__
     if _IPV4_RE.match(value):
         return "ipv4"
+    if _IPV4_PORT_RE.match(value):
+        return "ipv4:port"
+    if _IPV6_PORT_RE.match(value):
+        return "ipv6:port"
+    if _ACCOUNT_RE.match(value):
+        return "account:domain_user"
     if _GUID_RE.match(value):
         return "guid"
     if _EMAIL_RE.match(value):
