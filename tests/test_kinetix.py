@@ -129,13 +129,13 @@ class TestVariableManager:
         vm = VariableManager()
         result = vm.resolve("{{RANDOM_IP}}")
         assert "{{" not in result
-        assert result.startswith("192.168.1.")
+        assert any(result.startswith(subnet) for subnet in vm._ip_subnets)
 
     def test_random_host_resolves(self):
         from kinetix.core.vars import VariableManager
         vm = VariableManager()
         result = vm.resolve("{{RANDOM_HOST}}")
-        assert result.startswith("WS-PROD-")
+        assert result.startswith(("WS-SEA-", "WS-NYC-", "WS-LON-"))
 
     def test_random_user_resolves(self):
         from kinetix.core.vars import VariableManager

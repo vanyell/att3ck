@@ -48,8 +48,24 @@ class VariableManager:
         self._corpus: CorpusProfile = get_profile(corpus_dir)
         self._set_session_vars()
         self._set_persona_vars()
-        self.ip_pool = [f"192.168.1.{i}" for i in range(10, 250)]
-        self.host_pool = [f"WS-PROD-{i:03d}" for i in range(1, 100)]
+        # Multi-subnet internal address space (site/VLAN segments) rather than
+        # a single /24 -- RANDOM_IP is used both for "where a user logged in
+        # from" and "internal lateral-movement target", so every subnet here
+        # stays private/internal rather than adding public-looking ranges.
+        self._ip_subnets = [
+            "10.10.10.",  # Seattle HQ - workstations
+            "10.10.20.",  # Seattle HQ - servers
+            "10.20.10.",  # NYC office - workstations
+            "10.30.10.",  # London office - workstations
+            "172.16.5.",  # Guest / BYOD VLAN
+            "192.168.1.",  # Branch office
+        ]
+        self.ip_pool = [f"{subnet}{i}" for subnet in self._ip_subnets for i in range(10, 250)]
+        self.host_pool = (
+            [f"WS-SEA-{i:03d}" for i in range(1, 60)]
+            + [f"WS-NYC-{i:03d}" for i in range(1, 40)]
+            + [f"WS-LON-{i:03d}" for i in range(1, 30)]
+        )
         self.server_pool = [f"SRV-{i:03d}" for i in range(1, 30)]
         self.linux_host_pool = [f"web-{i:02d}.prod" for i in range(1, 20)] + [f"db-{i:02d}.prod" for i in range(1, 10)] + [f"app-{i:02d}.prod" for i in range(1, 15)] + [f"worker-{i:02d}.prod" for i in range(1, 10)]
         self.mac_host_pool = [f"MBP-{user.capitalize()}" for user in ["jsmith", "ajones", "tclark", "lwhite", "kmiller", "egarcia"]] + [f"Mac-mini-{i:02d}" for i in range(1, 6)]
