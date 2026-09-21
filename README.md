@@ -581,7 +581,9 @@ On the Wazuh manager side, enable a `<remote>` syslog collector in `/var/ossec/e
 </remote>
 ```
 
-Restart the manager (`systemctl restart wazuh-manager`) after editing. This path was not run against a live manager this session — the RFC 3164 framing and content are the same as the file-based `Kinetix_Syslog.log` output (verified below), but the `<remote>` listener itself wasn't exercised. Prefer UDP unless you need TCP's delivery guarantees; `SyslogOutput` does a best-effort single reconnect on a dropped TCP connection and otherwise drops the message rather than blocking the generator.
+Restart the manager (`systemctl restart wazuh-manager`) after editing. This path was not run against a live manager this session — the RFC 3164 framing and content are the same as the file-based `Kinetix_Syslog.log` output (verified below), but the `<remote>` listener itself wasn't exercised. Delivery to a local test listener (loopback, both UDP and TCP) was confirmed: all events arrived intact, correctly framed, matching the expected RFC 3164 format.
+
+**Agent-based file ingestion vs. this network path — which to use:** Prefer the agent-based `<localfile>` approach (JSON and/or syslog file tailing, below) as the default. It's what the live-verification against Wazuh 5.0 in this section is actually based on, and it mirrors how real production endpoints report to Wazuh — the agent handles TLS, compression, and local queuing if the manager is briefly unreachable. `--syslog-host` has none of that: `SyslogOutput` sends plaintext UDP/TCP with no encryption or authentication, and drops a message on delivery failure rather than queuing it (best-effort single reconnect on TCP only, see `kinetix/outputs/syslog.py`). Reach for `--syslog-host` for a quick smoke test without installing an agent, or when simulating a source that's naturally network-delivered in real deployments (firewalls, network appliances) — not as a stand-in for how endpoint/identity/cloud telemetry actually reaches Wazuh in production, and not across an untrusted network segment.
 
 #### Syslog events (Linux) — live-verified on Wazuh 5.0
 
