@@ -74,7 +74,7 @@
         "resource_id": "https://graph.microsoft.com",
         "ResultType": "0",
         "user_agent": "AzureAD-Sync/1.0",
-        "IPAddress": "{{RANDOM_IP}}",
+        "IPAddress": "{{CNC_IP}}",
         "is_service_principal": true,
         "client_app": "Other",
         "conditional_access_status": "notApplied",
@@ -98,7 +98,7 @@
         "OperationName": "Add user",
         "ResourceId": "/providers/Microsoft.AzureAD/users/attacker_sync_user",
         "Caller": "Microsoft Azure AD Sync",
-        "IPAddress": "{{RANDOM_IP}}",
+        "IPAddress": "{{CNC_IP}}",
         "data": {
           "SyncedFromTenant": "litware.com",
           "TargetTenant": "victim-tenant.onmicrosoft.com",

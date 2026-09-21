@@ -8,6 +8,7 @@ import signal
 import sys
 import threading
 import random
+import orjson
 from logging.handlers import RotatingFileHandler
 from rich.console import Console
 from rich.logging import RichHandler
@@ -15,6 +16,7 @@ from rich.logging import RichHandler
 from kinetix.core.engine import KinetixEngine
 from kinetix.core.scenario import AttackChain
 from kinetix.outputs.file import FileOutput
+from kinetix.outputs.syslog import SyslogOutput
 from kinetix.core.temporal import TemporalEngine
 from kinetix.schemas.temporal import TimingProfile
 from kinetix.core.vars import VariableManager
@@ -43,14 +45,14 @@ console = Console()
 # --- H1: Event type → Model class registry (replaces brittle if/elif chain) ---
 def _build_event_registry() -> dict:
     from kinetix.schemas.base import BaseLogEvent
-    from kinetix.schemas.endpoint import ProcessEvent, FileEvent, RegistryEvent
+    from kinetix.schemas.endpoint import ProcessEvent, FileEvent, RegistryEvent, DeviceGenericEvent
     from kinetix.schemas.network import FirewallEvent, DNSEvent, ProxyEvent
     from kinetix.schemas.cloud_auth import AuthenticationEvent, VPNEvent, CloudActivityEvent, O365ActivityEvent
-    from kinetix.schemas.security import SecurityAlert, SecurityIncident
-    from kinetix.schemas.app import webServerEvent, DatabaseEvent
+    from kinetix.schemas.security import SecurityAlert, SecurityIncident, AuditLogEvent, WorkspaceAuditEvent
+    from kinetix.schemas.app import webServerEvent, DatabaseEvent, GenericSyslogEvent
     from kinetix.schemas.linux import LinuxAuthEvent, LinuxSudoEvent, LinuxAuditdEvent, LinuxKernelEvent, LinuxCronEvent, LinuxProcessEvent
     from kinetix.schemas.macos import MacOSLogEvent, MacOSAuthEvent, MacOSAppExecEvent
-    from kinetix.schemas.email import EmailEvent
+    from kinetix.schemas.email import EmailEvent, EmailAttachmentEvent
     from kinetix.schemas.cloud_app import CloudAppEvent
     from kinetix.schemas.identity import IdentityLogonEvent, AADNonInteractiveSignIn
 
@@ -59,16 +61,22 @@ def _build_event_registry() -> dict:
         "process_creation": ProcessEvent,
         "file_system": FileEvent,
         "registry": RegistryEvent,
+        "device_event": DeviceGenericEvent,
         "network_connection": FirewallEvent,
         "dns_query": DNSEvent,
         "proxy": ProxyEvent,
+        "web_proxy": ProxyEvent,
         "vpn": VPNEvent,
+        "vpn_session": VPNEvent,
         "web_request": webServerEvent,
         "db_query": DatabaseEvent,
         "office_activity": O365ActivityEvent,
         "cloud_activity": CloudActivityEvent,
         "security_alert": SecurityAlert,
         "security_incident": SecurityIncident,
+        "directory_audit": AuditLogEvent,
+        "audit": WorkspaceAuditEvent,
+        "system_event": GenericSyslogEvent,
         "linux_auth": LinuxAuthEvent,
         "linux_sudo": LinuxSudoEvent,
         "linux_audit": LinuxAuditdEvent,
@@ -76,10 +84,13 @@ def _build_event_registry() -> dict:
         "linux_cron": LinuxCronEvent,
         "linux_process": LinuxProcessEvent,
         "macos_log": MacOSLogEvent,
+        "macos_process": MacOSLogEvent,
         "macos_auth": MacOSAuthEvent,
         "macos_exec": MacOSAppExecEvent,
         "email_event": EmailEvent,
+        "email_attachment": EmailAttachmentEvent,
         "cloud_app": CloudAppEvent,
+        "cloud_app_event": CloudAppEvent,
         "identity_logon": IdentityLogonEvent,
         "non_interactive_signin": AADNonInteractiveSignIn,
     }
@@ -209,7 +220,10 @@ def _generate_baseline_noise(count: int, var_manager: VariableManager) -> list:
 @click.option("--duration", type=int, default=0, help="Simulation duration in seconds. If 0 (default), the generator runs indefinitely until interrupted.")
 @click.option("--baseline-ratio", type=float, default=0.0, help="Ratio of benign noise events to inject alongside attack events (0.0 = off, 0.95 = 95% benign).")
 @click.option("--annotate", is_flag=True, help="Write a .annotations.json sidecar file mapping event_id to expected detections for SOC training.")
-def main(scenario, output_dir, temporal, stress, duration, baseline_ratio, annotate):
+@click.option("--syslog-host", default=None, help="If set, also stream events as real RFC 3164 syslog over the network to this host (e.g. a Wazuh manager's syslog collector, or a local rsyslog instance).")
+@click.option("--syslog-port", type=int, default=514, help="Destination port for --syslog-host.")
+@click.option("--syslog-proto", type=click.Choice(["udp", "tcp"]), default="udp", help="Transport for --syslog-host.")
+def main(scenario, output_dir, temporal, stress, duration, baseline_ratio, annotate, syslog_host, syslog_port, syslog_proto):
     """
     Kinetix: High-Performance Synthetic Log Generator for SIEM Validation.
     Generates JSON (Azure Sentinel parity) and CEF logs simultaneously.
@@ -223,17 +237,28 @@ def main(scenario, output_dir, temporal, stress, duration, baseline_ratio, annot
 
     # 1. Initialize Global Assets
     file_output = FileOutput(output_dir=output_dir)
+    output_providers = [file_output]
+
+    if syslog_host:
+        try:
+            syslog_output = SyslogOutput(host=syslog_host, port=syslog_port, protocol=syslog_proto)
+            output_providers.append(syslog_output)
+            console.print(f"[dim]Streaming syslog to {syslog_host}:{syslog_port}/{syslog_proto}[/dim]")
+        except OSError as e:
+            logger.error(f"Failed to initialize syslog output ({syslog_host}:{syslog_port}/{syslog_proto}): {e}")
+            console.print(f"[bold red]Syslog output disabled: {e}[/bold red]")
+
     var_manager = VariableManager()
-    
+
     # 2. Initialize Temporal Engine
     temporal_engine = None
     if temporal:
         delay = 0.01 if stress else 0.2
         temporal_engine = TemporalEngine(profile=TimingProfile(avg_delay_seconds=delay))
-    
+
     # 3. Initialize Engine
     engine = KinetixEngine(
-        output_providers=[file_output], 
+        output_providers=output_providers,
         worker_count=8 if stress else 2,
         temporal_engine=temporal_engine
     )

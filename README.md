@@ -397,47 +397,45 @@ Per-table files like `DeviceProcessEvents.json`, `SigninLogs.json`, `EmailEvents
 
 `Kinetix_Unified.log` — Common Event Format with dynamic `csN`/`csNLabel` extension mapping for fields beyond the standard header, including MITRE ATT&CK and D3FEND metadata.
 
-### Windows Event XML (EVT — Wazuh-compatible)
+### Windows Event XML (EVT — verified against a live Wazuh engine)
 
-`Kinetix_EVTX.log` — Single-line Windows Event XML per event, matching the standard `Event` schema. Each event carries a Windows Event ID, Provider, Channel, and structured `EventData`:
+`Kinetix_EVTX.log` — Single-line Windows Event XML per event, matching the standard `Event` schema. Each event carries a Windows Event ID, Provider, Channel, and structured `EventData`. Only genuinely Windows-native event sources are emitted here — event types backed by non-Windows appliances/cloud services (firewalls, DNS servers, proxies, IIS-style web logs, Azure PaaS resources, Cloud App Security) are excluded, since those products never produce real Windows Event Log entries:
 
 | Schema | EventID | Provider | Channel |
 |--------|---------|----------|---------|
 | ProcessEvent | 4688 | Microsoft-Windows-Security-Auditing | Security |
 | FileEvent | 4663 | Microsoft-Windows-Security-Auditing | Security |
 | RegistryEvent | 4657 | Microsoft-Windows-Security-Auditing | Security |
-| FirewallEvent (blocked) | 5157 | Microsoft-Windows-Security-Auditing | Security |
-| FirewallEvent (allowed) | 5156 | Microsoft-Windows-Security-Auditing | Security |
-| DNSEvent | 3008 | Microsoft-Windows-DNS-Client | DNS Client |
-| ProxyEvent | 1 | Microsoft-Windows-W3CIISLog | W3CIISLog |
 | AuthenticationEvent (success) | 4624 | Microsoft-Windows-Security-Auditing | Security |
 | AuthenticationEvent (failure) | 4625 | Microsoft-Windows-Security-Auditing | Security |
-| VPNEvent | 20224 | Microsoft-Windows-Security-Auditing | Security |
-| SecurityAlert | 1102 | Microsoft-Windows-Security-Auditing | Security |
-| SecurityIncident | 1102 | Microsoft-Windows-Security-Auditing | Security |
-| webServerEvent | 1 | Microsoft-Windows-W3CIISLog | W3CIISLog |
-| DatabaseEvent | 33205 | MSSQLSERVER | Application |
+| SecurityAlert | 9101 | Kinetix-SentinelAlert (synthetic) | Application |
+| SecurityIncident | 9102 | Kinetix-SentinelIncident (synthetic) | Application |
 | EmailEvent | 1033 | MSExchange Messaging | Application |
-| CloudAppEvent | 1102 | Microsoft-Windows-Security-Auditing | Security |
 | IdentityLogonEvent (success) | 4624 | Microsoft-Windows-Security-Auditing | Security |
 | IdentityLogonEvent (failure) | 4625 | Microsoft-Windows-Security-Auditing | Security |
 | AADNonInteractiveSignIn | 4624/4625 | Microsoft-Windows-Security-Auditing | Security |
 
-Linux and macOS events are excluded from EVT output (they use syslog only).
+`SecurityAlert`/`SecurityIncident` use a synthetic provider and event ID rather than a real Windows event ID, because Sentinel-native alerts/incidents have no genuine Windows EVTX equivalent to impersonate.
 
-### Syslog (RFC 3164 — Wazuh-compatible)
+Linux, macOS, firewall/VPN, DNS, proxy/web, database (AzureDiagnostics), and Cloud App Security events are excluded from EVT output — they use JSON/CEF/syslog only.
 
-`Kinetix_Syslog.log` — RFC 3164 format: `<PRI>timestamp hostname proc[pid]: msg` with Wazuh decoder-compatible messages:
+> **Verified against a live Wazuh manager (5.0.0-beta5).** An earlier draft of this README assumed Wazuh's Windows Event ingestion only happens through the agent's live `eventchannel` API subscription, and that raw EVTX text would need custom decoders to be useful. That assumption turned out to be wrong for how Wazuh's engine actually decodes this data — pulling the manager's real decoder asset (`decoder/windows-event/0`, `decoder/windows-security/0`, from `/var/wazuh-manager/data/ruleset/*/decoders/`) shows its `check` condition is literally `starts_with($event.original, '<Event xmlns=') AND contains($event.original, 'http://schemas.microsoft.com/win/2004/08/events/event')` — i.e. it parses the raw XML text directly (via a built-in `parse_xml()` function) regardless of how that text arrived. Feeding a `Kinetix_EVTX.log` line through the engine's real event-tester API (`/_internal/tester/run/post`, the 5.0 successor to `wazuh-logtest`) confirmed full decoding: `event.code`, `process.executable`, `process.command_line`, `process.parent.*`, `user.name`, etc. all populated correctly, with `wazuh.integration.decoders` showing `["decoder/core-wazuh-message/0", "decoder/windows-event/0", "decoder/windows-security/0"]`. **No custom decoder is needed** — point `<log_format>syslog</log_format>` at this file (see the Wazuh integration section below) and it works out of the box.
+>
+> Getting there also surfaced and fixed real field-naming bugs verified against that same live decoder: `ProcessEvent` now emits `NewProcessId` (hex, the created process) and `ProcessId` (hex, the **parent's** PID — real 4688 semantics, the opposite of what an earlier draft of this code did) plus `ParentProcessName` (not `CreatorProcessName`); `RegistryEvent` emits `NewValue` (not `ObjectValue`); `AuthenticationEvent`/`IdentityLogonEvent` emit `TargetUserName` (not `TargetUser`/`AccountName`). One residual quirk is Wazuh's own, not Kinetix's: a later unconditional block in `decoder/windows-security/0` re-assigns `process.pid` from the native `ProcessId` field for *every* event, which stomps the correct 4688-specific assignment — so `process.pid` in the final decoded output can show the parent's PID instead of the child's, regardless of what any 4688 producer emits. Confirmed via the decoder's own asset trace, not a claim to take on faith.
+>
+> This does **not** confirm anything about Wazuh 4.x's classic `analysisd`/XML-ruleset architecture, which is a different codebase — the verification above is specific to the 5.0 engine.
 
-| Wazuh Decoder | Syslog Pattern |
-|---------------|----------------|
-| sshd | `<36>Jun 11 02:38:18 web-01 sshd[1234]: Failed password for root from 10.0.0.1 port 22 ssh2` |
-| sudo | `<42>Jun 11 02:38:18 app-01 sudo[1234]:    alice : TTY=/dev/pts/0 ; PWD=/home/alice ; USER=root ; COMMAND=whoami` |
-| auditd | `<38>Jun 11 02:38:18 db-01 kernel[1234]: type=SYSCALL msg=audit(...): arch=c000003e syscall=59 success=yes` |
-| kernel | `<38>Jun 11 02:38:18 web-01 kernel[0]: CPU threshold exceeded` |
-| CRON | `<78>Jun 11 02:38:18 web-01 CRON[1234]: (root) CMD (run-parts /etc/cron.hourly)` |
+### Syslog (RFC 3164)
 
-Also covers `authd`, `opendirectoryd`, `installer`, `syspolicyd`, `tccd`, `VSCode`, `msexchange`, `CAS`, and `MicrosoftGraph` for Email, CloudApp, and Identity events.
+`Kinetix_Syslog.log` — RFC 3164 format: `<PRI>timestamp hostname proc[pid]: msg`. Verified against Wazuh's actual shipped ruleset (`wazuh/wazuh-ruleset`, decoders directory):
+
+| Process tag | Wazuh decoder support | Notes |
+|-------------|------------------------|-------|
+| `sshd` | Real built-in decoder, confirmed field match | `Failed/Accepted password for X from IP port N ssh2` matches Wazuh's `0310-ssh_decoders.xml` regex exactly |
+| `sudo` | Real built-in decoder, confirmed field match | `user : TTY=... ; PWD=... ; USER=... ; COMMAND=...` matches `0320-sudo_decoders.xml` exactly |
+| `kernel` (auditd messages) | Real built-in decoder, partial extraction | Base `auditd`/`kernel` decoders classify the event, but the field-extracting child decoders require the full real `auditd` SYSCALL record shape (`arch=... syscall=... exit=... comm="..." exe="..."`, in that order) — most scenario `audit_msg` values won't populate every field, so rich extraction is inconsistent |
+
+`CRON`, `authd`, `opendirectoryd`, `installer`, `syspolicyd`, `tccd` (macOS), `msexchange`, `CAS`, `MicrosoftGraph` (Email/CloudApp/Identity events), `AzureADAudit` (`AuditLogEvent`), `SentinelAudit` (`WorkspaceAuditEvent`) are **not** Wazuh built-in decoder names — there is no such decoder in Wazuh's default ruleset (verified against the full `decoders/` file listing in `wazuh/wazuh-ruleset`). Those events still reach Wazuh (the generic syslog collector ingests any line) but arrive as unparsed `full_log` text with no extracted fields until you write custom decoders for them (see the Wazuh section below). `GenericSyslogEvent` (`Syslog` table, scenario-authored `system_event` entries) uses whatever process tag the scenario supplies — treat it the same way unless that tag happens to match a real decoder.
 
 ### SOC Training Annotations
 
@@ -469,8 +467,8 @@ Kinetix generates up to four output formats simultaneously (JSON, CEF, Syslog, E
 |---------------|---------|----------|
 | **JSON** (NDJSON per table) | `DeviceProcessEvents.json`, `SigninLogs.json`, `EmailEvents.json`, `CloudAppEvents.json`, etc. | Splunk, Elastic, Sentinel, Chronicle |
 | **CEF** (unified stream) | `Kinetix_Unified.log` | Splunk, QRadar, ArcSight, Sentinel |
-| **Syslog** (RFC 3164) | `Kinetix_Syslog.log` | Wazuh, QRadar, ArcSight, Chronicle |
-| **EVT XML** (Windows Event XML) | `Kinetix_EVTX.log` | Wazuh, Splunk (Windows TA) |
+| **Syslog** (RFC 3164) | `Kinetix_Syslog.log` | Wazuh (sshd/sudo/auditd/kernel out of the box), QRadar, ArcSight, Chronicle |
+| **EVT XML** (Windows Event XML) | `Kinetix_EVTX.log` | Splunk (Windows TA); Wazuh (verified against a live 5.0 engine — no custom decoder needed, see caveat above) |
 
 ---
 
@@ -536,9 +534,12 @@ index = kinetix
 
 ### Wazuh
 
-Kinetix outputs are designed for Wazuh's `localfile` monitoring with built-in decoders.
+Two different verification methods were used here, and they matter for reading the table below correctly:
 
-#### Syslog events (Linux/macOS/network)
+- **Live-verified**: confirmed by feeding real Kinetix output through a live Wazuh manager's actual event-decoding API (`wazuh-manager` 5.0.0-beta5, via its engine's internal tester endpoint, `/_internal/tester/run/post` — the 5.0 successor to `wazuh-logtest`) and inspecting the real decoded output.
+- **Static-verified (4.x ruleset)**: checked against the classic `wazuh/wazuh-ruleset` GitHub repo (the 4.x-era decoder/rule XML files), *not* run against a live manager. **Wazuh 5.0's decoder/rule content turned out to be organized completely differently** — no `sshd`/`sudo`/`CRON`-named decoders exist in the 5.0 ruleset at all (confirmed by listing `/var/wazuh-manager/data/ruleset/*/decoders/` on the live box) — so treat any claim marked static-verified as informative for 4.x specifically, not assumed to carry over to 5.0.
+
+#### Syslog events (Linux) — live-verified on Wazuh 5.0
 
 ```xml
 <!-- /var/ossec/etc/ossec.conf -->
@@ -548,25 +549,29 @@ Kinetix outputs are designed for Wazuh's `localfile` monitoring with built-in de
 </localfile>
 ```
 
-Built-in decoders handle each syslog pattern automatically:
+| Message type | Result on live Wazuh 5.0 engine | Notes |
+|---------------|------|-------|
+| `sshd` failed/accepted password | Decodes fully | Chain is `decoder/syslog/0` → `decoder/system-auth/0` (not a decoder literally named `sshd` — that name doesn't exist in 5.0). Extracts `event.action: authentication-failure`, `source.ip`, `user.name`, `process.name` correctly |
+| `sudo` command execution | Decodes fully | Same `syslog`→`system-auth` chain. Extracts `user.name`, `user.effective.name`, `process.command_line`, `process.working_directory` correctly |
+| `CRON` job execution | Decodes fully | Same chain. Extracts `process.name: CRON`, `message` correctly |
+| `auditd` (`kernel` process tag) | Decoder asset exists (`decoder_auditd_0.json`) — not deeply tested | Present in the live ruleset; field extraction depth wasn't verified this session |
 
-| Decoder | Events Parsed |
-|---------|---------------|
-| `sshd` | SSH auth failures/successes |
-| `sudo` | Sudo command executions |
-| `auditd` | Linux audit syscalls (SYSCALL, USER_LOGIN, etc.) |
-| `kernel` | Kernel threshold, memory, OOM events |
-| `CRON` | Cron job executions |
-| `authd` | macOS authentication events |
-| `opendirectoryd` | macOS OpenDirectory operations |
-| `installer` | macOS software installs |
-| `syspolicyd` | macOS Gatekeeper rejections |
-| `tccd` | macOS TCC permission prompts |
-| `msexchange` | Email events (EmailEvent schema) |
-| `CAS` | CloudAppEvents operations |
-| `MicrosoftGraph` | AADNonInteractiveSignIn events |
+**Not decoded specially on the live 5.0 box** — `authd`, `opendirectoryd`, `installer`, `syspolicyd`, `tccd` (macOS), `msexchange`, `CAS`, `MicrosoftGraph` (Email/CloudApp/Identity). No decoder asset for these process tags was found in `/var/wazuh-manager/data/ruleset/*/decoders/`. These events still arrive via the generic syslog collector, but as unparsed `full_log` text — write custom decoders (see `documentation.wazuh.com/current/user-manual/ruleset/decoders/custom.html`) keyed on the process tag if you need structured fields from them.
 
-#### Windows EVT events
+#### JSON events (Windows endpoint, cloud, identity) — recommended path for everything else
+
+Rather than fighting the syslog/EVTX limitations below, point Wazuh's JSON collector at the per-table files or the unified feed:
+
+```xml
+<localfile>
+  <log_format>json</log_format>
+  <location>/path/to/att3ck/logs/Kinetix_Unified.json</location>
+</localfile>
+```
+
+Wazuh's JSON decoder exposes every top-level key (`ProcessCommandLine`, `AccountName`, `AppDisplayName`, etc.) as a queryable field, which rules can match with `<field name="...">`. This is the most reliable path for `DeviceProcessEvents`, `SigninLogs`, `EmailEvents`, `CloudAppEvents`, `DeviceEvents`, `AuditLogs`, `EmailAttachmentInfo`, and similar tables — it doesn't depend on any decoder recognizing a fabricated syslog process tag.
+
+#### Windows Security events — live-verified, no custom decoder needed
 
 ```xml
 <localfile>
@@ -575,50 +580,50 @@ Built-in decoders handle each syslog pattern automatically:
 </localfile>
 ```
 
-Wazuh's built-in Windows Event decoders parse EventID, Provider Name, and Channel to extract structured fields. See the EVT table above for EventID-to-schema mapping.
+Point this straight at `Kinetix_EVTX.log` — no custom decoder required. This was empirically confirmed on the live Wazuh 5.0.0-beta5 engine: its `decoder/windows-event/0` and `decoder/windows-security/0` assets parse the raw `<Event xmlns=...>` XML directly (via a built-in `parse_xml()` function keyed on `event.original`), so the manager doesn't need the data pre-shaped by a live agent's `eventchannel` collection — the raw XML text is exactly what it expects. Feeding real `Kinetix_EVTX.log` lines through the engine's tester API confirmed correct decoding of `ProcessEvent` (4688), `RegistryEvent` (4657), and `AuthenticationEvent`/`IdentityLogonEvent` (4624/4625) — `event.code`, `process.executable`, `process.command_line`, `process.parent.*`, `user.name`, `registry.value`, `registry.data.strings`, etc. all populated correctly. See the Output Format section above for the specific field-naming fixes this testing surfaced (`NewProcessId`/`ParentProcessName`/`NewValue`/`TargetUserName`) and the one residual quirk that's on Wazuh's side, not Kinetix's (a later unconditional block in `decoder/windows-security/0` can overwrite `process.pid` with the parent's PID for 4688 events).
+
+This was verified specifically against the 5.0 engine — Wazuh 4.x's classic `analysisd` is a different codebase and wasn't tested this session.
 
 #### Custom rules for Kinetix scenarios
 
-Add to `/var/ossec/etc/rules/local_rules.xml`:
+Add to `/var/ossec/etc/rules/local_rules.xml`. Verified against Wazuh's real rule IDs — the SSH rule below chains off `if_sid 5716` (`^Failed|^error: PAM: Authentication` — Wazuh's actual "sshd: authentication failed" rule; `5710` is a different rule scoped to nonexistent-username attempts, not password failures). The other four rules key off JSON-decoded fields rather than an `if_sid` chain, since there's no real syslog decoder for the process-creation/consent content they're matching:
 
 ```xml
 <group name="kinetix">
-  <!-- SSH brute force simulation -->
+  <!-- SSH brute force simulation (via Kinetix_Syslog.log) -->
   <rule id="100001" level="12">
-    <if_sid>5710</if_sid>
+    <if_sid>5716</if_sid>
     <match>Failed password for root</match>
     <description>Kinetix: SSH brute force targeting root</description>
   </rule>
 
-  <!-- RMM tool deployment (T1219) -->
+  <!-- RMM tool deployment (T1219) — via JSON-ingested DeviceProcessEvents -->
   <rule id="100002" level="14">
-    <if_sid>5103</if_sid>
-    <match>BeyondTrust|ScreenConnect|AnyDesk</match>
+    <field name="ProcessCommandLine">BeyondTrust|ScreenConnect|AnyDesk</field>
     <description>Kinetix: RMM tool abuse — suspicious remote management install</description>
   </rule>
 
   <!-- ADCS certificate request (T1649) -->
   <rule id="100003" level="14">
-    <if_sid>5103</if_sid>
-    <match>Certipy|Certify</match>
+    <field name="ProcessCommandLine">Certipy|Certify</field>
     <description>Kinetix: ADCS certificate abuse — unauthorized certificate request</description>
   </rule>
 
-  <!-- OAuth app consent (T1525) -->
+  <!-- OAuth app consent (T1525) — via JSON-ingested CloudAppEvents -->
   <rule id="100004" level="13">
-    <if_sid>5103</if_sid>
-    <match>ConsentGrant|OAuthApp</match>
+    <field name="ActionType">Consent to application</field>
     <description>Kinetix: OAuth consent grant — suspicious application authorized</description>
   </rule>
 
   <!-- Shadow copy deletion -->
   <rule id="100005" level="14">
-    <if_sid>5103</if_sid>
-    <match>vssadmin.*delete shadows</match>
+    <field name="ProcessCommandLine">vssadmin.*delete shadows</field>
     <description>Kinetix: Shadow copy deletion — ransomware precursor</description>
   </rule>
 </group>
 ```
+
+These four JSON-field rules assume `<log_format>json</log_format>` is pointed at `Kinetix_Unified.json` (or the relevant per-table file) as shown above — they will not fire against the syslog feed.
 
 ---
 

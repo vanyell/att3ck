@@ -26,6 +26,22 @@ class webServerEvent(BaseLogEvent):
                                ("sc-status", str(self.status_code)), ("cs-user-agent", self.user_agent),
                                ("time-taken", str(self.response_time_ms))])
 
+class GenericSyslogEvent(BaseLogEvent):
+    """Catch-all for arbitrary daemon/service syslog lines with no dedicated
+    Sentinel schema (e.g. scenario 'system_event' entries) — routes to the
+    real generic 'Syslog' Log Analytics table instead of BaseLogEvent."""
+    source: Literal["syslog"] = Field("syslog", alias="SourceSystem")
+    event_type: Literal["Syslog"] = Field("Syslog", alias="Type")
+
+    facility: str = Field("user", alias="Facility")
+    proc: str = Field("system", alias="ProcessName")
+    log_message: str = Field(..., alias="Message")
+
+    def to_syslog(self) -> str:
+        prio = syslog_priority(self.facility.lower(), self.severity)
+        return format_syslog(prio, self.timestamp, self.hostname or "localhost", self.proc, 0, self.log_message)
+
+
 class DatabaseEvent(BaseLogEvent):
     source: Literal["Azure"] = Field("Azure", alias="SourceSystem")
     event_type: Literal["AzureDiagnostics"] = Field("AzureDiagnostics", alias="Type")

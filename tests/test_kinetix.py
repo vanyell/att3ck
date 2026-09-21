@@ -690,7 +690,10 @@ class TestEVTOutput:
         from kinetix.schemas.security import SecurityAlert
         ev = SecurityAlert(AlertName="Test Alert", severity="High")
         evt = ev.to_evt()
-        assert "EventID>1102<" in evt
+        # SecurityAlert is Sentinel-native (no real Windows EVTX equivalent) —
+        # it must use a synthetic ID, not a real (and differently-meaning)
+        # Windows Security-Auditing event ID like 1102 ("audit log cleared").
+        assert "EventID>9101<" in evt
 
     def test_linux_event_has_no_evt(self):
         """Linux events use syslog only, verify EVT is not Windows Event XML."""
@@ -774,6 +777,30 @@ class TestScenarioLoading:
             except Exception as e:
                 pytest.fail(f"Scenario {f.name} failed to load: {e}")
 
+    def test_no_scenario_event_falls_back_to_base_log_event(self):
+        """
+        Regression test for the registry gap: an `event_type` string used in a
+        scenario JSON file that isn't registered in main._build_event_registry()
+        silently resolves to the generic BaseLogEvent, which (a) drops every
+        field not in the base schema and (b) can route to a malformed/non-Sentinel
+        table name via file.py's source-string fallback. Every event a scenario
+        actually emits must resolve to a real, dedicated schema class.
+        """
+        from main import load_scenario
+        from kinetix.core.vars import VariableManager
+        from kinetix.schemas.base import BaseLogEvent
+        vm = VariableManager()
+
+        offenders = []
+        for f in self._get_scenario_files():
+            stages = load_scenario(str(f), vm)
+            for stage in stages:
+                for event in stage["events"]:
+                    if type(event) is BaseLogEvent:
+                        offenders.append(f"{f.name}: event_type={event.event_type!r} source={event.source!r}")
+
+        assert not offenders, "Events falling back to generic BaseLogEvent (missing registry entry):\n" + "\n".join(offenders)
+
 
 # --- Markov Engine Tests ---
 
@@ -784,7 +811,7 @@ class TestTemporalEngine:
         from kinetix.core.temporal import TemporalEngine
         te = TemporalEngine()
         next_type = te.get_next_event_type("SigninLogs")
-        assert next_type in ["DeviceProcessEvents", "OfficeActivity", None]
+        assert next_type in ["DeviceProcessEvents", "OfficeActivity", "AzureActivity", None]
 
     def test_process_triggers_follow_up(self):
         from kinetix.core.temporal import TemporalEngine

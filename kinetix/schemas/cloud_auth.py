@@ -1,41 +1,53 @@
 from typing import Optional, Literal
 import uuid
-from pydantic import Field, AliasChoices
+from pydantic import Field, AliasChoices, computed_field
 from kinetix.schemas.base import BaseLogEvent, syslog_priority, format_syslog, format_evt_xml, evt_level
 
 class AuthenticationEvent(BaseLogEvent):
     source: Literal["Azure AD"] = Field("Azure AD", alias="SourceSystem")
     event_type: Literal["SigninLogs"] = Field("SigninLogs", alias="Type")
-    
+
     user_principal_name: str = Field(..., alias="UserPrincipalName", validation_alias=AliasChoices("UserPrincipalName", "user_name", "user_principal_name", "AccountName"))
     app_display_name: str = Field("Office 365", alias="AppDisplayName", validation_alias=AliasChoices("AppDisplayName", "app_name"))
     client_app_used: str = Field("Browser", alias="ClientAppUsed", validation_alias=AliasChoices("ClientAppUsed", "client_app"))
-    
+
     result_type: str = Field("0", alias="ResultType", validation_alias=AliasChoices("ResultType", "status"))
     result_description: Optional[str] = Field("Success", alias="ResultDescription", validation_alias=AliasChoices("ResultDescription", "failure_reason"))
-    
-    mfa_method: str = Field("Push", alias="MfaMethod")
+
+    # Real SigninLogs has no top-level MfaMethod — MFA detail lives inside the
+    # dynamic AuthenticationDetails/MfaDetail columns. Kept as an authoring
+    # input (exclude=True) rather than serialized under a fake column name.
+    mfa_method: str = Field("Push", alias="MfaMethod", exclude=True)
     risk_level: str = Field("None", alias="RiskLevelDuringSignIn")
     user_agent: str = Field("Mozilla/5.0", alias="UserAgent")
-    
-    location: str = Field("US", alias="Location")
-    city: str = Field("Seattle", alias="City")
+
+    # Real SigninLogs nests geo under the dynamic LocationDetails column
+    # (countryOrRegion/city/state), not flat Location/City strings. Keep the
+    # flat fields as authoring inputs and expose the real nested shape below.
+    location: str = Field("US", alias="Location", exclude=True)
+    city: str = Field("Seattle", alias="City", exclude=True)
     conditional_access_status: str = Field("success", alias="ConditionalAccessStatus")
+
+    @computed_field(alias="LocationDetails")
+    @property
+    def location_details(self) -> dict:
+        return {"countryOrRegion": self.location, "city": self.city}
 
     def to_syslog(self) -> str:
         result = "accepted" if self.result_type == "0" else "failed"
         return format_syslog(syslog_priority("authpriv", "info"), self.timestamp, self.hostname or "SERVER",
-                              "sshd", 0, f"Authentication {result} for {self.user_principal_name} from {self.source_ip}")
+                              "AzureAD", 0, f"Authentication {result} for {self.user_principal_name} from {self.source_ip}")
 
     def to_evt(self) -> str:
+        # Real 4624/4625 field is "TargetUserName", not "TargetUser" (verified
+        # against a live Wazuh 5.0 engine's decoder/windows-security/0 asset).
         eid = 4624 if self.result_type == "0" else 4625
         return format_evt_xml(eid, "Microsoft-Windows-Security-Auditing", "Security",
                               self.hostname or "SERVER", self.timestamp,
                               evt_level("info" if self.result_type == "0" else "err"),
-                              [("TargetUser", self.user_principal_name),
+                              [("TargetUserName", self.user_principal_name),
                                ("LogonType", self.client_app_used),
-                               ("IpAddress", self.source_ip or ""),
-                               ("MfaMethod", self.mfa_method)])
+                               ("IpAddress", self.source_ip or "")])
 
 class VPNEvent(BaseLogEvent):
     source: Literal["Firewall"] = Field("Firewall", alias="SourceSystem")

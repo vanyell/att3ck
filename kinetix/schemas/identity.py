@@ -26,12 +26,15 @@ class IdentityLogonEvent(BaseLogEvent):
 
     def to_evt(self) -> str:
         eid = 4624 if self.logon_result == "Success" else 4625
+        # Real 4624/4625 fields are "TargetUserName"/"WorkstationName", not
+        # "AccountName"/"TargetDevice" (verified against a live Wazuh 5.0
+        # engine's decoder/windows-security/0 asset).
         return format_evt_xml(eid, "Microsoft-Windows-Security-Auditing", "Security",
                               self.hostname or "DC", self.timestamp,
                               evt_level("info" if self.logon_result == "Success" else "err"),
-                              [("LogonType", self.logon_type), ("AccountName", self.user_name or ""),
+                              [("LogonType", self.logon_type), ("TargetUserName", self.user_name or ""),
                                ("IpAddress", self.source_ip or ""),
-                               ("TargetDevice", self.target_device or "")])
+                               ("WorkstationName", self.target_device or "")])
 
 
 class AADNonInteractiveSignIn(BaseLogEvent):

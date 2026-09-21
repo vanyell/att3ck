@@ -44,12 +44,39 @@ class ProcessEvent(EndpointEvent):
                               self.process_id, f"Process Created: {self.file_name} Cmd={self.command_line} User={self.user_name}")
 
     def to_evt(self) -> str:
+        # Real 4688 semantics (verified against a live Wazuh 5.0 engine's
+        # decoder/windows-security/0 asset): NewProcessId is the created
+        # process's PID, ProcessId is the CREATOR/parent's PID, and both are
+        # hex strings — the engine applies hex_to_number() to them. The
+        # decoder also expects ParentProcessName, not CreatorProcessName.
+        parent_pid = self.parent_process_id if self.parent_process_id is not None else 0
         return format_evt_xml(4688, "Microsoft-Windows-Security-Auditing", "Security",
                               self.hostname or "WKS", self.timestamp, evt_level("info"),
-                              [("NewProcessName", self.command_line),
-                               ("CreatorProcessName", self.parent_command_line or ""),
-                               ("ProcessId", str(self.process_id)),
+                              [("NewProcessId", f"0x{self.process_id:x}"),
+                               ("NewProcessName", f"{self.folder_path}\\{self.file_name}"),
+                               ("ProcessId", f"0x{parent_pid:x}"),
+                               ("ParentProcessName", self.parent_process_name or ""),
                                ("CommandLine", self.command_line)])
+
+class DeviceGenericEvent(EndpointEvent):
+    """Catch-all Defender for Endpoint 'DeviceEvents' table — heterogeneous
+    action types (USB plug/unplug, tamper protection, etc.) with no single
+    dedicated schema."""
+    source: Literal["endpoint"] = Field("endpoint", alias="SourceSystem")
+    event_type: Literal["DeviceEvents"] = Field("DeviceEvents", alias="Type")
+
+    def to_syslog(self) -> str:
+        prio = syslog_priority("user", "info")
+        return format_syslog(prio, self.timestamp, self.hostname or "WKS", "Microsoft-Windows-Security-Auditing",
+                              0, f"DeviceEvent: {self.action_type}")
+
+    def to_evt(self) -> str:
+        # DeviceEvents covers many unrelated action types with no single real
+        # EVTX ID — synthetic provider/ID, not impersonating a specific real event.
+        return format_evt_xml(9106, "Kinetix-DeviceEvents", "Application",
+                              self.hostname or "WKS", self.timestamp, evt_level("info"),
+                              [("ActionType", self.action_type)])
+
 
 class FileEvent(EndpointEvent):
     source: Literal["endpoint"] = Field("endpoint", alias="SourceSystem")
@@ -91,8 +118,11 @@ class RegistryEvent(EndpointEvent):
                                0, f"Registry {self.action_type}: Key={self.key_path} Name={self.value_name}")
 
     def to_evt(self) -> str:
+        # Real 4657 field is "NewValue", not "ObjectValue" (verified against
+        # a live Wazuh 5.0 engine's decoder/windows-security/0 asset, which
+        # maps registry.data.strings from EventData.NewValue).
         return format_evt_xml(4657, "Microsoft-Windows-Security-Auditing", "Security",
                               self.hostname or "WKS", self.timestamp, evt_level("info"),
                               [("ObjectName", self.key_path),
                                ("ObjectValueName", self.value_name or ""),
-                               ("ObjectValue", self.value_data or "")])
+                               ("NewValue", self.value_data or "")])

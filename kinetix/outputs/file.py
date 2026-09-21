@@ -5,7 +5,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 from datetime import datetime
 from kinetix.outputs.base import OutputProvider
-from kinetix.schemas.base import BaseLogEvent
+from kinetix.schemas.base import BaseLogEvent, cef_severity
 
 logger = logging.getLogger(__name__)
 
@@ -80,7 +80,7 @@ class FileOutput(OutputProvider):
             "CommonSecurityLog", "DnsEvents", "W3CIISLog", "AzureDiagnostics",
             "DatabaseAuditExport_CL", "LinuxAuditLog", "Syslog",
             "EmailEvents", "CloudAppEvents", "IdentityLogonEvents",
-            "AADNonInteractiveUserSignInLogs",
+            "AADNonInteractiveUserSignInLogs", "EmailAttachmentInfo",
         ]
         
         if event.event_type in sentinel_tables:
@@ -144,15 +144,21 @@ class FileOutput(OutputProvider):
         self.unified_syslog_logger.info(syslog_entry)
 
         # 5. Write to EVT feed (Windows Event XML for Wazuh/SIEM)
-        # Windows events: endpoint, firewall, dns, proxy, auth, vpn, security, web, db
-        # Syslog events (Linux/Mac/Network) skip EVT
+        # Windows-native events only: endpoint, auth, security, db.
+        # Non-Windows appliance/service sources (linux, macos, firewall, dns,
+        # proxy, web) skip EVT — they'd never emit real Windows Event Log entries.
         if not self._is_syslog_event(event):
             evt_entry = self._format_evt(event)
             self.unified_evt_logger.info(evt_entry)
 
+    # Sources backed by non-Windows appliances/services that never emit native
+    # Windows Event Log entries in real life (network appliances, DNS servers,
+    # web/proxy servers) — these should only appear in JSON/CEF/syslog output.
+    _NON_WINDOWS_SOURCES = {"linux", "macos", "firewall", "proxy", "dns", "web", "azure", "cloud app security"}
+
     def _is_syslog_event(self, event: BaseLogEvent) -> bool:
-        """Return True if event should only go to syslog (Linux/Mac/Network native syslog)."""
-        return event.source.lower() in ("linux", "macos")
+        """Return True if event should only go to syslog/CEF/JSON, never fabricated EVTX."""
+        return event.source.lower() in self._NON_WINDOWS_SOURCES
 
     def _format_json(self, event: BaseLogEvent) -> str:
         # L4: Exclude internal generator metadata from SIEM output
@@ -170,7 +176,7 @@ class FileOutput(OutputProvider):
         dev_version = "1.1"
         event_class_id = event.event_type
         name = f"Kinetix {event.event_type} event"
-        severity = event.severity
+        severity = cef_severity(event.severity)  # CEF requires an integer 0-10
         
         # 1. Base Extensions (Standard CEF keys)
         # rt = reception time (epoch ms)

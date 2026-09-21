@@ -1,5 +1,5 @@
 from typing import Optional, List, Literal
-from pydantic import Field
+from pydantic import Field, AliasChoices
 from kinetix.schemas.base import BaseLogEvent, syslog_priority, format_syslog, format_evt_xml, evt_level
 from datetime import datetime, timezone
 import uuid
@@ -29,14 +29,17 @@ class SecurityAlert(BaseLogEvent):
     techniques: Optional[str] = Field(None, alias="Techniques")
 
     def to_syslog(self) -> str:
-        prio = syslog_priority("authpriv", "crit" if self.severity in ("High", "Critical") else "warning")
+        prio = syslog_priority("authpriv", self.severity)
         return format_syslog(prio, self.timestamp, self.compromised_entity or "-", "Kinetix", 0,
                               f"ALERT: {self.alert_name} [{self.alert_type}] confidence={self.confidence_level}")
 
     def to_evt(self) -> str:
-        return format_evt_xml(1102, "Microsoft-Windows-Security-Auditing", "Security",
+        # SecurityAlert is a Sentinel-native construct with no real Windows EVTX
+        # form — use a distinct synthetic provider/ID rather than impersonating
+        # a real (and differently-meaning) Security-Auditing event ID.
+        return format_evt_xml(9101, "Kinetix-SentinelAlert", "Application",
                               self.compromised_entity or "-", self.timestamp,
-                              evt_level("crit" if self.severity in ("High", "Critical") else "warning"),
+                              evt_level(self.severity),
                               [("AlertName", self.alert_name), ("AlertType", self.alert_type),
                                ("Severity", self.severity),
                                ("Confidence", str(self.confidence_score))])
@@ -56,7 +59,53 @@ class SecurityIncident(BaseLogEvent):
     related_analytic_rule_ids: List[str] = Field(default_factory=list, alias="RelatedAnalyticRuleIds")
 
     def to_evt(self) -> str:
-        return format_evt_xml(1102, "Microsoft-Windows-Security-Auditing", "Security",
+        # SecurityIncident is likewise Sentinel-native — synthetic provider/ID.
+        return format_evt_xml(9102, "Kinetix-SentinelIncident", "Application",
                               self.hostname or "-", self.timestamp, evt_level(self.severity),
                               [("IncidentNumber", self.incident_number), ("Title", self.title),
                                ("Status", self.status)])
+
+
+class AuditLogEvent(BaseLogEvent):
+    """Azure AD directory audit trail (real Sentinel 'AuditLogs' table) —
+    e.g. user/group/role management operations."""
+    source: Literal["Azure AD"] = Field("Azure AD", alias="SourceSystem")
+    event_type: Literal["AuditLogs"] = Field("AuditLogs", alias="Type")
+
+    operation_name: str = Field(..., alias="OperationName", validation_alias=AliasChoices("OperationName", "operation_name"))
+    category: str = Field("UserManagement", alias="Category")
+    result: str = Field("success", alias="Result")
+    initiated_by: Optional[str] = Field(None, alias="InitiatedBy", validation_alias=AliasChoices("InitiatedBy", "initiated_by"))
+    target_resources: Optional[str] = Field(None, alias="TargetResources", validation_alias=AliasChoices("TargetResources", "target_resources"))
+
+    def to_syslog(self) -> str:
+        prio = syslog_priority("authpriv", self.severity)
+        return format_syslog(prio, self.timestamp, self.hostname or "AAD", "AzureADAudit", 0,
+                              f"{self.operation_name} result={self.result} by={self.initiated_by or self.user_name or '-'}")
+
+    def to_evt(self) -> str:
+        # AuditLogs is a Sentinel-native (Azure AD) construct with no real
+        # Windows EVTX form — synthetic provider/ID, not impersonating a real one.
+        return format_evt_xml(9104, "Kinetix-AzureADAudit", "Application",
+                              self.hostname or "-", self.timestamp, evt_level(self.severity),
+                              [("OperationName", self.operation_name), ("Result", self.result),
+                               ("TargetResources", self.target_resources or "")])
+
+
+class WorkspaceAuditEvent(BaseLogEvent):
+    """Sentinel/Log Analytics workspace-level configuration audit trail
+    (fabricated 'SentinelAudit' table — no real single Sentinel table name
+    covers this; kept distinct from AuditLogEvent's real Azure AD AuditLogs)."""
+    source: Literal["sentinel_audit"] = Field("sentinel_audit", alias="SourceSystem")
+    event_type: Literal["audit"] = Field("audit", alias="Type")
+
+    action: str = Field(..., alias="Action", validation_alias=AliasChoices("Action", "action"))
+
+    def to_syslog(self) -> str:
+        prio = syslog_priority("authpriv", self.severity)
+        return format_syslog(prio, self.timestamp, self.hostname or "SENTINEL", "SentinelAudit", 0, self.action)
+
+    def to_evt(self) -> str:
+        return format_evt_xml(9105, "Kinetix-SentinelAudit", "Application",
+                              self.hostname or "-", self.timestamp, evt_level(self.severity),
+                              [("Action", self.action)])

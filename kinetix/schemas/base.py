@@ -8,8 +8,27 @@ import uuid
 _SYSLOG_FACILITY = {"kern": 0, "user": 1, "mail": 2, "daemon": 3, "auth": 4, "syslog": 5, "authpriv": 10, "cron": 9}
 _SYSLOG_SEVERITY = {"emerg": 0, "alert": 1, "crit": 2, "err": 3, "warning": 4, "notice": 5, "info": 6, "debug": 7}
 
+# Kinetix's own severity vocabulary (used in scenario JSON and BaseLogEvent.severity)
+# mapped onto the RFC 3164 severity keywords above, so a scenario's "critical"/"high"/
+# "medium"/"low"/"informational" (any casing) actually affects PRI/EVT level output
+# instead of silently falling back to "info" for everything.
+_APP_SEVERITY_TO_SYSLOG = {
+    "critical": "crit",
+    "high": "err",
+    "medium": "warning",
+    "low": "notice",
+    "informational": "info",
+}
+
+def normalize_severity(severity: str) -> str:
+    """Map any Kinetix severity string onto an RFC 3164 severity keyword."""
+    key = (severity or "info").strip().lower()
+    if key in _SYSLOG_SEVERITY:
+        return key
+    return _APP_SEVERITY_TO_SYSLOG.get(key, "info")
+
 def syslog_priority(facility: str = "user", severity: str = "info") -> int:
-    return _SYSLOG_FACILITY.get(facility, 1) * 8 + _SYSLOG_SEVERITY.get(severity, 6)
+    return _SYSLOG_FACILITY.get(facility, 1) * 8 + _SYSLOG_SEVERITY.get(normalize_severity(severity), 6)
 
 def syslog_timestamp(dt: Optional[datetime] = None) -> str:
     if dt is None:
@@ -23,7 +42,20 @@ def format_syslog(priority: int, dt: datetime, hostname: str, proc: str, pid: in
 _WIN_EVENT_SEVERITY = {"emerg": 1, "alert": 1, "crit": 2, "err": 2, "warning": 3, "notice": 4, "info": 4, "debug": 5}
 
 def evt_level(severity: str = "info") -> int:
-    return _WIN_EVENT_SEVERITY.get(severity, 4)
+    return _WIN_EVENT_SEVERITY.get(normalize_severity(severity), 4)
+
+# CEF requires an integer 0-10 Severity field (not a free-text keyword)
+_APP_SEVERITY_TO_CEF = {
+    "critical": 10, "crit": 10, "emerg": 10, "alert": 10,
+    "high": 8, "err": 8,
+    "medium": 5, "warning": 5, "notice": 5,
+    "low": 3,
+    "informational": 1, "info": 1, "debug": 0,
+}
+
+def cef_severity(severity: str) -> int:
+    """Map a Kinetix severity string onto the CEF-mandated integer 0-10 scale."""
+    return _APP_SEVERITY_TO_CEF.get((severity or "info").strip().lower(), 1)
 
 def format_evt_xml(event_id: int, provider: str, channel: str, computer: str,
                    timestamp: datetime, level: int, event_data: List[Tuple[str, str]]) -> str:

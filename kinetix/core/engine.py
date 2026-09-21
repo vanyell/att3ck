@@ -68,8 +68,12 @@ class KinetixEngine:
 
     def wait_for_completion(self, timeout: float = 0):
         """Block until all events in the queue have been processed.
-        
-        If timeout > 0, raises queue.Empty if queue is not empty after timeout seconds.
+
+        If timeout > 0, gives up (leaving remaining events for workers to
+        keep draining) after timeout seconds instead of blocking forever.
+        Never consumes from the queue directly — only the worker threads
+        may do that, so events are always fully processed before being
+        removed.
         """
         if timeout > 0:
             deadline = time.monotonic() + timeout
@@ -78,11 +82,6 @@ class KinetixEngine:
                     remaining = self.event_queue.qsize()
                     logger.warning(f"Drain timeout after {timeout}s — {remaining} events remaining in queue.")
                     break
-                try:
-                    self.event_queue.get(timeout=min(0.5, timeout))
-                    self.event_queue.task_done()
-                except queue.Empty:
-                    if self.event_queue.empty():
-                        break
+                time.sleep(0.1)
         else:
             self.event_queue.join()
