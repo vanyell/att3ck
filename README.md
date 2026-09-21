@@ -139,11 +139,27 @@ in minutes instead of days.
 ```
 
 `--duration` still acts as a real-time safety cap if set; otherwise the run
-stops once the simulated window is fully filled. Note that at the default
-`avg_delay_seconds` (dense, workstation-scale pacing), a multi-week window can
-generate a very large volume of events — lower `avg_delay_seconds` (via a
-custom `TimingProfile`) or shrink `--sim-days` if disk usage becomes a
-concern.
+stops once the simulated window is fully filled.
+
+Weekend shaping (Sat/Sun suppression) applies **only** in `--sim-clock` mode.
+On the real-time path it would compound with the after-hours divisor — 66×
+combined at the defaults — and throttle an ordinary weekend-evening run down
+to a handful of events, so `TimingProfile.weekend_shaping` defaults to off and
+`--sim-clock` turns it on.
+
+**Disk usage.** Because the virtual clock advances by exactly the delay
+`TemporalEngine` computes per event, the event count for a given `--sim-days`
+is *inversely* proportional to `avg_delay_seconds`: **raise**
+`avg_delay_seconds` (via a custom `TimingProfile`) or shrink `--sim-days` to
+generate less. Lowering it makes the run substantially larger.
+
+`--sim-clock` also disables log rotation, because rotating mid-run would
+delete the oldest part of the very window you asked for — and would do it
+per-feed, leaving high-volume tables covering fewer days than low-volume ones
+and skewing any cross-table correlation. Budget accordingly: a completed
+`--sim-days 3` run at the default pacing writes ~225k events / ~380 MB across
+all feeds in about 40 seconds, and volume scales with the window. Real-time
+runs keep the bounded ~60 MB per-feed rotation (10 MB × 5) as before.
 
 ## Scenario Catalog
 

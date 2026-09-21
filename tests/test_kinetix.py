@@ -1154,3 +1154,101 @@ class TestCorpusIntegrity:
             if is_identifier_shaped(value)
         ]
         assert leaks == [], f"Identifier-shaped values leaked into freeform corpus pools: {leaks[:10]}"
+
+
+class TestCalendarShaping:
+    """Weekend shaping is meaningful on the simulated timeline, but on the
+    real-time path it compounds with the after-hours divisor (0.1 * 0.15 = 66x)
+    and throttles an ordinary `--duration 60` run down to a handful of events
+    on a Saturday evening, with nothing in the output explaining why."""
+
+    def _profile(self, **kwargs):
+        from kinetix.schemas.temporal import TimingProfile
+        # jitter_percent=0 makes calculate_delay() deterministic
+        return TimingProfile(avg_delay_seconds=1.0, jitter_percent=0.0, **kwargs)
+
+    def test_weekend_does_not_slow_delays_by_default(self):
+        from datetime import datetime, timezone
+        from kinetix.core.temporal import TemporalEngine
+
+        te = TemporalEngine(profile=self._profile())
+        saturday_evening = datetime(2026, 9, 19, 22, 0, tzinfo=timezone.utc)
+        wednesday_evening = datetime(2026, 9, 16, 22, 0, tzinfo=timezone.utc)
+
+        assert te.calculate_delay(saturday_evening) == pytest.approx(
+            te.calculate_delay(wednesday_evening)
+        )
+
+    def test_weekend_slows_delays_when_calendar_shaping_enabled(self):
+        from datetime import datetime, timezone
+        from kinetix.core.temporal import TemporalEngine
+
+        profile = self._profile(weekend_shaping=True)
+        assert profile.weekend_shaping is True, "TimingProfile has no weekend_shaping switch"
+
+        te = TemporalEngine(profile=profile)
+        saturday_noon = datetime(2026, 9, 19, 12, 0, tzinfo=timezone.utc)
+        wednesday_noon = datetime(2026, 9, 16, 12, 0, tzinfo=timezone.utc)
+
+        # weekend_multiplier=0.15 -> weekend delays are 1/0.15 longer
+        assert te.calculate_delay(saturday_noon) == pytest.approx(
+            te.calculate_delay(wednesday_noon) / 0.15
+        )
+
+    def test_after_hours_shaping_still_applies_by_default(self):
+        """Guard: gating the weekend divisor must not disable the diurnal curve."""
+        from datetime import datetime, timezone
+        from kinetix.core.temporal import TemporalEngine
+
+        te = TemporalEngine(profile=self._profile())
+        wednesday_noon = datetime(2026, 9, 16, 12, 0, tzinfo=timezone.utc)
+        wednesday_night = datetime(2026, 9, 16, 22, 0, tzinfo=timezone.utc)
+
+        assert te.calculate_delay(wednesday_night) == pytest.approx(
+            te.calculate_delay(wednesday_noon) / 0.1
+        )
+
+
+class TestSimClockRotation:
+    """A --sim-clock run is asked for a window of N simulated days; the default
+    10MB x 5 rotation silently deletes the oldest part of that window, and
+    truncates each table by a different amount (high-volume feeds lose days
+    while low-volume feeds keep everything), skewing cross-table correlation."""
+
+    def test_sim_clock_mode_disables_rotation(self):
+        from main import _rotation_limits
+
+        max_bytes, _ = _rotation_limits(sim_clock=True)
+        assert max_bytes == 0, "sim-clock output must not rotate away the requested window"
+
+    def test_real_time_mode_keeps_bounded_rotation(self):
+        from main import _rotation_limits
+
+        max_bytes, backup_count = _rotation_limits(sim_clock=False)
+        assert max_bytes > 0 and backup_count > 0
+
+    def test_file_output_retains_everything_when_rotation_disabled(self, tmp_path):
+        from kinetix.outputs.file import FileOutput
+        from kinetix.schemas.network import DNSEvent
+
+        out = FileOutput(output_dir=str(tmp_path), max_bytes=0)
+        for i in range(2000):
+            out.write(DNSEvent(Name=f"host{i}.example.com", hostname="WS-01"))
+
+        assert list(tmp_path.glob("*.json.1")) == [], "rotation happened despite max_bytes=0"
+        written = (tmp_path / "DnsEvents.json").read_text(encoding="utf-8").strip().splitlines()
+        assert len(written) == 2000
+
+
+class TestSimDaysValidation:
+    def test_non_positive_sim_days_exits_with_a_message(self):
+        from click.testing import CliRunner
+        from main import main
+
+        result = CliRunner().invoke(main, ["--sim-clock", "--sim-days", "0"])
+
+        assert result.exit_code == 1
+        assert not isinstance(result.exception, ValueError), (
+            f"raw traceback escaped instead of a clean exit: {result.exception!r}"
+        )
+        assert "--sim-days" in result.output

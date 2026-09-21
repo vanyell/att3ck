@@ -60,7 +60,7 @@ class TemporalEngine:
             base = base / self.profile.after_hours_multiplier
 
         # 2b. Day-of-Week Multiplier (Sat=5, Sun=6)
-        if current_time.weekday() >= 5:
+        if self.profile.weekend_shaping and current_time.weekday() >= 5:
             base = base / self.profile.weekend_multiplier
 
         # 3. Gaussian Jitter

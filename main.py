@@ -193,6 +193,23 @@ _BENIGN_NOISE_TEMPLATES = [
 _NOISE_SCENARIO_FILES = ["scenarios/benign_noise.json", "scenarios/cross_platform_noise.json"]
 _EXTRA_NOISE_TEMPLATES_CACHE = None
 
+_DEFAULT_MAX_BYTES = 10 * 1024 * 1024
+_DEFAULT_BACKUP_COUNT = 5
+
+
+def _rotation_limits(sim_clock: bool) -> tuple:
+    """Rotation sizing for the file outputs.
+
+    Real-time runs are open-ended, so they keep the bounded ~60MB-per-feed
+    rotation. A --sim-clock run instead generates a finite window the caller
+    explicitly asked for; rotating mid-run would delete the oldest part of
+    that window, and would do so per-feed, leaving high-volume tables covering
+    fewer days than low-volume ones. maxBytes=0 disables rotation entirely.
+    """
+    if sim_clock:
+        return 0, 0
+    return _DEFAULT_MAX_BYTES, _DEFAULT_BACKUP_COUNT
+
 
 def _load_noise_scenario_templates(paths: list) -> list:
     """Flatten stage events from noise scenario JSON files into a weighted
@@ -277,7 +294,8 @@ def main(scenario, output_dir, temporal, stress, duration, baseline_ratio, annot
         duration = 5
 
     # 1. Initialize Global Assets
-    file_output = FileOutput(output_dir=output_dir)
+    max_bytes, backup_count = _rotation_limits(sim_clock)
+    file_output = FileOutput(output_dir=output_dir, max_bytes=max_bytes, backup_count=backup_count)
     output_providers = [file_output]
 
     if syslog_host:
@@ -295,13 +313,21 @@ def main(scenario, output_dir, temporal, stress, duration, baseline_ratio, annot
     temporal_engine = None
     if temporal:
         delay = 0.01 if stress else 0.2
-        temporal_engine = TemporalEngine(profile=TimingProfile(avg_delay_seconds=delay))
+        # Weekend shaping only applies to the simulated timeline — on the
+        # real-time path it would compound with the after-hours divisor and
+        # throttle a weekend run to near silence.
+        temporal_engine = TemporalEngine(
+            profile=TimingProfile(avg_delay_seconds=delay, weekend_shaping=bool(sim_clock))
+        )
 
     # 2b. Initialize Simulated Clock (multi-day baseline mode)
     clock = None
     if sim_clock:
         from datetime import datetime, timedelta, timezone
         from kinetix.core.simclock import SimulatedClock
+        if sim_days <= 0:
+            console.print(f"[bold red]Invalid --sim-days '{sim_days}'; must be greater than 0.[/bold red]")
+            sys.exit(1)
         if sim_start:
             try:
                 start_dt = datetime.fromisoformat(sim_start)

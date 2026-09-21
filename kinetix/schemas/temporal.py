@@ -9,6 +9,11 @@ class TimingProfile(BaseModel):
     working_hours_end: int = 17   # 17:00
     after_hours_multiplier: float = 0.1  # 10% activity at night
     weekend_multiplier: float = 0.15  # 15% activity on Sat/Sun
+    # Off by default: on the real-time path the weekend divisor compounds with
+    # after_hours_multiplier (66x) and would throttle an ordinary run to near
+    # silence on a Saturday evening. Simulated-clock mode turns it on, where
+    # spanning real calendar days is the whole point.
+    weekend_shaping: bool = False
     stealth_mode: bool = False
 
 class MarkovTransition(BaseModel):
