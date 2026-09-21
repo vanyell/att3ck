@@ -33,6 +33,7 @@ class ContextGenerator:
         UserPersona("service_backup", "Backup Service", "IT", "litware.com", "SRV-BACKUP-01", is_admin=True),
         UserPersona("ceo_office", "CEO", "Executive", "litware.com", "CEO-LAPTOP-01", is_sensitive=True),
         UserPersona("intern_1", "Intern", "Engineering", "litware.com", "DEV-WS-05"),
+        UserPersona("raj_ml", "ML Engineer", "AI Engineering", "litware.com", "MLOPS-WS-01", is_sensitive=True),
     ]
 
     INTERNAL_SUBNETS = ["10.0.0.0/24", "192.168.1.0/24", "172.16.5.0/24"]

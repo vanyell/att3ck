@@ -83,6 +83,10 @@ class D3fendMapping(BaseModel):
     id: str  # e.g., d3f:FileAnalysis
     description: str
 
+class AtlasMapping(BaseModel):
+    id: str  # e.g., AML.T0051.001 (MITRE ATLAS technique/sub-technique ID)
+    name: str
+
 class BaseLogEvent(BaseModel):
     """
     Internal representation of a log event before formatting.
@@ -117,6 +121,7 @@ class BaseLogEvent(BaseModel):
     # Framework Mapping
     mitre: Optional[MitreMapping] = None
     d3fend: Optional[D3fendMapping] = None
+    atlas: Optional[AtlasMapping] = None  # MITRE ATLAS (AI/ML-specific TTPs); complements mitre for AI-native techniques
     
     # Dynamic Data
     data: Dict[str, Any] = Field(default_factory=dict, alias="ExtendedProperties")

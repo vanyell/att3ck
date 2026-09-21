@@ -4,8 +4,8 @@ Kinetix is a high-performance, modular synthetic log generator designed for SOC 
 
 ## Key Features
 
-- **27 MITRE ATT&CK-Mapped Scenarios** — Ransomware, APT (LockBit, BEC, SolarWinds, LAPSUS$, Volt Typhoon), AI-powered attacks, OAuth spoofing, RMM/C2 abuse, AD certificate attacks, cloud lateral movement, Linux/macOS threats, and benign noise baselines
-- **AI-Enabled Attack Coverage** — AI-generated spear-phishing, LLM prompt injection, deepfake social engineering (CEO fraud/vishing), AI-assisted recon & credential theft
+- **31 MITRE ATT&CK-Mapped Scenarios** — Ransomware, APT (LockBit, BEC, SolarWinds, LAPSUS$, Volt Typhoon), AI-powered attacks, OAuth spoofing, RMM/C2 abuse, AD certificate attacks, cloud lateral movement, Linux/macOS threats, and benign noise baselines
+- **AI-Enabled Attack Coverage** — AI-generated spear-phishing, LLM prompt injection, deepfake social engineering (CEO fraud/vishing), AI-assisted recon & credential theft, Shadow AI/GenAI data exfiltration, agentic AI/tool-invocation abuse, AI supply-chain (model) compromise, LLM-assisted malware development — cross-tagged to MITRE ATLAS where ATT&CK has no AI-native equivalent
 - **Modern Cloud Attack Scenarios** — OAuth consent phishing, device code phishing, SSO session token theft (AiTM), cross-tenant synchronization abuse, RMM tool abuse for C2 (ClickFix + BeyondTrust)
 - **Active Directory Attack Scenarios** — ADCS certificate abuse (ESC1), Kerberos PKINIT certificate authentication, DCSync
 - **Sentinel Schema Parity** — 19 Pydantic models mapped 1:1 to Azure Monitor/Sentinel tables (DeviceProcessEvents, SigninLogs, CommonSecurityLog, OfficeActivity, EmailEvents, CloudAppEvents, IdentityLogonEvents, etc.)
@@ -152,9 +152,13 @@ This generates 95% benign noise interleaved with attacks, plus a `Kinetix_Annota
 | Scenario File | Description | Key TTPs |
 |---------------|-------------|----------|
 | `ai_phishing_campaign.json` | AI-gen spear-phishing → credential harvesting page → contextual deepfake follow-up → mailbox exfiltration | T1566.001/2, T1056.004, T1078.004, T1114.002, T1048.002 |
-| `ai_prompt_injection_attack.json` | Recon of AI tooling → indirect prompt injection → LLM-generated PowerShell payload (AMSI evasion) → crypto theft via model-generated commands | T1565.002, T1059.001, T1071.001, T1647 |
+| `ai_prompt_injection_attack.json` | Discovery of AI tooling in use → indirect prompt injection executes attacker payload → direct prompt injection generates AMSI-evading PowerShell → crypto-wallet theft via model-generated commands | T1518, T1059.006, T1587.001, T1059.001, T1071.001, T1565.002, T1528 (+ ATLAS AML.T0051.000/.001) |
 | `ai_deepfake_social_engineering.json` | Social media recon for voice cloning → deepfake vishing (cloned CFO voice) → fraudulent wire transfer → SIEM detection alert | T1593.001, T1566.004, T1565.001 |
 | `ai_assisted_recon.json` | AI-steered LinkedIn scraping + DNS sweep → adaptive credential stuffing (30x) → MFA fatigue with AI-optimized timing → token theft → service principal persistence → rclone exfiltration | T1593.001, T1590, T1110.001, T1621, T1528, T1136.003, T1567.002 |
+| `shadow_ai_data_exfiltration.json` | Employee browses to a consumer GenAI app → pastes confidential data into chat → uploads proprietary source code → CASB/DLP detects the policy violation | T1567 |
+| `agentic_ai_abuse.json` | Over-permissioned support-agent service principal ingests a crafted ticket (indirect prompt injection) → invokes KeyVault tool out of scope → grants itself additional credentials → leaks the secret via its own legitimate channel | T1078.004, T1098.001, T1567.002 (+ ATLAS AML.T0051.001, AML.T0053) |
+| `ai_supply_chain_compromise.json` | Backdoored model pulled from a public model hub → pickle deserialization spawns a payload on load → registry persistence → C2 beaconing → EDR detection | T1195.002, T1059.006, T1059.001, T1547.001, T1071.001 (+ ATLAS AML.T0010) |
+| `llm_assisted_malware_development.json` | Attacker jailbreaks an AI coding assistant under their own account → model generates obfuscated defense-evasion PowerShell → payload disables EDR → executes and beacons out | T1587.001, T1027, T1562.001, T1059.001, T1071.001 (+ ATLAS AML.T0043) |
 
 ### Linux Attack Scenarios
 
@@ -213,6 +217,7 @@ This generates 95% benign noise interleaved with attacks, plus a `Kinetix_Annota
 | `{{RANDOM_UA}}` | Per-call | `Mozilla/5.0 (Windows NT 10.0; Win64; x64) ...` |
 | `{{RANDOM_URL}}` | Per-call | `https://login.microsoftonline.com/...` |
 | `{{RANDOM_AI_MODEL}}` | Per-call | `GPT-4o`, `Claude-3.5-Sonnet`, `Gemini-2.0-Flash` |
+| `{{RANDOM_AI_APP}}` | Per-call | `ChatGPT`, `Claude.ai`, `Google Gemini` |
 | `{{RANDOM_LOCATION}}` | Per-call | `US`, `GB`, `DE`, `JP`, `SG` |
 | `{{RANDOM_CITY}}` | Per-call | `Seattle`, `London`, `Tokyo` |
 | `{{RANDOM_ORG}}` | Per-call | `Litware Inc` |
@@ -270,6 +275,10 @@ This determination is a risk-based internal call, not a legal opinion, and it do
         "d3fend": {
           "id": "d3f:FileAnalysis",
           "description": "Detect encryption patterns"
+        },
+        "atlas": {
+          "id": "AML.T0051.001",
+          "name": "LLM Prompt Injection: Indirect"
         },
         "is_malicious": true,
         "killchain_phase": "execution",
@@ -370,7 +379,7 @@ att3ck/
 │   │   └── file.py              # FileOutput — JSON + CEF + Syslog + EVT with 10MB rotation
 │   └── intelligence/
 │       └── context.py           # ContextGenerator — identity personas and network helpers
-├── scenarios/                   # 27 scenario JSON definitions
+├── scenarios/                   # 31 scenario JSON definitions
 │   ├── oauth_consent_phishing.json  # (new) OAuth consent grant attack
 │   ├── oauth_device_code_phishing.json # (new) Device code flow phishing
 │   ├── rmm_tool_abuse_c2.json       # (new) RMM/C2 abuse via ClickFix
@@ -959,7 +968,7 @@ To run a specific test class:
 
 1. Choose a `source` and `event_type` from the Event Type Reference table above
 2. Create a JSON file following the Scenario JSON Format
-3. Each event can optionally include `mitre`, `d3fend`, `is_malicious`, `killchain_phase`, `expected_detection`, and `detection_guidance`
+3. Each event can optionally include `mitre`, `d3fend`, `atlas` (MITRE ATLAS — use for AI-native techniques, e.g. LLM prompt injection, that ATT&CK Enterprise has no dedicated technique for; pair with the closest defensible ATT&CK `mitre` tag rather than force-fitting an unrelated one), `is_malicious`, `killchain_phase`, `expected_detection`, and `detection_guidance`
 4. Use template variables (`{{RANDOM_*}}`, `{{PERSONA_*}}`, `{{CNC_IP}}`) for dynamic values
 5. Load with `--scenario scenarios/your_scenario.json`
 

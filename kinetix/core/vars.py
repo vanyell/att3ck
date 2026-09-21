@@ -104,6 +104,11 @@ class VariableManager:
         self.ai_model_pool = ["GPT-4o", "GPT-4o-mini", "Claude-3.5-Sonnet", "Claude-3-Opus",
                               "Gemini-2.0-Ultra", "Gemini-2.0-Flash", "Llama-3.1-405B",
                               "Llama-3.1-70B", "Mistral-Large-2", "DeepSeek-R1", "Cohere-Command-R+"]
+        # Consumer/SaaS GenAI applications -- distinct from ai_model_pool (which
+        # names the underlying model): this is the app a user browses to or
+        # installs, relevant for Shadow AI / CloudAppEvent-based scenarios.
+        self.ai_app_pool = ["ChatGPT", "Claude.ai", "Google Gemini", "Microsoft Copilot",
+                            "Perplexity", "Poe"]
         # Fallback pools for corpus-backed placeholders below. Corpus-sampled
         # values (real mined telemetry) can look "attack-like" even when
         # mined from goodware baselines -- e.g. a legitimate CommandLine can
@@ -225,6 +230,8 @@ class VariableManager:
                 value = value.replace("{{RANDOM_CITY}}", random.choice(self.city_pool))
             if "{{RANDOM_AI_MODEL}}" in value:
                 value = value.replace("{{RANDOM_AI_MODEL}}", random.choice(self.ai_model_pool))
+            if "{{RANDOM_AI_APP}}" in value:
+                value = value.replace("{{RANDOM_AI_APP}}", random.choice(self.ai_app_pool))
             if "{{RANDOM_GUID}}" in value:
                 value = value.replace("{{RANDOM_GUID}}", str(uuid.uuid4()))
             if "{{RANDOM_PID}}" in value:

@@ -26,14 +26,14 @@ Kinetix is a modular synthetic log generator designed for SIEM validation and ad
 - **`kinetix/schemas/`**: Pydantic models serving as the source-of-truth for log formats, maintaining 1:1 parity with Microsoft Sentinel tables (e.g., `DeviceProcessEvents`, `SigninLogs`, `EmailEvents`, `CloudAppEvents`, `IdentityLogonEvents`).
 - **`kinetix/outputs/`**: Providers for exporting logs to JSON files, CEF streams, syslog (RFC 3164), and Windows Event XML (EVT).
 - **`kinetix/intelligence/`**: Context-aware generators including `context.py` (user persona system with 10 role-based identities).
-- **`scenarios/`**: 22 JSON definitions of event sequences mapped to MITRE ATT&CK TTPs (6 new: OAuth phishing, device code phishing, RMM abuse, SSO token theft, ADCS ESC1, cross-tenant sync).
+- **`scenarios/`**: 31 JSON definitions of event sequences mapped to MITRE ATT&CK TTPs (4 AI-powered scenarios added on top of the existing AI category: Shadow AI/GenAI data exfiltration, agentic AI/tool-invocation abuse, AI supply-chain/model compromise, LLM-assisted malware development — cross-tagged with MITRE ATLAS via the `atlas` field where ATT&CK Enterprise has no AI-native technique).
 
 ### Log Flow
 Scenario JSON $\rightarrow$ Variable Substitution (incl. persona resolution) $\rightarrow$ Baseline Noise Interleave $\rightarrow$ Temporal Timing $\rightarrow$ Pydantic Schema Validation $\rightarrow$ Output Provider (JSON/CEF/Syslog/EVT) $\rightarrow$ Optional Annotation Sidecar
 
 ### Template Variables
 - **Persona templates** (session-stable): `{{PERSONA_USER}}`, `{{PERSONA_HOST}}`, `{{PERSONA_EMAIL}}`, `{{PERSONA_ROLE}}`, `{{PERSONA_DEPT}}`, `{{PERSONA_DOMAIN}}`, `{{PERSONA_IS_ADMIN}}`, `{{PERSONA_IS_SENSITIVE}}`
-- **Random generators** (per-call): `{{RANDOM_IP}}`, `{{RANDOM_USER}}`, `{{RANDOM_HOST}}`, `{{RANDOM_EMAIL}}`, `{{RANDOM_UA}}`, `{{RANDOM_URL}}`, `{{RANDOM_AI_MODEL}}`, `{{RANDOM_LOCATION}}`, `{{RANDOM_CITY}}`, `{{RANDOM_ORG}}`, `{{RANDOM_PID}}`, `{{RANDOM_PORT}}`, `{{RANDOM_GUID}}`, `{{RANDOM_INT}}`, `{{RANDOM_LINUX_HOST}}`, `{{RANDOM_MAC_HOST}}`, `{{RANDOM_COMMANDLINE}}`, `{{RANDOM_FILE_PATH}}`, `{{RANDOM_REGISTRY_VALUE}}`, `{{RANDOM_SCRIPT_BLOCK}}`
+- **Random generators** (per-call): `{{RANDOM_IP}}`, `{{RANDOM_USER}}`, `{{RANDOM_HOST}}`, `{{RANDOM_EMAIL}}`, `{{RANDOM_UA}}`, `{{RANDOM_URL}}`, `{{RANDOM_AI_MODEL}}`, `{{RANDOM_AI_APP}}`, `{{RANDOM_LOCATION}}`, `{{RANDOM_CITY}}`, `{{RANDOM_ORG}}`, `{{RANDOM_PID}}`, `{{RANDOM_PORT}}`, `{{RANDOM_GUID}}`, `{{RANDOM_INT}}`, `{{RANDOM_LINUX_HOST}}`, `{{RANDOM_MAC_HOST}}`, `{{RANDOM_COMMANDLINE}}`, `{{RANDOM_FILE_PATH}}`, `{{RANDOM_REGISTRY_VALUE}}`, `{{RANDOM_SCRIPT_BLOCK}}`
 - **Corpus-backed generators**: `RANDOM_UA`, `RANDOM_URL`, `RANDOM_COMMANDLINE`, `RANDOM_FILE_PATH`, `RANDOM_REGISTRY_VALUE`, and `RANDOM_SCRIPT_BLOCK` prefer real mined EVTX corpus values (see `kinetix/intelligence/corpus_profiles/`, `kinetix/core/vars.py:CORPUS_FIELD_CANDIDATES`) and fall back to a small static pool when the corpus has no data for that field.
 - **Session variables**: `{{SESSION_ID}}`, `{{CNC_IP}}`, `{{MALICIOUS_DOMAIN}}`, `{{MALICIOUS_URL}}`, `{{DEEPFAKE_PHONE}}`
 

@@ -1,0 +1,111 @@
+[
+  {
+    "name": "Baseline - Employee Browses to Consumer GenAI App",
+    "delay": 1.0,
+    "events": [
+      {
+        "source": "proxy",
+        "event_type": "proxy",
+        "url": "https://chatgpt.com/",
+        "http_method": "GET",
+        "http_status": 200,
+        "user_agent": "{{RANDOM_UA}}",
+        "content_type": "text/html",
+        "AccountName": "{{PERSONA_USER}}",
+        "DeviceName": "{{PERSONA_HOST}}",
+        "SourceIP": "{{RANDOM_IP}}",
+        "killchain_phase": "reconnaissance"
+      }
+    ]
+  },
+  {
+    "name": "Sensitive Data Pasted Into Unsanctioned GenAI Chat",
+    "delay": 0.8,
+    "events": [
+      {
+        "source": "cloud_app",
+        "event_type": "cloud_app",
+        "app_name": "{{RANDOM_AI_APP}}",
+        "activity_type": "DataAccess",
+        "action_type": "DataPasted",
+        "risk_level": "High",
+        "is_third_party_app": true,
+        "is_admin_operation": false,
+        "AccountName": "{{PERSONA_EMAIL}}",
+        "DeviceName": "{{PERSONA_HOST}}",
+        "IPAddress": "{{RANDOM_IP}}",
+        "data": {
+          "ContentClassification": "Confidential - Financial Forecast",
+          "CharacterCount": 4820
+        },
+        "mitre": {
+          "tactic": "Exfiltration",
+          "technique_id": "T1567",
+          "technique_name": "Exfiltration Over Web Service"
+        },
+        "is_malicious": true,
+        "killchain_phase": "exfiltration"
+      }
+    ]
+  },
+  {
+    "name": "Proprietary Source Code Uploaded as File Attachment",
+    "delay": 1.2,
+    "events": [
+      {
+        "source": "cloud_app",
+        "event_type": "cloud_app",
+        "app_name": "{{RANDOM_AI_APP}}",
+        "activity_type": "DataAccess",
+        "action_type": "FileUploaded",
+        "risk_level": "High",
+        "is_third_party_app": true,
+        "is_admin_operation": false,
+        "AccountName": "{{PERSONA_EMAIL}}",
+        "DeviceName": "{{PERSONA_HOST}}",
+        "IPAddress": "{{RANDOM_IP}}",
+        "data": {
+          "UploadedFileCount": 3,
+          "UploadedDataSizeMB": 12,
+          "ContentClassification": "Confidential - Source Code"
+        },
+        "mitre": {
+          "tactic": "Exfiltration",
+          "technique_id": "T1567",
+          "technique_name": "Exfiltration Over Web Service"
+        },
+        "is_malicious": true,
+        "killchain_phase": "exfiltration"
+      }
+    ]
+  },
+  {
+    "name": "CASB Detects Shadow AI Policy Violation",
+    "delay": 0.5,
+    "events": [
+      {
+        "source": "security_alert",
+        "event_type": "security_alert",
+        "alert_name": "Shadow AI Data Exfiltration Detected",
+        "alert_type": "DLP / Shadow AI Policy Violation",
+        "description": "User {{PERSONA_USER}} uploaded confidential source code and pasted financial data into an unsanctioned consumer GenAI application ({{RANDOM_AI_APP}}) not covered by the organization's data processing agreement.",
+        "severity": "High",
+        "confidence_level": "High",
+        "confidence_score": 0.88,
+        "tactics": "['Exfiltration']",
+        "techniques": "['T1567']",
+        "compromised_entity": "{{PERSONA_HOST}}",
+        "remediation_steps": "Block unsanctioned GenAI domains at the proxy/CASB layer, notify the user's manager, review DLP policies for AI-app coverage, rotate any credentials pasted into the session.",
+        "mitre": {
+          "tactic": "Exfiltration",
+          "technique_id": "T1567",
+          "technique_name": "Exfiltration Over Web Service"
+        },
+        "is_malicious": true,
+        "killchain_phase": "exfiltration",
+        "expected_detection": true,
+        "detection_guidance": "CloudAppEvents: filter ActionType in ('DataPasted','FileUploaded') where Application is a known consumer GenAI app and IsThirdPartyApp=true; correlate with DLP sensitive-info-type matches on the pasted/uploaded content."
+      }
+    ]
+  }
+]
