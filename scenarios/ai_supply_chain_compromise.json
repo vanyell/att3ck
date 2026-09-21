@@ -146,9 +146,7 @@
           "name": "AI Supply Chain Compromise"
         },
         "is_malicious": true,
-        "killchain_phase": "initial-access",
-        "expected_detection": true,
-        "detection_guidance": "Alert on process trees where a Python process loading a model file (torch.load / pickle.load without weights_only) spawns cmd.exe/powershell.exe as a child, followed by a new autorun registry value and outbound beaconing from the same host."
+        "killchain_phase": "initial-access"
       }
     ]
   }

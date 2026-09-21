@@ -102,9 +102,7 @@
           "technique_name": "Exfiltration Over Web Service"
         },
         "is_malicious": true,
-        "killchain_phase": "exfiltration",
-        "expected_detection": true,
-        "detection_guidance": "CloudAppEvents: filter ActionType in ('DataPasted','FileUploaded') where Application is a known consumer GenAI app and IsThirdPartyApp=true; correlate with DLP sensitive-info-type matches on the pasted/uploaded content."
+        "killchain_phase": "exfiltration"
       }
     ]
   }

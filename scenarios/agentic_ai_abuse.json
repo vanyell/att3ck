@@ -120,9 +120,7 @@
           "technique_name": "Exfiltration Over Web Service: Cloud Storage"
         },
         "is_malicious": true,
-        "killchain_phase": "exfiltration",
-        "expected_detection": true,
-        "detection_guidance": "Correlate a service-principal sign-in with no interactive user context (AADNonInteractiveSignIn) invoking a high-privilege KeyVault operation minutes after ingesting untrusted external content; alert on cloud secrets subsequently appearing in externally-visible content."
+        "killchain_phase": "exfiltration"
       }
     ]
   }

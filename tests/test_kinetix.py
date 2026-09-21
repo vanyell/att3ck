@@ -1051,27 +1051,6 @@ class TestPersonaVariables:
         assert username in email
 
 
-class TestExpectedDetectionField:
-    def test_expected_detection_default(self):
-        from kinetix.schemas.endpoint import ProcessEvent
-        e = ProcessEvent(
-            FileName="test.exe", ProcessId=123,
-            ProcessCommandLine="test.exe",
-        )
-        assert e.expected_detection is False
-        assert e.detection_guidance is None
-
-    def test_expected_detection_set(self):
-        from kinetix.schemas.base import BaseLogEvent
-        e = BaseLogEvent(
-            source="test", event_type="test",
-            expected_detection=True,
-            detection_guidance="Alert should fire on this event",
-        )
-        assert e.expected_detection
-        assert e.detection_guidance == "Alert should fire on this event"
-
-
 class TestNewScenarioLoading:
     def _load_scenario(self, path):
         import importlib.util
@@ -1238,6 +1217,33 @@ class TestSimClockRotation:
         assert list(tmp_path.glob("*.json.1")) == [], "rotation happened despite max_bytes=0"
         written = (tmp_path / "DnsEvents.json").read_text(encoding="utf-8").strip().splitlines()
         assert len(written) == 2000
+
+
+class TestNoiseTemplateLoading:
+    """The widened noise pool was resolved relative to the process working
+    directory, so running main.py by absolute path from anywhere other than
+    the repo root silently collapsed the pool from ~200 templates back to the
+    15 inline ones. The fallback emits the same table names, so the loss is
+    invisible in the output."""
+
+    def test_noise_pool_loads_regardless_of_working_directory(self, tmp_path, monkeypatch):
+        import main
+
+        monkeypatch.chdir(tmp_path)
+        templates = main._load_noise_scenario_templates(main._NOISE_SCENARIO_FILES)
+
+        assert len(templates) > len(main._BENIGN_NOISE_TEMPLATES), (
+            "noise scenario files did not resolve from outside the repo root"
+        )
+
+    def test_missing_noise_file_is_logged(self, caplog):
+        import logging
+        import main
+
+        with caplog.at_level(logging.WARNING):
+            main._load_noise_scenario_templates(["scenarios/does_not_exist.json"])
+
+        assert "does_not_exist.json" in caplog.text
 
 
 class TestSimDaysValidation:

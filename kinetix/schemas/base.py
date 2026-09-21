@@ -132,10 +132,6 @@ class BaseLogEvent(BaseModel):
     depth: int = 0  # To prevent infinite Markov loops
     killchain_phase: str = ""  # e.g. "reconnaissance", "initial-access", "execution", "persistence", "exfiltration", "impact"
 
-    # SOC Training annotations
-    expected_detection: bool = False
-    detection_guidance: Optional[str] = None
-
     def to_syslog(self) -> str:
         """RFC 3164 syslog representation. Override in subclasses for fidelity."""
         prio = syslog_priority("user", "info")

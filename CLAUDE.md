@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Run Simulation**: `python3 main.py`
 - **Run Specific Scenarios**: `python3 main.py --scenario scenarios/name.json`
 - **Run with Duration**: `python3 main.py --duration <seconds>`
-- **SOC Training Mode**: `python3 main.py --baseline-ratio 0.95 --annotate --scenario scenarios/name.json`
+- **SOC Training Mode**: `python3 main.py --baseline-ratio 0.95 --scenario scenarios/name.json`
 - **Stress Test**: `python3 main.py --stress --scenario scenarios/name.json`
 - **Simulated-Clock Baseline** (multi-day history in a short run): `python3 main.py --sim-clock --sim-days 14 --baseline-ratio 0.95 --scenario scenarios/name.json`
 - **Run Tests**: `pytest`
@@ -17,7 +17,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Kinetix is a modular synthetic log generator designed for SIEM validation and adversarial simulation.
 
 ### Core Components
-- **`main.py`**: Entry point; handles CLI arguments (--scenario, --duration, --stress, --baseline-ratio, --annotate) and initializes the simulation.
+- **`main.py`**: Entry point; handles CLI arguments (--scenario, --duration, --stress, --baseline-ratio) and initializes the simulation.
 - **`kinetix/core/`**: 
     - `engine.py`: Orchestrates scenario execution and worker management.
     - `scenario.py`: Parses and manages JSON-based attack/noise profiles.
@@ -30,7 +30,7 @@ Kinetix is a modular synthetic log generator designed for SIEM validation and ad
 - **`scenarios/`**: 31 JSON definitions of event sequences mapped to MITRE ATT&CK TTPs (4 AI-powered scenarios added on top of the existing AI category: Shadow AI/GenAI data exfiltration, agentic AI/tool-invocation abuse, AI supply-chain/model compromise, LLM-assisted malware development — cross-tagged with MITRE ATLAS via the `atlas` field where ATT&CK Enterprise has no AI-native technique).
 
 ### Log Flow
-Scenario JSON $\rightarrow$ Variable Substitution (incl. persona resolution) $\rightarrow$ Baseline Noise Interleave $\rightarrow$ Temporal Timing $\rightarrow$ Pydantic Schema Validation $\rightarrow$ Output Provider (JSON/CEF/Syslog/EVT) $\rightarrow$ Optional Annotation Sidecar
+Scenario JSON $\rightarrow$ Variable Substitution (incl. persona resolution) $\rightarrow$ Baseline Noise Interleave $\rightarrow$ Temporal Timing $\rightarrow$ Pydantic Schema Validation $\rightarrow$ Output Provider (JSON/CEF/Syslog/EVT)
 
 ### Template Variables
 - **Persona templates** (session-stable): `{{PERSONA_USER}}`, `{{PERSONA_HOST}}`, `{{PERSONA_EMAIL}}`, `{{PERSONA_ROLE}}`, `{{PERSONA_DEPT}}`, `{{PERSONA_DOMAIN}}`, `{{PERSONA_IS_ADMIN}}`, `{{PERSONA_IS_SENSITIVE}}`
@@ -42,7 +42,7 @@ Scenario JSON $\rightarrow$ Variable Substitution (incl. persona resolution) $\r
 - `kinetix/schemas/email.py` — EmailEvent schema
 - `kinetix/schemas/cloud_app.py` — CloudAppEvent schema
 - `kinetix/schemas/identity.py` — IdentityLogonEvent + AADNonInteractiveSignIn schemas
-- `kinetix/schemas/base.py` — BaseLogEvent with expected_detection/detection_guidance fields
+- `kinetix/schemas/base.py` — BaseLogEvent
 - `kinetix/intelligence/context.py` — ContextGenerator with 10 user personas
 - `kinetix/core/vars.py` — VariableManager with persona template resolution
-- `kinetix/outputs/file.py` — Table mapping + internal field filtering for annotations
+- `kinetix/outputs/file.py` — Table mapping + internal field filtering

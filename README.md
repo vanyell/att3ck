@@ -16,7 +16,6 @@ Kinetix is a high-performance, modular synthetic log generator designed for SOC 
 - **Killchain Labeling** — Every event tagged with killchain phase for SOC training & detection gap analysis
 - **Volume Multiplication** — `multiply` key on any event for high-throughput stress/flood testing
 - **Baseline Noise Injection** — `--baseline-ratio` flag to automatically interleave benign noise with attack events
-- **SOC Training Annotations** — `--annotate` flag to write sidecar file mapping events to expected detections, MITRE TTPs, and detection guidance
 - **Identity Persona System** — Consistent user personas (role, department, domain, typical host) for cross-event identity correlation
 - **Scalable Architecture** — Producer-consumer pattern with configurable worker threads, thread-safe lazy logger initialization
 
@@ -74,18 +73,18 @@ Run a single pass of an AI-powered attack:
 ./venv/bin/python main.py --scenario scenarios/cross_tenant_sync_attack.json --duration 60
 ```
 
-### SOC Training Mode (with noise + annotations)
+### SOC Training Mode (with noise)
 
 ```bash
 ./venv/bin/python main.py \
   --scenario scenarios/oauth_consent_phishing.json \
   --scenario scenarios/sso_session_token_theft.json \
   --baseline-ratio 0.95 \
-  --annotate \
   --duration 120
 ```
 
-This generates 95% benign noise interleaved with attacks, plus a `Kinetix_Annotations.json` sidecar file for trainee self-assessment.
+This generates 95% benign noise interleaved with attacks. Malicious events stay
+identifiable by their `killchain_phase` and `mitre` tags.
 
 ### Stress Test
 
@@ -109,7 +108,6 @@ This generates 95% benign noise interleaved with attacks, plus a `Kinetix_Annota
 | `--stress` | `False` | High-throughput mode (8 workers, 0.01s delay, bypasses stage delays) |
 | `--duration` | `0` (infinite) | Simulation duration in seconds |
 | `--baseline-ratio` | `0.0` | Ratio of benign noise to attack events (0.0 = off, 0.95 = 95% benign) |
-| `--annotate` | `False` | Write `.annotations.json` sidecar with detection expectations |
 | `--syslog-host` | `None` | If set, also stream every event's RFC 3164 syslog representation live over the network to this host (e.g. a Wazuh manager's `<remote>` syslog collector, or a local rsyslog instance) |
 | `--syslog-port` | `514` | Destination port for `--syslog-host` |
 | `--syslog-proto` | `udp` | Transport for `--syslog-host` — `udp` or `tcp` |
@@ -135,7 +133,7 @@ in minutes instead of days.
 ./venv/bin/python main.py \
   --sim-clock --sim-days 14 \
   --scenario scenarios/linux_ssh_bruteforce.json \
-  --baseline-ratio 0.95 --annotate
+  --baseline-ratio 0.95
 ```
 
 `--duration` still acts as a real-time safety cap if set; otherwise the run
@@ -331,8 +329,6 @@ This determination is a risk-based internal call, not a legal opinion, and it do
         },
         "is_malicious": true,
         "killchain_phase": "execution",
-        "expected_detection": true,
-        "detection_guidance": "Alert should fire on PowerShell downloading remote payload — monitor EventID 4688 with suspicious command lines",
         "data": { ... }
       }
     ]
@@ -341,8 +337,6 @@ This determination is a risk-based internal call, not a legal opinion, and it do
 ```
 
 All fields directly in the event body are passed to the Pydantic model. A `"data"` key is auto-flattened into top-level fields for flexibility. The `"multiply"` key replicates the event N times with unique template resolution per instance.
-
-The optional `expected_detection` and `detection_guidance` fields enable SOC training mode (use with `--annotate` flag).
 
 ## Event Type Reference
 
@@ -502,27 +496,6 @@ Linux, macOS, firewall/VPN, DNS, proxy/web, database (AzureDiagnostics), and Clo
 
 `CRON`, `authd`, `opendirectoryd`, `installer`, `syspolicyd`, `tccd` (macOS), `msexchange`, `CAS`, `MicrosoftGraph` (Email/CloudApp/Identity events), `AzureADAudit` (`AuditLogEvent`), `SentinelAudit` (`WorkspaceAuditEvent`) are **not** Wazuh built-in decoder names — there is no such decoder in Wazuh's default ruleset (verified against the full `decoders/` file listing in `wazuh/wazuh-ruleset`). Those events still reach Wazuh (the generic syslog collector ingests any line) but arrive as unparsed `full_log` text with no extracted fields until you write custom decoders for them (see the Wazuh section below). `GenericSyslogEvent` (`Syslog` table, scenario-authored `system_event` entries) uses whatever process tag the scenario supplies — treat it the same way unless that tag happens to match a real decoder.
 
-### SOC Training Annotations
-
-When run with `--annotate`, Kinetix writes a `Kinetix_Annotations.json` sidecar file after the simulation completes. This file contains one JSON object per annotated event, with fields for trainee self-assessment:
-
-```json
-{
-  "event_id": "...",
-  "event_type": "DeviceProcessEvents",
-  "is_malicious": true,
-  "expected_detection": true,
-  "detection_guidance": "Alert should fire on PowerShell encoding — monitor EventID 4688 with -EncodedCommand flag",
-  "killchain_phase": "execution",
-  "mitre": {
-    "tactic": "Execution",
-    "technique_id": "T1059.001",
-    "technique_name": "Command and Scripting Interpreter: PowerShell"
-  }
-}
-```
-
-SOC trainees can compare the annotations against their SIEM's alert output to identify detection gaps.
 
 ## SIEM Ingestion Guides
 
@@ -1044,7 +1017,7 @@ To run a specific test class:
 
 1. Choose a `source` and `event_type` from the Event Type Reference table above
 2. Create a JSON file following the Scenario JSON Format
-3. Each event can optionally include `mitre`, `d3fend`, `atlas` (MITRE ATLAS — use for AI-native techniques, e.g. LLM prompt injection, that ATT&CK Enterprise has no dedicated technique for; pair with the closest defensible ATT&CK `mitre` tag rather than force-fitting an unrelated one), `is_malicious`, `killchain_phase`, `expected_detection`, and `detection_guidance`
+3. Each event can optionally include `mitre`, `d3fend`, `atlas` (MITRE ATLAS — use for AI-native techniques, e.g. LLM prompt injection, that ATT&CK Enterprise has no dedicated technique for; pair with the closest defensible ATT&CK `mitre` tag rather than force-fitting an unrelated one), `is_malicious`, and `killchain_phase`
 4. Use template variables (`{{RANDOM_*}}`, `{{PERSONA_*}}`, `{{CNC_IP}}`) for dynamic values
 5. Load with `--scenario scenarios/your_scenario.json`
 

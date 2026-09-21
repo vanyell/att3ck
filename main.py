@@ -8,7 +8,6 @@ import signal
 import sys
 import threading
 import random
-import orjson
 from logging.handlers import RotatingFileHandler
 from rich.console import Console
 from rich.logging import RichHandler
@@ -192,6 +191,7 @@ _BENIGN_NOISE_TEMPLATES = [
 # from a much wider corpus instead of cycling the same ~15 templates.
 _NOISE_SCENARIO_FILES = ["scenarios/benign_noise.json", "scenarios/cross_platform_noise.json"]
 _EXTRA_NOISE_TEMPLATES_CACHE = None
+_REPO_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 _DEFAULT_MAX_BYTES = 10 * 1024 * 1024
 _DEFAULT_BACKUP_COUNT = 5
@@ -214,10 +214,18 @@ def _rotation_limits(sim_clock: bool) -> tuple:
 def _load_noise_scenario_templates(paths: list) -> list:
     """Flatten stage events from noise scenario JSON files into a weighted
     template pool. 'multiply' on an event is treated as a sampling weight
-    (expanded by duplication) rather than a literal event count."""
+    (expanded by duplication) rather than a literal event count.
+
+    Relative paths resolve against this file's directory, not the process
+    working directory: invoking main.py by absolute path from elsewhere
+    otherwise found nothing and silently fell back to the small inline pool.
+    """
     templates = []
     for path in paths:
+        if not os.path.isabs(path):
+            path = os.path.join(_REPO_ROOT, path)
         if not os.path.exists(path):
+            logging.getLogger(__name__).warning(f"Noise scenario not found, skipping: {path}")
             continue
         try:
             with open(path, "r") as f:
@@ -274,14 +282,13 @@ def _generate_baseline_noise(count: int, var_manager: VariableManager) -> list:
 @click.option("--stress", is_flag=True, help="Enable high-throughput mode (ignores scenario delays, increases worker count).")
 @click.option("--duration", type=int, default=0, help="Simulation duration in seconds. If 0 (default), the generator runs indefinitely until interrupted.")
 @click.option("--baseline-ratio", type=float, default=0.0, help="Ratio of benign noise events to inject alongside attack events (0.0 = off, 0.95 = 95% benign).")
-@click.option("--annotate", is_flag=True, help="Write a .annotations.json sidecar file mapping event_id to expected detections for SOC training.")
 @click.option("--syslog-host", default=None, help="If set, also stream events as real RFC 3164 syslog over the network to this host (e.g. a Wazuh manager's syslog collector, or a local rsyslog instance).")
 @click.option("--syslog-port", type=int, default=514, help="Destination port for --syslog-host.")
 @click.option("--syslog-proto", type=click.Choice(["udp", "tcp"]), default="udp", help="Transport for --syslog-host.")
 @click.option("--sim-clock", is_flag=True, help="Simulated-clock mode: stamp events across a virtual multi-day window (diurnal + weekend-aware pacing) instead of real wall-clock time, so a realistic historical baseline can be generated in a short run.")
 @click.option("--sim-days", type=float, default=7.0, help="Span of simulated time to generate when --sim-clock is set (default 7 days).")
 @click.option("--sim-start", default=None, help="ISO start timestamp for --sim-clock (e.g. 2026-09-01 or 2026-09-01T00:00:00). Defaults to (now - sim-days), so the window ends at the current time.")
-def main(scenario, output_dir, temporal, stress, duration, baseline_ratio, annotate, syslog_host, syslog_port, syslog_proto, sim_clock, sim_days, sim_start):
+def main(scenario, output_dir, temporal, stress, duration, baseline_ratio, syslog_host, syslog_port, syslog_proto, sim_clock, sim_days, sim_start):
     """
     Kinetix: High-Performance Synthetic Log Generator for SIEM Validation.
     Generates JSON (Azure Sentinel parity) and CEF logs simultaneously.
@@ -453,38 +460,6 @@ def main(scenario, output_dir, temporal, stress, duration, baseline_ratio, annot
         console.print("[bold green]Simulation complete![/bold green]")
         console.print(f"Logs saved to: [cyan]{output_dir}/[/cyan]")
 
-        if annotate:
-            annotation_path = os.path.join(output_dir, "Kinetix_Annotations.json")
-            annotations = []
-            unified_path = os.path.join(output_dir, "Kinetix_Unified.json")
-            if os.path.exists(unified_path):
-                with open(unified_path, "r") as af:
-                    for line in af:
-                        line = line.strip()
-                        if not line:
-                            continue
-                        try:
-                            evt = orjson.loads(line)
-                        except orjson.JSONDecodeError:
-                            continue
-                        if evt.get("expected_detection") or evt.get("is_malicious"):
-                            annotations.append({
-                                "event_id": evt.get("Id", ""),
-                                "event_type": evt.get("Type", ""),
-                                "scenario_id": evt.get("ScenarioId", evt.get("scenario_id", "")),
-                                "is_malicious": evt.get("is_malicious", False),
-                                "expected_detection": evt.get("expected_detection", False),
-                                "detection_guidance": evt.get("detection_guidance", None),
-                                "killchain_phase": evt.get("killchain_phase", ""),
-                                "mitre": evt.get("mitre", None),
-                            })
-            if annotations:
-                with open(annotation_path, "w") as af:
-                    af.write(orjson.dumps(annotations, option=orjson.OPT_APPEND_NEWLINE).decode("utf-8"))
-                console.print(f"[yellow]Wrote {len(annotations)} annotations to {annotation_path}[/yellow]")
-            else:
-                console.print("[yellow]No annotated events found (use 'expected_detection: true' in scenarios)[/yellow]")
-        
     except KeyboardInterrupt:
         shutdown_requested.set()
         engine._stop_event.set()

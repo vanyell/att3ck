@@ -43,7 +43,6 @@ No linter, formatter, or typecheck tool is configured in pyproject.toml. Run tes
 
 - `data` key auto-flattens into top-level fields — you can put fields inside `data` or at the top level
 - `multiply` replicates the event N times with unique template resolution per instance
-- `expected_detection` and `detection_guidance` fields require `--annotate` flag to produce sidecar output
 - `killchain_phase` uses lowercase-hyphenated values (e.g., `initial-access`, `credential-access`)
 
 ## Testing

@@ -10,7 +10,7 @@ from kinetix.schemas.base import BaseLogEvent, cef_severity
 logger = logging.getLogger(__name__)
 
 # L4: Internal generator metadata that should NOT appear in SIEM output
-_INTERNAL_FIELDS = {"is_malicious", "scenario_id", "depth", "killchain_phase", "expected_detection", "detection_guidance"}
+_INTERNAL_FIELDS = {"is_malicious", "scenario_id", "depth", "killchain_phase"}
 
 class FileOutput(OutputProvider):
     def __init__(self, output_dir: str, max_bytes: int = 10 * 1024 * 1024, backup_count: int = 5):
