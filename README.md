@@ -110,6 +110,9 @@ This generates 95% benign noise interleaved with attacks, plus a `Kinetix_Annota
 | `--duration` | `0` (infinite) | Simulation duration in seconds |
 | `--baseline-ratio` | `0.0` | Ratio of benign noise to attack events (0.0 = off, 0.95 = 95% benign) |
 | `--annotate` | `False` | Write `.annotations.json` sidecar with detection expectations |
+| `--syslog-host` | `None` | If set, also stream every event's RFC 3164 syslog representation live over the network to this host (e.g. a Wazuh manager's `<remote>` syslog collector, or a local rsyslog instance) |
+| `--syslog-port` | `514` | Destination port for `--syslog-host` |
+| `--syslog-proto` | `udp` | Transport for `--syslog-host` — `udp` or `tcp` |
 | `--help` | | Show full usage |
 
 ## Scenario Catalog
@@ -554,6 +557,31 @@ Two different verification methods were used here, and they matter for reading t
 
 - **Live-verified**: confirmed by feeding real Kinetix output through a live Wazuh manager's actual event-decoding API (`wazuh-manager` 5.0.0-beta5, via its engine's internal tester endpoint, `/_internal/tester/run/post` — the 5.0 successor to `wazuh-logtest`) and inspecting the real decoded output.
 - **Static-verified (4.x ruleset)**: checked against the classic `wazuh/wazuh-ruleset` GitHub repo (the 4.x-era decoder/rule XML files), *not* run against a live manager. **Wazuh 5.0's decoder/rule content turned out to be organized completely differently** — no `sshd`/`sudo`/`CRON`-named decoders exist in the 5.0 ruleset at all (confirmed by listing `/var/wazuh-manager/data/ruleset/*/decoders/` on the live box) — so treat any claim marked static-verified as informative for 4.x specifically, not assumed to carry over to 5.0.
+
+#### Option: live network syslog (no file tailing needed)
+
+Kinetix can stream every event's RFC 3164 representation directly to a Wazuh manager over UDP/TCP as it's generated, using `--syslog-host`/`--syslog-port`/`--syslog-proto` (`kinetix/outputs/syslog.py`). This runs *alongside* the JSON/CEF/EVT file outputs (it does not replace them) and sends **every** event type, not just the Linux ones — non-Linux schemas fall back to `BaseLogEvent.to_syslog()`, which Wazuh's generic syslog collector still accepts as unparsed `full_log` text if no decoder recognizes the tag:
+
+```bash
+./venv/bin/python main.py \
+  --scenario scenarios/linux_ssh_bruteforce.json \
+  --syslog-host <wazuh-manager-ip> \
+  --syslog-port 514 \
+  --syslog-proto udp
+```
+
+On the Wazuh manager side, enable a `<remote>` syslog collector in `/var/ossec/etc/ossec.conf` (this is a manager-wide listener, separate from the agent-based `<localfile>` config below):
+
+```xml
+<remote>
+  <connection>syslog</connection>
+  <port>514</port>
+  <protocol>udp</protocol>
+  <allowed-ips>0.0.0.0/0</allowed-ips>  <!-- restrict to the Kinetix host's IP in practice -->
+</remote>
+```
+
+Restart the manager (`systemctl restart wazuh-manager`) after editing. This path was not run against a live manager this session — the RFC 3164 framing and content are the same as the file-based `Kinetix_Syslog.log` output (verified below), but the `<remote>` listener itself wasn't exercised. Prefer UDP unless you need TCP's delivery guarantees; `SyslogOutput` does a best-effort single reconnect on a dropped TCP connection and otherwise drops the message rather than blocking the generator.
 
 #### Syslog events (Linux) — live-verified on Wazuh 5.0
 
