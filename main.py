@@ -448,10 +448,14 @@ def main(scenario, output_dir, temporal, stress, duration, baseline_ratio, syslo
     if sort_output is None:
         sort_output = bool(sim_clock)
 
-    start_time = time.time()
+    # Monotonic deadline for --duration. time.time() is wall clock and can
+    # jump (NTP step, DST); the cutoff must not depend on that.
+    deadline = None
     if duration > 0 and duration < 5:
         logger.warning(f"Requested duration {duration}s is below minimum for stability. Bumping to 5s.")
         duration = 5
+    if duration > 0:
+        deadline = time.monotonic() + duration
 
     # 1. Initialize Global Assets
     max_bytes, backup_count = _rotation_limits(sim_clock)
@@ -579,7 +583,18 @@ def main(scenario, output_dir, temporal, stress, duration, baseline_ratio, syslo
             )
 
             console.print(f"[green]Executing chain: {attack_chain.name}[/green]")
-            attack_chain.run(engine, stop_event=shutdown_requested)
+            timed_out = attack_chain.run(
+                engine, stop_event=shutdown_requested, deadline=deadline
+            )
+
+            # Checked before the simulated-clock drain below, which waits on
+            # the queue without a timeout — an expired run must not be parked
+            # there.
+            if timed_out:
+                console.print("[bold yellow]Duration reached mid-cycle. Draining queue and shutting down...[/bold yellow]")
+                shutdown_requested.set()
+                engine._stop_event.set()
+                break
 
             if clock:
                 # Drain this cycle's events before checking/advancing further so
@@ -594,8 +609,7 @@ def main(scenario, output_dir, temporal, stress, duration, baseline_ratio, syslo
                     engine._stop_event.set()
                     break
 
-            elapsed = time.time() - start_time
-            if duration > 0 and elapsed >= duration:
+            if deadline is not None and time.monotonic() >= deadline:
                 console.print("[bold yellow]Duration reached. Draining queue and shutting down...[/bold yellow]")
                 shutdown_requested.set()
                 engine._stop_event.set()

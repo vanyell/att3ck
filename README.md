@@ -106,7 +106,7 @@ identifiable by their `killchain_phase` and `mitre` tags.
 | `--output-dir` | `logs` | Output directory for JSON/CEF files |
 | `--temporal` / `--no-temporal` | `True` | Enable Markov-chain timing with Gaussian jitter |
 | `--stress` | `False` | High-throughput mode (8 workers, 0.01s delay, bypasses stage delays) |
-| `--duration` | `0` (infinite) | Simulation duration in seconds |
+| `--duration` | `0` (infinite) | Simulation duration in seconds. Enforced as a hard deadline *during* a cycle, not just between cycles — values below 5s are bumped to 5s for stability |
 | `--baseline-ratio` | `0.0` | Ratio of benign noise to attack events (0.0 = off, 0.95 = 95% benign) |
 | `--syslog-host` | `None` | If set, also stream every event's RFC 3164 syslog representation live over the network to this host (e.g. a Wazuh manager's `<remote>` syslog collector, or a local rsyslog instance) |
 | `--syslog-port` | `514` | Destination port for `--syslog-host` |

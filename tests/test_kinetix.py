@@ -1697,3 +1697,151 @@ class TestAuditdFeed:
         for line in lines:
             assert line.startswith(("type=", "node=")), \
                 f"Wazuh auditd decoder would discard: {line[:80]!r}"
+
+
+class TestDurationDeadline:
+    """`--duration` was only checked after AttackChain.run() returned, so a
+    single cycle could overrun it without limit. A 180s run was observed
+    still generating 19 hours later: --baseline-ratio 0.95 across 6 scenarios
+    builds a cycle of tens of thousands of events, engine.emit() blocks up to
+    1.0s per event once the 10,000-slot queue fills, and nothing inside the
+    chain looked at the clock or the stop event. The deadline has to be
+    enforced *during* a cycle, at every point the chain can block.
+    """
+
+    class FakeEngine:
+        """Records emits. Optionally sets a stop event on the Nth emit, which
+        is how a real Ctrl+C arrives mid-stage."""
+
+        def __init__(self, stop_event=None, stop_after=None):
+            self.emitted = []
+            self.stop_event = stop_event
+            self.stop_after = stop_after
+
+        def emit(self, event):
+            self.emitted.append(event)
+            if self.stop_after is not None and len(self.emitted) >= self.stop_after:
+                self.stop_event.set()
+
+    def _chain(self, stage_count=3, events_per_stage=4, delay=1.0):
+        from kinetix.core.scenario import AttackChain
+
+        class Ev:
+            def __init__(self, tag):
+                self.tag = tag
+                self.scenario_id = None
+
+        stages = [
+            {
+                "name": f"stage-{i}",
+                "delay": delay,
+                "events": [Ev(f"s{i}e{j}") for j in range(events_per_stage)],
+            }
+            for i in range(stage_count)
+        ]
+        return AttackChain(scenario_id="test", name="deadline", stages=stages)
+
+    def test_no_stage_runs_when_deadline_already_passed(self):
+        import time
+
+        chain = self._chain()
+        engine = self.FakeEngine()
+
+        chain.run(engine, deadline=time.monotonic() - 1)
+
+        assert engine.emitted == []
+
+    def test_event_loop_stops_mid_stage_at_deadline(self, monkeypatch):
+        import kinetix.core.scenario as scenario_mod
+
+        # A synthetic clock that advances one second per reading makes the
+        # cutoff deterministic: with a deadline 3 ticks out, the per-event
+        # check must stop the stage partway instead of emitting all 50.
+        ticks = iter(range(0, 1000))
+        monkeypatch.setattr(scenario_mod.time, "monotonic", lambda: float(next(ticks)))
+
+        chain = self._chain(stage_count=1, events_per_stage=50, delay=0)
+        engine = self.FakeEngine()
+
+        chain.run(engine, deadline=3.0)
+
+        assert 0 < len(engine.emitted) < 50, f"emitted {len(engine.emitted)} of 50"
+
+    def test_inter_stage_sleep_aborts_at_deadline(self):
+        import time
+
+        # Two 30s inter-stage delays: honouring them would take a minute.
+        chain = self._chain(stage_count=3, events_per_stage=1, delay=30.0)
+        engine = self.FakeEngine()
+
+        started = time.monotonic()
+        chain.run(engine, deadline=started + 0.3)
+        wall = time.monotonic() - started
+
+        assert wall < 5.0, f"chain slept {wall:.1f}s past its deadline"
+
+    def test_event_loop_honours_stop_event_mid_stage(self):
+        import threading
+
+        stop = threading.Event()
+        chain = self._chain(stage_count=1, events_per_stage=100, delay=0)
+        engine = self.FakeEngine(stop_event=stop, stop_after=5)
+
+        chain.run(engine, stop_event=stop)
+
+        assert len(engine.emitted) == 5, f"kept emitting after stop: {len(engine.emitted)}"
+
+    def test_chain_without_deadline_runs_every_stage(self):
+        chain = self._chain(stage_count=3, events_per_stage=4, delay=0)
+        engine = self.FakeEngine()
+
+        chain.run(engine)
+
+        assert len(engine.emitted) == 12
+
+    def test_run_reports_whether_the_deadline_cut_it_short(self):
+        import time
+
+        chain = self._chain(stage_count=3, events_per_stage=2, delay=0)
+        engine = self.FakeEngine()
+
+        assert chain.run(engine, deadline=time.monotonic() - 1) is True
+        assert chain.run(engine) is False
+
+    def test_timed_run_exits_within_its_duration(self, tmp_path):
+        """End-to-end guard on the wiring, not just AttackChain.
+
+        This is the exact invocation that was observed still generating 19
+        hours after a --duration 180 request. The bound is measured, not
+        guessed: with the deadline enforced this exits in 5.3-5.4s over three
+        runs; with the pre-fix post-cycle-only check it takes 31.5-31.6s,
+        because one full cycle has to finish emitting and draining before the
+        duration is ever consulted. 15s sits between the two with margin on
+        both sides. A looser bound passes against the bug and guards nothing.
+        """
+        import subprocess
+        import sys
+        import time
+
+        scenarios = [
+            "scenarios/apt_lockbit_style.json",
+            "scenarios/apt_volt_typhoon_style.json",
+            "scenarios/linux_ssh_bruteforce.json",
+            "scenarios/oauth_device_code_phishing.json",
+            "scenarios/shadow_ai_data_exfiltration.json",
+            "scenarios/adcs_certificate_abuse.json",
+        ]
+        cmd = [sys.executable, "main.py", "--baseline-ratio", "0.95",
+               "--duration", "5", "--output-dir", str(tmp_path)]
+        for s in scenarios:
+            cmd += ["--scenario", s]
+
+        started = time.monotonic()
+        try:
+            proc = subprocess.run(cmd, capture_output=True, text=True, timeout=45)
+        except subprocess.TimeoutExpired:
+            pytest.fail("--duration 5 run did not exit within 45s")
+        wall = time.monotonic() - started
+
+        assert proc.returncode == 0, proc.stderr[-2000:]
+        assert wall < 15, f"--duration 5 run took {wall:.0f}s"
