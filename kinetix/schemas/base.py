@@ -87,6 +87,7 @@ def format_evt_xml(event_id: int, provider: str, channel: str, computer: str,
     return (f"<Event xmlns='http://schemas.microsoft.com/win/2004/08/events/event'>"
             f"<System><Provider Name='{html.escape(provider)}'/>"
             f"<EventID>{event_id}</EventID><Version>0</Version><Level>{level}</Level>"
+            f"<TimeCreated SystemTime='{time_str}'/>"
             f"<Channel>{html.escape(channel)}</Channel>"
             f"<Computer>{html.escape(computer)}</Computer>"
             f"<Security/></System>"

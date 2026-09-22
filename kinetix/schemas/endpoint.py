@@ -96,10 +96,21 @@ class FileEvent(EndpointEvent):
                                0, f"File {self.action_type}: {self.folder_path}\\{self.file_name}")
 
     def to_evt(self) -> str:
-        return format_evt_xml(4663, "Microsoft-Windows-Security-Auditing", "Security",
+        # Not 4663: decoder/windows-event/0 carries the ruleset's only
+        # discard_events() block and 4663 is on it, so the engine drops the
+        # event after decoding it — ingest-verified as zero indexed documents
+        # for four separate 4663 shapes, including a fully Microsoft-faithful
+        # one. Sysmon's file events are not on that list and decode through
+        # decoder/windows-sysmon/0, which gates on the provider name.
+        deleted = "delete" in self.action_type.lower()
+        return format_evt_xml(23 if deleted else 11, "Microsoft-Windows-Sysmon",
+                              "Microsoft-Windows-Sysmon/Operational",
                               self.hostname or "WKS", self.timestamp, evt_level("info"),
-                              [("ObjectName", f"{self.folder_path}\\{self.file_name}"),
-                               ("AccessMask", self.action_type)])
+                              [("RuleName", self.action_type),
+                               ("UtcTime", self.timestamp.strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]),
+                               ("Image", self.initiating_process_file_name or ""),
+                               ("TargetFilename", f"{self.folder_path}\\{self.file_name}"),
+                               ("User", self.user_name or "")])
 
 class RegistryEvent(EndpointEvent):
     source: Literal["endpoint"] = Field("endpoint", alias="SourceSystem")

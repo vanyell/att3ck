@@ -663,12 +663,65 @@ class TestEVTOutput:
         assert "Channel>Security<" in evt
         assert "CommandLine" in evt
 
-    def test_evt_file_event(self):
+    def test_evt_carries_timecreated(self):
+        """decoder/windows-event/0 maps event.start from
+        System.TimeCreated.@SystemTime. Without the element every indexed
+        document falls back to ingest time, which silently voids --sim-clock
+        backdating for this feed (measured: 0 of 75,434 indexed windows docs
+        had event.start)."""
+        from datetime import datetime, timezone
+        from kinetix.schemas.endpoint import ProcessEvent
+        ts = datetime(2026, 9, 1, 13, 45, 30, tzinfo=timezone.utc)
+        ev = ProcessEvent(TimeGenerated=ts, FileName="cmd.exe", ProcessId=1,
+                          ProcessCommandLine="cmd /c whoami")
+        evt = ev.to_evt()
+        assert "<TimeCreated SystemTime='2026-09-01T13:45:30.000Z'/>" in evt
+
+    def test_evt_file_event_uses_sysmon_file_create(self):
+        """4663 is on decoder/windows-event/0's discard list, so file activity
+        shipped as 4663 is dropped by the engine no matter how well-formed it
+        is (ingest-verified: 4 variants, including a fully Microsoft-faithful
+        one, all produced 0 documents). Sysmon file events are not on that
+        list and decode via decoder/windows-sysmon/0."""
         from kinetix.schemas.endpoint import FileEvent
         ev = FileEvent(ActionType="FileCreated", FileName="malware.exe", FolderPath="C:\\temp")
         evt = ev.to_evt()
-        assert "EventID>4663<" in evt
-        assert "ObjectName" in evt
+        assert "EventID>11<" in evt
+        assert "Provider Name='Microsoft-Windows-Sysmon'" in evt
+        assert "Channel>Microsoft-Windows-Sysmon/Operational<" in evt
+        assert "TargetFilename" in evt
+        assert "C:\\temp\\malware.exe" in evt
+
+    def test_evt_file_delete_uses_sysmon_file_delete(self):
+        from kinetix.schemas.endpoint import FileEvent
+        ev = FileEvent(ActionType="FileDeleted", FileName="evidence.log", FolderPath="C:\\logs")
+        evt = ev.to_evt()
+        assert "EventID>23<" in evt
+        assert "Channel>Microsoft-Windows-Sysmon/Operational<" in evt
+
+    def test_no_evt_event_id_is_on_the_wazuh_discard_list(self):
+        """decoder/windows-event/0 carries the ruleset's only discard_events()
+        block, keyed on these codes. An endpoint schema emitting one of them
+        produces zero indexed documents on Wazuh 5.0, with no error anywhere.
+        This guard covers every Windows-shaped schema Kinetix ships."""
+        import re
+        from kinetix.schemas.endpoint import ProcessEvent, FileEvent, RegistryEvent, DeviceGenericEvent
+        from kinetix.schemas.network import FirewallEvent
+        discarded = {"4656", "4658", "4660", "4663", "4670", "4690", "4703",
+                     "4907", "5145", "5152", "5156", "5157", "5447"}
+        events = [
+            ProcessEvent(FileName="a.exe", ProcessId=1, ProcessCommandLine="a"),
+            FileEvent(ActionType="FileCreated", FileName="a.txt", FolderPath="C:\\t"),
+            FileEvent(ActionType="FileDeleted", FileName="a.txt", FolderPath="C:\\t"),
+            RegistryEvent(ActionType="RegistryValueSet", RegistryKey="HKLM\\S",
+                          RegistryValueName="V", RegistryValueData="d"),
+            DeviceGenericEvent(ActionType="AntivirusDetection"),
+            FirewallEvent(DeviceAction="blocked", Protocol="TCP", SourcePort=1, DestinationPort=443),
+            FirewallEvent(DeviceAction="allowed", Protocol="TCP", SourcePort=1, DestinationPort=443),
+        ]
+        for ev in events:
+            code = re.search(r"<EventID>(\d+)</EventID>", ev.to_evt()).group(1)
+            assert code not in discarded, f"{type(ev).__name__} emits discarded code {code}"
 
     def test_evt_registry_event(self):
         from kinetix.schemas.endpoint import RegistryEvent
@@ -688,11 +741,26 @@ class TestEVTOutput:
         evt = ev.to_evt()
         assert "EventID>4625<" in evt
 
-    def test_evt_firewall_event(self):
+    def test_evt_firewall_event_uses_sysmon_network_connect(self):
+        """5156/5157 are on decoder/windows-event/0's discard list (both
+        ingest-verified as 0 documents), so the Windows Filtering Platform
+        codes never reach the index. Sysmon 3 does. The allow/block
+        distinction Sysmon 3 has no field for is carried in RuleName."""
         from kinetix.schemas.network import FirewallEvent
         ev = FirewallEvent(DeviceAction="blocked", Protocol="TCP", SourcePort=12345, DestinationPort=443)
         evt = ev.to_evt()
-        assert "EventID>5157<" in evt
+        assert "EventID>3<" in evt
+        assert "Provider Name='Microsoft-Windows-Sysmon'" in evt
+        assert "Channel>Microsoft-Windows-Sysmon/Operational<" in evt
+        assert "DestinationPort" in evt
+        assert "RuleName" in evt and "blocked" in evt
+
+    def test_evt_firewall_allowed_keeps_action_in_rulename(self):
+        from kinetix.schemas.network import FirewallEvent
+        ev = FirewallEvent(DeviceAction="allowed", Protocol="TCP", SourcePort=1, DestinationPort=80)
+        evt = ev.to_evt()
+        assert "EventID>3<" in evt
+        assert "allowed" in evt
 
     def test_evt_dns_event(self):
         from kinetix.schemas.network import DNSEvent

@@ -24,12 +24,26 @@ class FirewallEvent(BaseLogEvent):
                                0, f"ACTION={self.action} PROTO={self.protocol} SRC={self.source_ip}:{self.source_port} DST={self.dest_ip}:{self.dest_port}")
 
     def to_evt(self) -> str:
-        eid = 5157 if self.action == "blocked" else 5156
-        return format_evt_xml(eid, "Microsoft-Windows-Security-Auditing", "Security",
-                              self.hostname or "FW", self.timestamp, evt_level("warning" if self.action == "blocked" else "info"),
-                              [("Direction", self.direction), ("Protocol", self.protocol),
+        # Not 5156/5157: both Windows Filtering Platform codes sit on
+        # decoder/windows-event/0's discard list and were ingest-verified as
+        # zero indexed documents. Sysmon 3 (NetworkConnect) decodes instead.
+        # Sysmon 3 has no allow/block field — it only ever records connections
+        # that happened — so the action rides in RuleName, which is Sysmon's
+        # own tagging field. Note this shapes appliance firewall telemetry as
+        # endpoint telemetry; the JSON/CEF/syslog feeds keep the firewall
+        # framing for consumers that model it properly.
+        return format_evt_xml(3, "Microsoft-Windows-Sysmon",
+                              "Microsoft-Windows-Sysmon/Operational",
+                              self.hostname or "FW", self.timestamp,
+                              evt_level("warning" if self.action == "blocked" else "info"),
+                              [("RuleName", self.action),
+                               ("UtcTime", self.timestamp.strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]),
+                               ("Protocol", self.protocol.lower()),
+                               ("Initiated", "true" if self.direction == "Outbound" else "false"),
+                               ("SourceIp", self.source_ip or ""),
                                ("SourcePort", str(self.source_port)),
-                               ("DestPort", str(self.dest_port))])
+                               ("DestinationIp", self.dest_ip or ""),
+                               ("DestinationPort", str(self.dest_port))])
 
 class DNSEvent(BaseLogEvent):
     source: Literal["DNS"] = Field("DNS", alias="SourceSystem")

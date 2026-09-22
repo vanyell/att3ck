@@ -483,7 +483,8 @@ Per-table files like `DeviceProcessEvents.json`, `SigninLogs.json`, `EmailEvents
 | Schema | EventID | Provider | Channel |
 |--------|---------|----------|---------|
 | ProcessEvent | 4688 | Microsoft-Windows-Security-Auditing | Security |
-| FileEvent | 4663 | Microsoft-Windows-Security-Auditing | Security |
+| FileEvent (create/modify) | 11 | Microsoft-Windows-Sysmon | Microsoft-Windows-Sysmon/Operational |
+| FileEvent (delete) | 23 | Microsoft-Windows-Sysmon | Microsoft-Windows-Sysmon/Operational |
 | RegistryEvent | 4657 | Microsoft-Windows-Security-Auditing | Security |
 | AuthenticationEvent (success) | 4624 | Microsoft-Windows-Security-Auditing | Security |
 | AuthenticationEvent (failure) | 4625 | Microsoft-Windows-Security-Auditing | Security |
@@ -496,7 +497,11 @@ Per-table files like `DeviceProcessEvents.json`, `SigninLogs.json`, `EmailEvents
 
 `SecurityAlert`/`SecurityIncident` use a synthetic provider and event ID rather than a real Windows event ID, because Sentinel-native alerts/incidents have no genuine Windows EVTX equivalent to impersonate.
 
-Linux, macOS, firewall/VPN, DNS, proxy/web, database (AzureDiagnostics), and Cloud App Security events are excluded from EVT output — they use JSON/CEF/syslog only.
+Every event carries `<TimeCreated SystemTime='...'/>` in its `System` block. Wazuh's `decoder/windows-event/0` maps `event.start` from exactly that attribute; an earlier version of `format_evt_xml()` computed the timestamp and never emitted it, so all EVTX documents were stamped with ingest time and `--sim-clock` backdating was silently void for this feed (measured: 0 of 75,434 indexed documents carried `event.start`).
+
+**Why FileEvent is Sysmon-shaped and not 4663.** `decoder/windows-event/0` carries the 5.0 ruleset's only `discard_events()` block, which drops thirteen codes outright, after decoding and before any integration gating: 4656, 4658, 4660, **4663**, 4670, 4690, 4703, 4907, 5145, 5152, **5156**, **5157**, 5447. Ingest-verified 2026-09-22 — four separate 4663 shapes, including one with a complete `System` block and the full twelve-field Microsoft `EventData`, each produced zero indexed documents, while a minimal-shape 4657 control indexed normally. Content is irrelevant; only the code matters. Sysmon's file events are not on the list and decode through `decoder/windows-sysmon/0`, which gates on the provider name. A 2,093-line batch replayed after the change indexed 2,093/2,093, including all 378 Sysmon file events, with `file.path` and `event.start` populated.
+
+Linux, macOS, firewall/VPN, DNS, proxy/web, database (AzureDiagnostics), and Cloud App Security events are excluded from EVT output — they use JSON/CEF/syslog only (`FileOutput._NON_WINDOWS_SOURCES`). `FirewallEvent.to_evt()` exists and now emits Sysmon 3 (NetworkConnect) rather than the discarded 5156/5157 pair, with the allow/block distinction carried in `RuleName`, but that exclusion means it is not reachable from the file output as shipped.
 
 > **Verified against a live Wazuh manager (5.0.0-beta5).** An earlier draft of this README assumed Wazuh's Windows Event ingestion only happens through the agent's live `eventchannel` API subscription, and that raw EVTX text would need custom decoders to be useful. That assumption turned out to be wrong for how Wazuh's engine actually decodes this data — pulling the manager's real decoder asset (`decoder/windows-event/0`, `decoder/windows-security/0`, from `/var/wazuh-manager/data/ruleset/*/decoders/`) shows its `check` condition is literally `starts_with($event.original, '<Event xmlns=') AND contains($event.original, 'http://schemas.microsoft.com/win/2004/08/events/event')` — i.e. it parses the raw XML text directly (via a built-in `parse_xml()` function) regardless of how that text arrived. Feeding a `Kinetix_EVTX.log` line through the engine's real event-tester API (`/_internal/tester/run/post`, the 5.0 successor to `wazuh-logtest`) confirmed full decoding: `event.code`, `process.executable`, `process.command_line`, `process.parent.*`, `user.name`, etc. all populated correctly, with `wazuh.integration.decoders` showing `["decoder/core-wazuh-message/0", "decoder/windows-event/0", "decoder/windows-security/0"]`. **No custom decoder is needed** — point `<log_format>syslog</log_format>` at this file (see the Wazuh integration section below) and it works out of the box.
 >
