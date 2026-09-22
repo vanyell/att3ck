@@ -27,12 +27,12 @@ Kinetix is a modular synthetic log generator designed for SIEM validation and ad
     - `vars.py`: Variable engine for template substitution (e.g., `{{RANDOM_IP}}`, `{{PERSONA_USER}}`).
     - `worker.py`: Handles concurrent event generation.
 - **`kinetix/schemas/`**: Pydantic models serving as the source-of-truth for log formats, maintaining 1:1 parity with Microsoft Sentinel tables (e.g., `DeviceProcessEvents`, `SigninLogs`, `EmailEvents`, `CloudAppEvents`, `IdentityLogonEvents`).
-- **`kinetix/outputs/`**: Providers for exporting logs to JSON files, CEF streams, syslog (RFC 3164), and Windows Event XML (EVT).
+- **`kinetix/outputs/`**: Providers for exporting logs to JSON files, CEF streams, syslog (RFC 3164), Windows Event XML (EVT), and Linux auditd wire format (`Kinetix_Auditd.log` — the only Linux feed Wazuh 5.0 actually indexes; see README's Wazuh section).
 - **`kinetix/intelligence/`**: Context-aware generators including `context.py` (user persona system with 10 role-based identities).
 - **`scenarios/`**: 31 JSON definitions of event sequences mapped to MITRE ATT&CK TTPs (4 AI-powered scenarios added on top of the existing AI category: Shadow AI/GenAI data exfiltration, agentic AI/tool-invocation abuse, AI supply-chain/model compromise, LLM-assisted malware development — cross-tagged with MITRE ATLAS via the `atlas` field where ATT&CK Enterprise has no AI-native technique).
 
 ### Log Flow
-Scenario JSON $\rightarrow$ Variable Substitution (incl. persona resolution) $\rightarrow$ Baseline Noise Interleave $\rightarrow$ Temporal Timing $\rightarrow$ Pydantic Schema Validation $\rightarrow$ Output Provider (JSON/CEF/Syslog/EVT)
+Scenario JSON $\rightarrow$ Variable Substitution (incl. persona resolution) $\rightarrow$ Baseline Noise Interleave $\rightarrow$ Temporal Timing $\rightarrow$ Pydantic Schema Validation $\rightarrow$ Output Provider (JSON/CEF/Syslog/EVT/auditd)
 
 ### Template Variables
 - **Persona templates** (session-stable): `{{PERSONA_USER}}`, `{{PERSONA_HOST}}`, `{{PERSONA_EMAIL}}`, `{{PERSONA_ROLE}}`, `{{PERSONA_DEPT}}`, `{{PERSONA_DOMAIN}}`, `{{PERSONA_IS_ADMIN}}`, `{{PERSONA_IS_SENSITIVE}}`

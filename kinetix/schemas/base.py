@@ -3,6 +3,8 @@ import html
 from pydantic import BaseModel, Field
 from datetime import datetime, timezone
 import uuid
+import itertools
+import shlex
 
 # RFC 3164 syslog helpers
 _SYSLOG_FACILITY = {"kern": 0, "user": 1, "mail": 2, "daemon": 3, "auth": 4, "syslog": 5, "authpriv": 10, "cron": 9}
@@ -91,6 +93,34 @@ def format_evt_xml(event_id: int, provider: str, channel: str, computer: str,
             f"<EventData>{data_xml}</EventData></Event>")
 
 # H2: Workspace-level TenantId — same for all events in a session
+# --- auditd wire format -------------------------------------------------
+# Wazuh 5.0's auditd decoder (decoder/auditd/0) gates on:
+#   starts_with($event.original, "node=") OR starts_with($event.original, "type=")
+# A line failing that gate is silently discarded by the manager, so every
+# auditd record Kinetix emits must lead with `type=`.
+_AUDIT_SERIAL = itertools.count(1)
+
+
+def next_audit_serial() -> int:
+    """Monotonic audit event serial. next() on itertools.count is atomic in
+    CPython, which matters because LogWorkers emit concurrently."""
+    return next(_AUDIT_SERIAL)
+
+
+def format_auditd(record_type: str, dt: datetime, serial: int, fields: str) -> str:
+    """One auditd record: `type=X msg=audit(<epoch>.<ms>:<serial>): <fields>`.
+
+    The timestamp comes from the event, not wall clock, so --sim-clock
+    backdating carries through to the feed.
+    """
+    return f"type={record_type} msg=audit({dt.timestamp():.3f}:{serial}): {fields}"
+
+
+def audit_hex(value: str) -> str:
+    """Real auditd hex-encodes command strings containing whitespace."""
+    return value.encode("utf-8").hex()
+
+
 _WORKSPACE_TENANT_ID = str(uuid.uuid4())
 
 class MitreMapping(BaseModel):
@@ -162,6 +192,16 @@ class BaseLogEvent(BaseModel):
         return format_evt_xml(0, self.source, self.source, self.hostname or "-",
                               self.timestamp, evt_level(self.severity),
                               [("Type", self.event_type), ("Severity", self.severity)])
+
+    def to_auditd(self) -> List[str]:
+        """Linux auditd records for this event, one string per line.
+
+        Empty list means the event has no auditd equivalent (the default for
+        every non-Linux source), and the auditd feed skips it entirely. Linux
+        subclasses override. Returning a list rather than a str is what lets a
+        single event emit a SYSCALL/EXECVE pair under one serial, as auditd does.
+        """
+        return []
 
     class Config:
         populate_by_name = True

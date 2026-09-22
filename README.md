@@ -10,7 +10,7 @@ Kinetix is a high-performance, modular synthetic log generator designed for SOC 
 - **Active Directory Attack Scenarios** — ADCS certificate abuse (ESC1), Kerberos PKINIT certificate authentication, DCSync
 - **Sentinel Schema Parity** — 19 Pydantic models mapped 1:1 to Azure Monitor/Sentinel tables (DeviceProcessEvents, SigninLogs, CommonSecurityLog, OfficeActivity, EmailEvents, CloudAppEvents, IdentityLogonEvents, etc.)
 - **Cross-Platform Coverage** — Linux (auth, sudo, auditd, kernel, cron, process) and macOS (unified log, authd, app execution) schemas with variable substitution
-- **Quad Output** — Simultaneous per-table JSON files + unified CEF stream + RFC 3164 syslog + Windows Event XML (EVT) (all rotated at 10MB)
+- **Five Output Feeds** — Simultaneous per-table JSON files + unified CEF stream + RFC 3164 syslog + Windows Event XML (EVT) + Linux auditd wire format (all rotated at 10MB)
 - **Variable Template Engine** — 30+ template variables including user persona templates for identity-consistent event generation
 - **Temporal Realism** — Markov-chain event sequencing, Gaussian jitter, time-of-day traffic scaling
 - **Killchain Labeling** — Every event tagged with killchain phase for SOC training & detection gap analysis
@@ -161,7 +161,7 @@ the file as a stream does. `--sort-output` (on by default under `--sim-clock`)
 rewrites each JSON feed in `TimeGenerated` order once the run finishes, using a
 chunked external merge sort so peak memory stays bounded regardless of window
 size. Verified at 0 inversions across 449,260 lines. Pass `--no-sort-output`
-to skip it; the CEF, syslog and EVTX feeds keep write order either way.
+to skip it; the CEF, syslog, EVTX and auditd feeds keep write order either way.
 
 **Backdated windows and syslog.** RFC 3164's timestamp (`%b %d %H:%M:%S`) has
 no year, so a `--sim-start` in a prior year is silently re-dated to the ingest
@@ -439,7 +439,7 @@ att3ck/
 │   │   └── temporal.py          # TimingProfile, MarkovTransition
 │   ├── outputs/
 │   │   ├── base.py              # OutputProvider ABC
-│   │   └── file.py              # FileOutput — JSON + CEF + Syslog + EVT with 10MB rotation
+│   │   └── file.py              # FileOutput — JSON + CEF + Syslog + EVT + auditd with 10MB rotation
 │   └── intelligence/
 │       └── context.py           # ContextGenerator — identity personas and network helpers
 ├── scenarios/                   # 31 scenario JSON definitions
@@ -504,6 +504,42 @@ Linux, macOS, firewall/VPN, DNS, proxy/web, database (AzureDiagnostics), and Clo
 >
 > This does **not** confirm anything about Wazuh 4.x's classic `analysisd`/XML-ruleset architecture, which is a different codebase — the verification above is specific to the 5.0 engine.
 
+### Linux auditd wire format (verified end to end on a live Wazuh 5.0 engine)
+
+`Kinetix_Auditd.log` — one real auditd record per line:
+`type=<RECORD> msg=audit(<epoch>.<ms>:<serial>): <fields>`. Only Linux event
+sources emit here; every other schema returns no auditd representation and is
+skipped entirely (`BaseLogEvent.to_auditd()` returns an empty list by default,
+so the feed is self-gating — there is no source allow-list to keep in sync).
+
+| Kinetix Linux event | auditd record(s) | Notes |
+|---------------------|------------------|-------|
+| `LinuxAuthEvent` (success) | `USER_LOGIN` | `res=success`, `terminal=ssh` |
+| `LinuxAuthEvent` (failure) | `USER_AUTH` | `res=failed`; failure inferred from the message text |
+| `LinuxSudoEvent` | `USER_CMD` | `cmd=` is hex-encoded, as real auditd does for commands containing whitespace |
+| `LinuxAuditdEvent` | its own `audit_type` (default `SYSCALL`) | Passes the scenario's `audit_msg` through with `pid`/`auid`/`ses` appended |
+| `LinuxCronEvent` | `CRED_ACQ` | `op=PAM:setcred`, `terminal=cron` |
+| `LinuxProcessEvent` | `SYSCALL` **+** `EXECVE` | Two lines sharing one serial — that shared serial is how auditd groups a single execve; `EXECVE` splits the command line into `argc`/`a0`/`a1`/… via `shlex` |
+| `LinuxKernelEvent` | *(none)* | Kernel ring-buffer messages have no auditd equivalent |
+
+Serials come from a process-wide monotonic counter (`itertools.count`, whose
+`next()` is atomic in CPython — this matters because LogWorkers emit
+concurrently). Timestamps come from the event, not wall clock, so `--sim-clock`
+backdating carries through into the feed.
+
+> **Verified end to end against a live Wazuh 5.0.0-beta5 deployment (2026-09-22),
+> not just through the decoder tester.** 5,207 generated lines were tailed by a
+> `wazuh-agent` and **5,207 documents were indexed** with
+> `wazuh.integration.name: auditd` and decoder chain
+> `["decoder/core-wazuh-message/0", "decoder/auditd/0"]` — zero drops at the
+> agent, zero loss at the engine. Record-type counts in the indexer matched the
+> generated file exactly (`USER_AUTH` 2400, `SYSCALL` 975, `EXECVE` 895,
+> `USER_LOGIN` 461, `CRED_ACQ` 246, `USER_CMD` 230). Decoded ECS fields include
+> `event.code`, `event.sequence` (the auditd serial), `event.category`
+> (`authentication` / `process`), `event.start`, `process.executable`,
+> `process.pid`, `user.id` and `host.name`. `event.start` preserved the
+> simulated clock (records landed on the backdated days, not the run date).
+
 ### Syslog (RFC 3164)
 
 `Kinetix_Syslog.log` — RFC 3164 format: `<PRI>timestamp hostname proc[pid]: msg`. Verified against Wazuh's actual shipped ruleset (`wazuh/wazuh-ruleset`, decoders directory):
@@ -519,7 +555,7 @@ Linux, macOS, firewall/VPN, DNS, proxy/web, database (AzureDiagnostics), and Clo
 
 ## SIEM Ingestion Guides
 
-Kinetix generates up to four output formats simultaneously (JSON, CEF, Syslog, EVT XML), all rotated at 10MB. Each SIEM has a preferred ingestion path:
+Kinetix generates up to five output formats simultaneously (JSON, CEF, Syslog, EVT XML, auditd), all rotated at 10MB. Each SIEM has a preferred ingestion path:
 
 | Output Format | File(s) | Best For |
 |---------------|---------|----------|
@@ -527,6 +563,7 @@ Kinetix generates up to four output formats simultaneously (JSON, CEF, Syslog, E
 | **CEF** (unified stream) | `Kinetix_Unified.log` | Splunk, QRadar, ArcSight, Sentinel |
 | **Syslog** (RFC 3164) | `Kinetix_Syslog.log` | Wazuh (sshd/sudo/auditd/kernel out of the box), QRadar, ArcSight, Chronicle |
 | **EVT XML** (Windows Event XML) | `Kinetix_EVTX.log` | Splunk (Windows TA); Wazuh (verified against a live 5.0 engine — no custom decoder needed, see caveat above) |
+| **auditd** (Linux audit wire format) | `Kinetix_Auditd.log` | Wazuh 5.0 (verified end to end — 5,207/5,207 indexed via the `auditd` integration); any auditd/`audispd` consumer |
 
 ---
 
@@ -596,6 +633,23 @@ Two different verification methods were used here, and they matter for reading t
 
 - **Live-verified**: confirmed by feeding real Kinetix output through a live Wazuh manager's actual event-decoding API (`wazuh-manager` 5.0.0-beta5, via its engine's internal tester endpoint, `/_internal/tester/run/post` — the 5.0 successor to `wazuh-logtest`) and inspecting the real decoded output.
 - **Static-verified (4.x ruleset)**: checked against the classic `wazuh/wazuh-ruleset` GitHub repo (the 4.x-era decoder/rule XML files), *not* run against a live manager. **Wazuh 5.0's decoder/rule content turned out to be organized completely differently** — no `sshd`/`sudo`/`CRON`-named decoders exist in the 5.0 ruleset at all (confirmed by listing `/var/wazuh-manager/data/ruleset/*/decoders/` on the live box) — so treat any claim marked static-verified as informative for 4.x specifically, not assumed to carry over to 5.0.
+- **Ingest-verified (end to end)**: the strongest tier — lines were written to a file a real `wazuh-agent` was tailing, and the resulting documents were then counted in the indexer. Only two Kinetix feeds currently reach this tier: `Kinetix_EVTX.log` and `Kinetix_Auditd.log`.
+
+> **Wazuh 5.0 gates ingestion on enabled integrations — decoding alone is not enough.** The 5.0 engine only emits an event that an **enabled integration** claims; anything else is discarded silently, with no error anywhere. There is no 4.x-style archive-everything path. On the reference lab manager only **19 of 126** integrations were enabled, nearly all `mode: protected` internals; the enabled user-managed ones were `apache-http`, `cloud-detection` and `auditd`, alongside `windows` and `linux`. The practical consequence: a feed can decode perfectly in the engine's tester API and still produce **zero indexed documents**, because the tester bypasses the gate. Every live-verified claim below was made with the tester and confirms decoding only — treat the ingest-verified feeds as the ones proven to actually land.
+>
+> **Corollary for verification: never judge Kinetix ingest by raw document counts.** Aggregate on `wazuh.integration.name`, or query a distinctive field value. `wazuh-rootcheck` alone produced ~39k documents in a single afternoon on an idle lab box and will happily mask a total Kinetix ingest failure:
+>
+> ```bash
+> # on the manager (indexer port 9200 is loopback-only by default)
+> curl -sk --cert admin.pem --key admin-key.pem \
+>   -H 'Content-Type: application/json' \
+>   'https://localhost:9200/wazuh-events-v5-*/_search?ignore_unavailable=true' -d '{
+>     "size": 0,
+>     "aggs": {"integ": {"terms": {"field": "wazuh.integration.name", "size": 30}}}
+>   }'
+> ```
+>
+> Also worth knowing: `msg_sent` in `wazuh-agentd.state` reads `0` even for healthy traffic on this beta — it is vestigial, not a signal. Use `wazuh-logcollector.state` (`events`/`bytes`/`drops` per file) for the agent side and the aggregation above for the engine side.
 
 #### Option: live network syslog (no file tailing needed)
 
@@ -643,7 +697,50 @@ Restart the manager (`systemctl restart wazuh-manager`) after editing. This path
 
 **Not decoded specially on the live 5.0 box** — `authd`, `opendirectoryd`, `installer`, `syspolicyd`, `tccd` (macOS), `msexchange`, `CAS`, `MicrosoftGraph` (Email/CloudApp/Identity). No decoder asset for these process tags was found in `/var/wazuh-manager/data/ruleset/*/decoders/`. These events still arrive via the generic syslog collector, but as unparsed `full_log` text — write custom decoders (see `documentation.wazuh.com/current/user-manual/ruleset/decoders/custom.html`) keyed on the process tag if you need structured fields from them.
 
-#### JSON events (Windows endpoint, cloud, identity) — recommended path for everything else
+#### Linux auditd events — ingest-verified end to end on Wazuh 5.0 (recommended for Linux)
+
+```xml
+<!-- /var/ossec/etc/ossec.conf -->
+<localfile>
+  <log_format>syslog</log_format>
+  <location>/path/to/att3ck/logs/Kinetix_Auditd.log</location>
+  <label key="source">kinetix-auditd</label>
+</localfile>
+```
+
+`log_format` is `syslog`, not `audit`: `syslog` passes the line through verbatim
+as `$event.original`, which is exactly what `decoder/auditd/0` inspects. Its
+`check` expression gates on the line starting with `type=` or `node=` — every
+line Kinetix writes to this feed leads with `type=`, and
+`tests/test_kinetix.py::TestAuditdOutput::test_every_auditd_line_satisfies_wazuh_decoder_gate`
+enforces that as a regression guard.
+
+This is the **preferred path for Linux telemetry on Wazuh 5.0**, because the
+`auditd` integration is enabled by default and the syslog feed's Linux content
+is not claimed by any enabled integration (see the gating note above). Measured
+on 2026-09-22: 5,207 lines fed at ~400 lines/sec → 5,207 indexed documents,
+`drops=0`, record-type counts matching the source file exactly. See the Output
+Format section above for the full record mapping and decoded field list.
+
+Feed rate matters. `--sim-clock` writes roughly 6,400 lines/sec, which wedges
+the agent's HTTPS accumulator (`Agent buffer is full` warnings, then loss).
+Stage the run with `--output-dir` and replay into the tailed path at ~400
+lines/sec:
+
+```bash
+python3 main.py --sim-clock --sim-days 1 --baseline-ratio 0.8 --output-dir /tmp/staging \
+  --scenario scenarios/linux_ssh_bruteforce.json \
+  --scenario scenarios/linux_privilege_escalation.json \
+  --scenario scenarios/linux_malware.json
+
+# then replay at a pace the agent can absorb
+awk '{print; system("")}' /tmp/staging/Kinetix_Auditd.log \
+  | while IFS= read -r l; do printf '%s\n' "$l" >> logs/Kinetix_Auditd.log; sleep 0.0025; done
+```
+
+#### JSON events (Windows endpoint, cloud, identity) — works on 4.x; yields nothing on 5.0
+
+> **This path produces zero indexed documents on Wazuh 5.0.** `log_format json` parses the NDJSON correctly — the problem is downstream: the field names are Sentinel-shaped, no enabled 5.0 integration claims them, and the engine therefore discards every event (see the gating note above). Measured on the reference lab: 65,354 lines read by logcollector with `drops=0`, **0 documents indexed**. The guidance below remains valid for Wazuh 4.x, whose `analysisd` will surface the fields for `<field name="...">` rules. On 5.0, use `Kinetix_EVTX.log` for Windows telemetry and `Kinetix_Auditd.log` for Linux; cloud/identity tables have no enabled-integration path and need a custom integration authored on the manager.
 
 Rather than fighting the syslog/EVTX limitations below, point Wazuh's JSON collector at the per-table files or the unified feed:
 
@@ -656,7 +753,7 @@ Rather than fighting the syslog/EVTX limitations below, point Wazuh's JSON colle
 
 Wazuh's JSON decoder exposes every top-level key (`ProcessCommandLine`, `AccountName`, `AppDisplayName`, etc.) as a queryable field, which rules can match with `<field name="...">`. This is the most reliable path for `DeviceProcessEvents`, `SigninLogs`, `EmailEvents`, `CloudAppEvents`, `DeviceEvents`, `AuditLogs`, `EmailAttachmentInfo`, and similar tables — it doesn't depend on any decoder recognizing a fabricated syslog process tag.
 
-#### Windows Security events — live-verified, no custom decoder needed
+#### Windows Security events — ingest-verified end to end, no custom decoder needed
 
 ```xml
 <localfile>
@@ -665,7 +762,7 @@ Wazuh's JSON decoder exposes every top-level key (`ProcessCommandLine`, `Account
 </localfile>
 ```
 
-Point this straight at `Kinetix_EVTX.log` — no custom decoder required. This was empirically confirmed on the live Wazuh 5.0.0-beta5 engine: its `decoder/windows-event/0` and `decoder/windows-security/0` assets parse the raw `<Event xmlns=...>` XML directly (via a built-in `parse_xml()` function keyed on `event.original`), so the manager doesn't need the data pre-shaped by a live agent's `eventchannel` collection — the raw XML text is exactly what it expects. Feeding real `Kinetix_EVTX.log` lines through the engine's tester API confirmed correct decoding of `ProcessEvent` (4688), `RegistryEvent` (4657), and `AuthenticationEvent`/`IdentityLogonEvent` (4624/4625) — `event.code`, `process.executable`, `process.command_line`, `process.parent.*`, `user.name`, `registry.value`, `registry.data.strings`, etc. all populated correctly. See the Output Format section above for the specific field-naming fixes this testing surfaced (`NewProcessId`/`ParentProcessName`/`NewValue`/`TargetUserName`) and the one residual quirk that's on Wazuh's side, not Kinetix's (a later unconditional block in `decoder/windows-security/0` can overwrite `process.pid` with the parent's PID for 4688 events).
+Point this straight at `Kinetix_EVTX.log` — no custom decoder required. The `windows` integration is enabled by default, so this feed clears the 5.0 gating rule described above: measured on 2026-09-21, 300 lines fed to a tailing agent produced 288 indexed documents with `wazuh.integration.name: windows`, `event.code` values of 4688/4624/4657/9101 and `host.name` carrying the synthetic Windows hostnames. Note that nothing in `decoder/windows-event/0` depends on the agent's operating system — a Linux agent tailing the file reaches the same decoder a Windows agent does. The decoding itself was also confirmed on the live Wazuh 5.0.0-beta5 engine: its `decoder/windows-event/0` and `decoder/windows-security/0` assets parse the raw `<Event xmlns=...>` XML directly (via a built-in `parse_xml()` function keyed on `event.original`), so the manager doesn't need the data pre-shaped by a live agent's `eventchannel` collection — the raw XML text is exactly what it expects. Feeding real `Kinetix_EVTX.log` lines through the engine's tester API confirmed correct decoding of `ProcessEvent` (4688), `RegistryEvent` (4657), and `AuthenticationEvent`/`IdentityLogonEvent` (4624/4625) — `event.code`, `process.executable`, `process.command_line`, `process.parent.*`, `user.name`, `registry.value`, `registry.data.strings`, etc. all populated correctly. See the Output Format section above for the specific field-naming fixes this testing surfaced (`NewProcessId`/`ParentProcessName`/`NewValue`/`TargetUserName`) and the one residual quirk that's on Wazuh's side, not Kinetix's (a later unconditional block in `decoder/windows-security/0` can overwrite `process.pid` with the parent's PID for 4688 events).
 
 This was verified specifically against the 5.0 engine — Wazuh 4.x's classic `analysisd` is a different codebase and wasn't tested this session.
 

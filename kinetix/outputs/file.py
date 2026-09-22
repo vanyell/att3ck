@@ -33,6 +33,7 @@ class FileOutput(OutputProvider):
         self.unified_cef_logger = self._get_rotating_logger("Unified_CEF", "Kinetix_Unified.log")
         self.unified_syslog_logger = self._get_rotating_logger("Unified_Syslog", "Kinetix_Syslog.log")
         self.unified_evt_logger = self._get_rotating_logger("Unified_EVT", "Kinetix_EVTX.log")
+        self.unified_auditd_logger = self._get_rotating_logger("Unified_Auditd", "Kinetix_Auditd.log")
 
     def _get_rotating_logger(self, name: str, filename: str) -> logging.Logger:
         """Creates a logger with a RotatingFileHandler and no formatting."""
@@ -150,6 +151,14 @@ class FileOutput(OutputProvider):
             evt_entry = self._format_evt(event)
             self.unified_evt_logger.info(evt_entry)
 
+        # 6. Write to auditd feed (Linux auditd wire format for Wazuh).
+        # Self-gating: to_auditd() returns [] for every source with no auditd
+        # equivalent, so unlike the EVT feed there is no source list to keep
+        # in sync. Wazuh 5.0's auditd decoder only accepts lines starting
+        # `type=` or `node=`; anything else it silently discards.
+        for auditd_entry in event.to_auditd():
+            self.unified_auditd_logger.info(auditd_entry)
+
     # Sources backed by non-Windows appliances/services that never emit native
     # Windows Event Log entries in real life (network appliances, DNS servers,
     # web/proxy servers) — these should only appear in JSON/CEF/syslog output.
@@ -264,7 +273,7 @@ class FileOutput(OutputProvider):
         pass
 
     def close(self):
-        all_loggers = list(self.loggers.values()) + [self.unified_json_logger, self.unified_cef_logger, self.unified_syslog_logger, self.unified_evt_logger]
+        all_loggers = list(self.loggers.values()) + [self.unified_json_logger, self.unified_cef_logger, self.unified_syslog_logger, self.unified_evt_logger, self.unified_auditd_logger]
         for lgr in all_loggers:
             for handler in lgr.handlers:
                 handler.close()

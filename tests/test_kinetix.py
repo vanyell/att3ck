@@ -1511,3 +1511,189 @@ class TestBusinessHoursTimezone:
         import main
         profile = main._build_timing_profile(delay=0.2, sim_clock=True)
         assert profile.business_utc_offset_hours == 0.0
+
+
+class TestAuditdOutput:
+    """auditd wire-format output — Wazuh 5.0's auditd decoder gates on
+    `starts_with($event.original, "node=") OR starts_with($event.original, "type=")`,
+    so every emitted line must satisfy that or the manager silently discards it."""
+
+    WAZUH_GATE = ("type=", "node=")
+
+    def _all_linux_events(self):
+        from kinetix.schemas.linux import (
+            LinuxAuthEvent, LinuxSudoEvent, LinuxAuditdEvent,
+            LinuxCronEvent, LinuxProcessEvent, LinuxKernelEvent,
+        )
+        return [
+            LinuxAuthEvent(pid=1234, proc="sshd", log_message="Accepted password for alice from 10.0.0.1 port 22 ssh2"),
+            LinuxAuthEvent(pid=1235, proc="sshd", log_message="Failed password for root from 10.0.0.1 port 22 ssh2"),
+            LinuxSudoEvent(pid=1236, user="alice", command="cat /etc/shadow", hostname="web-01"),
+            LinuxAuditdEvent(pid=1237, hostname="db-01", audit_type="SYSCALL",
+                             audit_msg="arch=c000003e syscall=59 success=yes", auid=1000, ses=3),
+            LinuxCronEvent(pid=1238, user="root", command="run-parts /etc/cron.hourly"),
+            LinuxProcessEvent(pid=1239, ppid=1200, exe="/usr/bin/nmap", args="nmap -sS 10.0.0.0/24",
+                              user="alice", uid=1000, gid=1000),
+            LinuxKernelEvent(pid=0, log_message="CPU threshold exceeded"),
+        ]
+
+    def test_base_event_has_no_auditd_representation(self):
+        from kinetix.schemas.endpoint import ProcessEvent
+        ev = ProcessEvent(FileName="cmd.exe", FolderPath="C:\\Windows\\System32",
+                          ProcessId=1234, ProcessCommandLine="cmd.exe /c whoami")
+        assert ev.to_auditd() == []
+
+    def test_auditd_event_renders_syscall_record(self):
+        from kinetix.schemas.linux import LinuxAuditdEvent
+        ev = LinuxAuditdEvent(pid=1237, hostname="db-01", audit_type="SYSCALL",
+                              audit_msg="arch=c000003e syscall=59 success=yes", auid=1000, ses=3)
+        lines = ev.to_auditd()
+        assert len(lines) == 1
+        assert lines[0].startswith("type=SYSCALL msg=audit(")
+        assert "auid=1000" in lines[0]
+        assert "ses=3" in lines[0]
+
+    def test_auth_success_renders_user_login(self):
+        from kinetix.schemas.linux import LinuxAuthEvent
+        ev = LinuxAuthEvent(pid=1234, proc="sshd",
+                            log_message="Accepted password for alice from 10.0.0.1 port 22 ssh2")
+        line = ev.to_auditd()[0]
+        assert line.startswith("type=USER_LOGIN ")
+        assert "res=success" in line
+
+    def test_auth_failure_renders_user_auth_with_failed_result(self):
+        from kinetix.schemas.linux import LinuxAuthEvent
+        ev = LinuxAuthEvent(pid=1235, proc="sshd",
+                            log_message="Failed password for root from 10.0.0.1 port 22 ssh2")
+        line = ev.to_auditd()[0]
+        assert line.startswith("type=USER_AUTH ")
+        assert "res=failed" in line
+
+    def test_sudo_renders_user_cmd_with_hex_encoded_command(self):
+        from kinetix.schemas.linux import LinuxSudoEvent
+        ev = LinuxSudoEvent(pid=1236, user="alice", command="cat /etc/shadow", hostname="web-01")
+        line = ev.to_auditd()[0]
+        assert line.startswith("type=USER_CMD ")
+        # real auditd hex-encodes commands containing spaces
+        assert "cmd=" + "cat /etc/shadow".encode().hex() in line
+        assert "cat /etc/shadow" not in line
+
+    def test_process_renders_syscall_and_execve_sharing_one_serial(self):
+        from kinetix.schemas.linux import LinuxProcessEvent
+        import re
+        ev = LinuxProcessEvent(pid=1239, ppid=1200, exe="/usr/bin/nmap",
+                               args="nmap -sS 10.0.0.0/24", user="alice", uid=1000, gid=1000)
+        lines = ev.to_auditd()
+        assert len(lines) == 2
+        assert lines[0].startswith("type=SYSCALL ")
+        assert lines[1].startswith("type=EXECVE ")
+        serials = [re.search(r"msg=audit\([0-9.]+:(\d+)\)", l).group(1) for l in lines]
+        assert serials[0] == serials[1], "SYSCALL and EXECVE of one event must share a serial"
+
+    def test_execve_splits_args_into_numbered_fields(self):
+        from kinetix.schemas.linux import LinuxProcessEvent
+        ev = LinuxProcessEvent(pid=1239, ppid=1200, exe="/usr/bin/nmap",
+                               args="nmap -sS 10.0.0.0/24", user="alice", uid=1000, gid=1000)
+        execve = ev.to_auditd()[1]
+        assert "argc=3" in execve
+        assert 'a0="nmap"' in execve
+        assert 'a1="-sS"' in execve
+        assert 'a2="10.0.0.0/24"' in execve
+
+    def test_cron_renders_cred_acq(self):
+        from kinetix.schemas.linux import LinuxCronEvent
+        ev = LinuxCronEvent(pid=1238, user="root", command="run-parts /etc/cron.hourly")
+        line = ev.to_auditd()[0]
+        assert line.startswith("type=CRED_ACQ ")
+
+    def test_serials_are_unique_across_distinct_events(self):
+        from kinetix.schemas.linux import LinuxCronEvent
+        import re
+        a = LinuxCronEvent(pid=1, user="root", command="a").to_auditd()[0]
+        b = LinuxCronEvent(pid=2, user="root", command="b").to_auditd()[0]
+        sa = re.search(r"msg=audit\([0-9.]+:(\d+)\)", a).group(1)
+        sb = re.search(r"msg=audit\([0-9.]+:(\d+)\)", b).group(1)
+        assert sa != sb
+
+    def test_timestamp_derives_from_event_time_not_wall_clock(self):
+        """--sim-clock backdates events; auditd lines must carry that time, not now()."""
+        from kinetix.schemas.linux import LinuxCronEvent
+        from datetime import datetime, timezone
+        import re
+        backdated = datetime(2026, 9, 1, 12, 0, 0, tzinfo=timezone.utc)
+        ev = LinuxCronEvent(pid=1238, user="root", command="x", TimeGenerated=backdated)
+        line = ev.to_auditd()[0]
+        epoch = float(re.search(r"msg=audit\(([0-9.]+):", line).group(1))
+        assert abs(epoch - backdated.timestamp()) < 1.0
+
+    def test_every_auditd_line_satisfies_wazuh_decoder_gate(self):
+        """Regression: a line failing this gate is silently dropped by the manager."""
+        for ev in self._all_linux_events():
+            for line in ev.to_auditd():
+                assert line.startswith(self.WAZUH_GATE), \
+                    f"{type(ev).__name__} emitted a line the Wazuh auditd decoder would discard: {line[:80]!r}"
+
+    def test_auditd_lines_are_single_line(self):
+        for ev in self._all_linux_events():
+            for line in ev.to_auditd():
+                assert "\n" not in line and "\r" not in line
+
+
+class TestAuditdFeed:
+    """The unified Kinetix_Auditd.log feed written by FileOutput."""
+
+    def _write(self, tmp_path, events):
+        from kinetix.outputs.file import FileOutput
+        fo = FileOutput(str(tmp_path))
+        for ev in events:
+            fo.write(ev)
+        fo.flush()
+        fo.close()
+        return tmp_path / "Kinetix_Auditd.log"
+
+    def test_linux_event_lands_in_auditd_feed(self, tmp_path):
+        from kinetix.schemas.linux import LinuxSudoEvent
+        ev = LinuxSudoEvent(pid=4242, user="alice", command="cat /etc/shadow", hostname="web-01")
+        feed = self._write(tmp_path, [ev])
+        lines = [l for l in feed.read_text().splitlines() if l.strip()]
+        assert len(lines) == 1
+        assert lines[0].startswith("type=USER_CMD ")
+
+    def test_process_event_writes_both_records(self, tmp_path):
+        from kinetix.schemas.linux import LinuxProcessEvent
+        ev = LinuxProcessEvent(pid=99, ppid=1, exe="/usr/bin/nmap",
+                               args="nmap -sS 10.0.0.0/24", user="alice")
+        feed = self._write(tmp_path, [ev])
+        lines = [l for l in feed.read_text().splitlines() if l.strip()]
+        assert len(lines) == 2
+        assert lines[0].startswith("type=SYSCALL ")
+        assert lines[1].startswith("type=EXECVE ")
+
+    def test_windows_event_produces_no_auditd_lines(self, tmp_path):
+        from kinetix.schemas.endpoint import ProcessEvent
+        ev = ProcessEvent(FileName="cmd.exe", FolderPath="C:\\Windows\\System32",
+                          ProcessId=1234, ProcessCommandLine="cmd.exe /c whoami")
+        feed = self._write(tmp_path, [ev])
+        # the feed file is always created; it must simply have no records in it
+        assert feed.exists(), "auditd feed should be created even when empty"
+        assert feed.read_text().strip() == ""
+
+    def test_feed_lines_all_satisfy_wazuh_gate(self, tmp_path):
+        from kinetix.schemas.linux import (
+            LinuxAuthEvent, LinuxSudoEvent, LinuxAuditdEvent, LinuxCronEvent, LinuxProcessEvent,
+        )
+        from kinetix.schemas.endpoint import ProcessEvent
+        events = [
+            LinuxAuthEvent(pid=1, proc="sshd", log_message="Failed password for root from 10.0.0.1 port 22 ssh2"),
+            LinuxSudoEvent(pid=2, user="bob", command="id"),
+            LinuxAuditdEvent(pid=3, audit_type="SYSCALL", audit_msg="arch=c000003e syscall=2"),
+            LinuxCronEvent(pid=4, user="root", command="backup.sh"),
+            LinuxProcessEvent(pid=5, exe="/bin/sh", args="sh -c whoami", user="root"),
+            ProcessEvent(FileName="cmd.exe", ProcessId=6, ProcessCommandLine="cmd /c dir"),
+        ]
+        feed = self._write(tmp_path, events)
+        lines = [l for l in feed.read_text().splitlines() if l.strip()]
+        assert lines, "expected auditd lines from the Linux events"
+        for line in lines:
+            assert line.startswith(("type=", "node=")), \
+                f"Wazuh auditd decoder would discard: {line[:80]!r}"
