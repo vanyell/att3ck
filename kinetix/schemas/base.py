@@ -7,7 +7,11 @@ import itertools
 import shlex
 
 # RFC 3164 syslog helpers
-_SYSLOG_FACILITY = {"kern": 0, "user": 1, "mail": 2, "daemon": 3, "auth": 4, "syslog": 5, "authpriv": 10, "cron": 9}
+_SYSLOG_FACILITY = {"kern": 0, "user": 1, "mail": 2, "daemon": 3, "auth": 4, "syslog": 5, "authpriv": 10, "cron": 9,
+                    # Network appliances log to the local facilities; FortiOS and
+                    # Cisco ASA both default to local7.
+                    "local0": 16, "local1": 17, "local2": 18, "local3": 19,
+                    "local4": 20, "local5": 21, "local6": 22, "local7": 23}
 _SYSLOG_SEVERITY = {"emerg": 0, "alert": 1, "crit": 2, "err": 3, "warning": 4, "notice": 5, "info": 6, "debug": 7}
 
 # Kinetix's own severity vocabulary (used in scenario JSON and BaseLogEvent.severity)
@@ -193,6 +197,23 @@ class BaseLogEvent(BaseModel):
         return format_evt_xml(0, self.source, self.source, self.hostname or "-",
                               self.timestamp, evt_level(self.severity),
                               [("Type", self.event_type), ("Severity", self.severity)])
+
+    def to_vendor_feeds(self) -> List[Tuple[str, str]]:
+        """(feed filename, line) pairs in vendor-native wire formats.
+
+        Wazuh 5.0 only indexes what an enabled integration claims, and the
+        Sentinel-shaped JSON feeds are claimed by nothing. Emitting the format
+        the real appliance emits — FortiOS key=value, Cisco's %ASA- syslog,
+        Okta's System Log JSON — lets the shipped vendor decoders do the work,
+        with correct provenance rather than telemetry disguised as some other
+        product's.
+
+        Self-gating like to_auditd(): an event with no vendor equivalent
+        returns [], so the feeds skip it and there is no source list to keep
+        in sync. One event can yield several pairs, but never two flavours of
+        the same device — a session came off one appliance.
+        """
+        return []
 
     def to_auditd(self) -> List[str]:
         """Linux auditd records for this event, one string per line.

@@ -509,6 +509,64 @@ Linux, macOS, firewall/VPN, DNS, proxy/web, database (AzureDiagnostics), and Clo
 >
 > This does **not** confirm anything about Wazuh 4.x's classic `analysisd`/XML-ruleset architecture, which is a different codebase — the verification above is specific to the 5.0 engine.
 
+### Vendor-native feeds (ingest-verified on a live Wazuh 5.0 engine)
+
+Wazuh 5.0 only indexes what an **enabled integration** claims, and the
+Sentinel-shaped JSON is claimed by nothing. Rather than disguise telemetry as
+some other product's, Kinetix emits the wire format the real appliance emits
+and lets the shipped vendor decoders do the work. Each vendor gets its own
+feed file so an agent tails a stream whose every line one decoder claims.
+
+| Feed | Source schema | Integration | Wire format |
+|------|---------------|-------------|-------------|
+| `Kinetix_Fortinet.log` | `FirewallEvent` (`vendor=fortigate`, default) | `fortinet` | FortiOS 7.x traffic log, RFC 3164 + `key=value` |
+| `Kinetix_CiscoASA.log` | `FirewallEvent` (`vendor=asa`) | `cisco-asa` | RFC 3164 with an `asa:` tag, message leading `%ASA-level-id:` |
+| `Kinetix_Okta.json` | `AuthenticationEvent` | `okta` | Okta System Log JSON, one record per line |
+| `Kinetix_EVTX.log` | `DNSEvent` | `microsoft-dnsserver` | Windows Event XML on the `Microsoft-Windows-DNSServer/Analytical` channel |
+
+DNS needs no feed of its own: `decoder/microsoft-dnsserver-analytical/0`
+selects on `event.dataset`, which `decoder/windows-event/0` derives from
+`downcase(Channel)`, so the records ride the existing EVTX file.
+
+**Measured 2026-09-22** against Wazuh 5.0.0-beta5, agent reading at `drops=0`:
+
+| Integration | Lines fed | Documents indexed |
+|-------------|-----------|-------------------|
+| `fortinet` | 100 | **100** |
+| `okta` | 100 | **100** |
+| `cisco-asa` | 60 | **60** |
+| `microsoft-dnsserver` | 50 | **50** |
+
+Decoded fields confirm the decoders do real work: `observer.vendor`/`product`/
+`serial_number` and ingress/egress interfaces for FortiGate; `event.code`
+`302013`/`106023` plus `source.ip`/`destination.port`/`network.transport` for
+ASA; `dns.question.name` and a `dns.question.type` of `AAAA` resolved from the
+numeric QTYPE through Wazuh's own KVDB; `user.name`/`client.ip`/`event.outcome`
+and `event.dataset: okta.system` for Okta.
+
+**Two things these formats are strict about**, both found by feeding a live
+manager rather than by reading docs:
+
+- **Cisco ASA needs a syslog tag.** The chain is `decoder/syslog/0` →
+  `decoder/cisco-asa/0`, and syslog/0 parses the tag as
+  `<_TAG/alphanumeric/->:`. `%ASA-4-106023` cannot *be* that tag — the leading
+  `%` is not alphanumeric, so the syslog parse fails and cisco-asa/0 never
+  receives a `$message`. The line needs a real tag (`asa:`) with the
+  `%ASA-level-id` starting the message after it. Untagged lines produced
+  **zero** documents while the agent read them at `drops=0`.
+- **FortiOS needs its priority prefix.** `decoder/fortinet-start/0` gates on
+  the line containing `" type="`, `" time="` and `" subtype="` *and* parses
+  `$PRIORITY<_tmp_log>`, so the `<PRI>` prefix is load-bearing.
+
+**Enabling the integrations.** Wazuh 5.0 has no standalone integrations page —
+it is **Security analytics → Overview → Integrations** (`/app/sa-integrations`),
+where each integration's own page has Actions → Enable. All `network-activity`
+integrations ship disabled: this lab went from 19 to 23 enabled. Note the
+namespace directory under `data/ruleset/` is renamed on every change
+(`cmsync_standard_<hash>`), so a path captured before a change reads stale.
+The same page carries space-level **Index discarded events** and **Index
+unclassified events** toggles, both off by default.
+
 ### Linux auditd wire format (verified end to end on a live Wazuh 5.0 engine)
 
 `Kinetix_Auditd.log` — one real auditd record per line:

@@ -763,10 +763,13 @@ class TestEVTOutput:
         assert "allowed" in evt
 
     def test_evt_dns_event(self):
+        """DNS Server analytical (256), not DNS Client (3008) — see
+        TestVendorFeeds for why the server channel is the one Wazuh decodes."""
         from kinetix.schemas.network import DNSEvent
         ev = DNSEvent(Name="evil.com")
         evt = ev.to_evt()
-        assert "EventID>3008<" in evt
+        assert "EventID>256<" in evt
+        assert "Channel>Microsoft-Windows-DNSServer/Analytical<" in evt
 
     def test_evt_security_alert(self):
         from kinetix.schemas.security import SecurityAlert
@@ -1584,6 +1587,253 @@ class TestBusinessHoursTimezone:
         import main
         profile = main._build_timing_profile(delay=0.2, sim_clock=True)
         assert profile.business_utc_offset_hours == 0.0
+
+
+class TestVendorFeeds:
+    """Vendor-native wire formats for sources Wazuh 5.0 decodes natively.
+
+    Sentinel-shaped JSON is claimed by no enabled 5.0 integration, and the
+    Windows Filtering Platform codes a firewall would otherwise map to are on
+    decoder/windows-event/0's discard list. Emitting what the real appliance
+    emits is the only path that both indexes and stays honest about
+    provenance.
+    """
+
+    def _fw(self, **kw):
+        from kinetix.schemas.network import FirewallEvent
+        base = dict(DeviceAction="allowed", Protocol="TCP", SourcePort=49152,
+                    DestinationPort=443, hostname="FGT-EDGE-01")
+        base.update(kw)
+        return FirewallEvent(**base)
+
+    def test_base_event_emits_no_vendor_feed(self):
+        """Self-gating like to_auditd(): a source with no vendor equivalent
+        contributes nothing, so there is no source list to keep in sync."""
+        from kinetix.schemas.endpoint import ProcessEvent
+        ev = ProcessEvent(FileName="a.exe", ProcessId=1, ProcessCommandLine="a")
+        assert ev.to_vendor_feeds() == []
+
+    def test_firewall_event_writes_a_fortinet_feed_line(self):
+        feeds = dict(self._fw().to_vendor_feeds())
+        assert "Kinetix_Fortinet.log" in feeds
+
+    def test_every_fortinet_line_satisfies_the_wazuh_decoder_gate(self):
+        """decoder/fortinet-start/0 gates on:
+             contains($event.original, " type=") AND
+             contains($event.original, " time=") AND
+             (contains($event.original, " subtype=") OR ...)
+        and parses '$PRIORITY<_tmp_log>', so the line must also carry a
+        syslog priority prefix. A line failing any of these is discarded by
+        the manager with no error anywhere."""
+        import re
+        for action in ("allowed", "blocked", "dropped"):
+            for direction in ("Inbound", "Outbound"):
+                line = dict(self._fw(DeviceAction=action, NetworkDirection=direction)
+                            .to_vendor_feeds())["Kinetix_Fortinet.log"]
+                assert re.match(r"^<\d{1,3}>", line), f"no syslog priority: {line[:40]}"
+                assert " type=" in line
+                assert " time=" in line
+                assert " subtype=" in line
+                assert "\n" not in line
+
+    def test_fortinet_line_declares_the_traffic_type(self):
+        """_fortinet.type selects the child decoder: string_equal("traffic")
+        routes to decoder/fortinet-traffic/0, which is the one that extracts
+        the session fields."""
+        line = dict(self._fw().to_vendor_feeds())["Kinetix_Fortinet.log"]
+        assert 'type="traffic"' in line
+        assert 'subtype="forward"' in line
+
+    def test_fortinet_line_carries_the_session_fields(self):
+        ev = self._fw(DeviceAction="blocked", Protocol="TCP", SourcePort=51000,
+                      DestinationPort=8443, IPAddress="10.20.30.40",
+                      DestinationIP="203.0.113.9", SentBytes=1200, ReceivedBytes=350)
+        line = dict(ev.to_vendor_feeds())["Kinetix_Fortinet.log"]
+        assert "srcip=10.20.30.40" in line
+        assert "dstip=203.0.113.9" in line
+        assert "srcport=51000" in line
+        assert "dstport=8443" in line
+        assert "proto=6" in line          # TCP as an IANA protocol number
+        assert 'action="deny"' in line    # FortiOS vocabulary, not Kinetix's
+        assert "sentbyte=1200" in line
+        assert "rcvdbyte=350" in line
+
+    def test_fortinet_allowed_action_uses_fortios_accept(self):
+        line = dict(self._fw(DeviceAction="allowed").to_vendor_feeds())["Kinetix_Fortinet.log"]
+        assert 'action="accept"' in line
+
+    def test_firewall_vendor_defaults_to_fortigate(self):
+        feeds = dict(self._fw().to_vendor_feeds())
+        assert list(feeds) == ["Kinetix_Fortinet.log"]
+
+    def test_firewall_vendor_asa_emits_only_the_asa_feed(self):
+        """One session comes off one appliance, so a device flavour selects
+        the feed rather than every event appearing in both."""
+        feeds = dict(self._fw(vendor="asa").to_vendor_feeds())
+        assert list(feeds) == ["Kinetix_CiscoASA.log"]
+
+    def test_asa_line_satisfies_the_wazuh_decoder_gate(self):
+        """The ASA path runs decoder/syslog/0 -> decoder/cisco-asa/0, and
+        syslog/0 parses the tag as '<_TAG/alphanumeric/->:'. '%ASA-4-106023'
+        cannot BE the tag — the leading % is not alphanumeric, the syslog
+        parse fails, and cisco-asa/0 never receives a $message to work on.
+        So the line needs a real tag ("asa:") and the %ASA-level-id has to sit
+        at the start of the message after it.
+
+        Ingest-verified 2026-09-22: this shape indexed, while the same line
+        without the tag produced zero documents despite the agent reading it
+        with drops=0."""
+        import re
+        for action in ("allowed", "blocked"):
+            line = dict(self._fw(DeviceAction=action, vendor="asa")
+                        .to_vendor_feeds())["Kinetix_CiscoASA.log"]
+            assert re.match(r"^<\d{1,3}>[A-Z][a-z]{2} \d{2} \d{2}:\d{2}:\d{2} \S+ [a-z0-9-]+: %ASA-\d-\d{6}: ", line), line[:100]
+            assert "%FTD" not in line, "the ASA decoder excludes anything carrying %FTD"
+            assert "\n" not in line
+
+    def test_asa_allowed_session_is_a_built_connection(self):
+        ev = self._fw(DeviceAction="allowed", vendor="asa", IPAddress="10.20.30.40",
+                      DestinationIP="203.0.113.9", SourcePort=51000, DestinationPort=8443)
+        line = dict(ev.to_vendor_feeds())["Kinetix_CiscoASA.log"]
+        assert "%ASA-6-302013" in line
+        assert "Built outbound TCP connection" in line
+        assert "10.20.30.40/51000" in line
+        assert "203.0.113.9/8443" in line
+
+    def test_asa_blocked_session_is_an_acl_deny(self):
+        ev = self._fw(DeviceAction="blocked", vendor="asa", IPAddress="10.20.30.40",
+                      DestinationIP="203.0.113.9", SourcePort=51000, DestinationPort=8443)
+        line = dict(ev.to_vendor_feeds())["Kinetix_CiscoASA.log"]
+        assert "%ASA-4-106023" in line
+        assert "Deny tcp src" in line
+        assert "by access-group" in line
+
+    def test_dns_event_is_a_dns_server_analytical_record(self):
+        """decoder/microsoft-dnsserver-analytical/0 hangs off windows-event
+        and selects on event.dataset == 'microsoft-windows-dnsserver/analytical',
+        which windows-event sets from downcase(Channel). So the DNS feed rides
+        the existing EVTX file — no new feed, no manager-side collector — as
+        long as the Channel is right. Server-side analytical logging is also
+        what a SOC actually collects; DNS Client 3008 is endpoint-local."""
+        from kinetix.schemas.network import DNSEvent
+        ev = DNSEvent(Name="evil.example.com", QueryType="A", hostname="DC-DNS-01",
+                      IPAddresses="203.0.113.10")
+        evt = ev.to_evt()
+        assert "Channel>Microsoft-Windows-DNSServer/Analytical<" in evt
+        assert "Provider Name='Microsoft-Windows-DNSServer'" in evt
+        assert "EventID>256<" in evt
+
+    def test_dns_event_carries_the_fields_the_decoder_reads(self):
+        """The decoder maps dns.question.name from EventData.QNAME, dns.id
+        from XID, destination.ip from Destination, and resolves
+        dns.question.type by kvdb lookup on the numeric QTYPE."""
+        from kinetix.schemas.network import DNSEvent
+        evt = DNSEvent(Name="evil.example.com", QueryType="AAAA", hostname="DC-DNS-01",
+                       IPAddresses="203.0.113.10").to_evt()
+        assert "Name='QNAME'>evil.example.com<" in evt
+        assert "Name='QTYPE'>28<" in evt      # AAAA as its numeric RR type
+        assert "Name='XID'>" in evt
+        assert "Name='Destination'>" in evt
+
+    def test_dns_query_type_falls_back_for_unknown_records(self):
+        from kinetix.schemas.network import DNSEvent
+        evt = DNSEvent(Name="x.example.com", QueryType="WEIRD").to_evt()
+        assert "Name='QTYPE'>1<" in evt
+
+    def test_dns_events_reach_the_evt_feed(self, tmp_path):
+        """DNS was excluded from EVT as a non-Windows appliance source. A
+        Microsoft DNS Server is a genuine Windows Event Log producer, so the
+        exclusion was what kept this telemetry out of Wazuh."""
+        from kinetix.outputs.file import FileOutput
+        from kinetix.schemas.network import DNSEvent
+        out = FileOutput(output_dir=str(tmp_path), max_bytes=0)
+        out.write(DNSEvent(Name="evil.example.com", hostname="DC-DNS-01"))
+        evtx = (tmp_path / "Kinetix_EVTX.log").read_text(encoding="utf-8")
+        assert "Microsoft-Windows-DNSServer/Analytical" in evtx
+
+    def test_authentication_event_writes_an_okta_system_log_record(self):
+        """decoder/okta-system/0 gates on the JSON carrying eventType, uuid
+        and published. Okta is the identity source Kinetix's SSO and OAuth
+        scenarios are actually modelling, and the Sentinel-shaped SigninLogs
+        JSON is claimed by no enabled 5.0 integration."""
+        import json as _json
+        from kinetix.schemas.cloud_auth import AuthenticationEvent
+        ev = AuthenticationEvent(UserPrincipalName="alice@corp.com", ResultType="0",
+                                 IPAddress="10.20.30.40")
+        feeds = dict(ev.to_vendor_feeds())
+        assert "Kinetix_Okta.json" in feeds
+        rec = _json.loads(feeds["Kinetix_Okta.json"])
+        assert rec["eventType"]
+        assert rec["uuid"]
+        assert rec["published"]
+        assert rec["outcome"]["result"] == "SUCCESS"
+        assert rec["actor"]["alternateId"] == "alice@corp.com"
+
+    def test_failed_authentication_is_an_okta_failure_outcome(self):
+        import json as _json
+        from kinetix.schemas.cloud_auth import AuthenticationEvent
+        ev = AuthenticationEvent(UserPrincipalName="root@corp.com", ResultType="50126")
+        rec = _json.loads(dict(ev.to_vendor_feeds())["Kinetix_Okta.json"])
+        assert rec["outcome"]["result"] == "FAILURE"
+        assert rec["eventType"] == "user.session.start"
+
+    def test_okta_failure_reason_is_not_the_default_success_string(self):
+        """result_description defaults to "Success" on the Sentinel schema,
+        so a failed sign-in that does not override it produced
+        outcome.result=FAILURE with outcome.reason=Success — a contradiction
+        that lands in event.reason on the Wazuh side."""
+        import json as _json
+        from kinetix.schemas.cloud_auth import AuthenticationEvent
+        rec = _json.loads(dict(AuthenticationEvent(
+            UserPrincipalName="root@corp.com", ResultType="50126").to_vendor_feeds())["Kinetix_Okta.json"])
+        assert rec["outcome"]["result"] == "FAILURE"
+        assert rec["outcome"]["reason"] != "Success"
+
+    def test_okta_failure_keeps_an_explicit_reason(self):
+        import json as _json
+        from kinetix.schemas.cloud_auth import AuthenticationEvent
+        rec = _json.loads(dict(AuthenticationEvent(
+            UserPrincipalName="root@corp.com", ResultType="50126",
+            ResultDescription="Invalid username or password").to_vendor_feeds())["Kinetix_Okta.json"])
+        assert rec["outcome"]["reason"] == "Invalid username or password"
+
+    def test_okta_record_is_one_line_of_json(self):
+        """The agent reads this feed with log_format json, one record per
+        line — an embedded newline would split a record in half."""
+        from kinetix.schemas.cloud_auth import AuthenticationEvent
+        line = dict(AuthenticationEvent(UserPrincipalName="a@b.com").to_vendor_feeds())["Kinetix_Okta.json"]
+        assert "\n" not in line
+
+    def test_file_output_writes_the_fortinet_feed(self, tmp_path):
+        """A dedicated feed file per vendor, like Kinetix_Auditd.log: the
+        agent tails a file whose every line one decoder claims, instead of a
+        mixed stream the decoder has to sift."""
+        from kinetix.outputs.file import FileOutput
+        out = FileOutput(output_dir=str(tmp_path), max_bytes=0)
+        out.write(self._fw(DeviceAction="blocked"))
+
+        feed = tmp_path / "Kinetix_Fortinet.log"
+        assert feed.exists(), "vendor feed file was not created"
+        lines = feed.read_text(encoding="utf-8").strip().splitlines()
+        assert len(lines) == 1
+        assert 'type="traffic"' in lines[0]
+
+    def test_file_output_skips_the_vendor_feed_for_unrelated_events(self, tmp_path):
+        from kinetix.outputs.file import FileOutput
+        from kinetix.schemas.endpoint import ProcessEvent
+        out = FileOutput(output_dir=str(tmp_path), max_bytes=0)
+        out.write(ProcessEvent(FileName="a.exe", ProcessId=1, ProcessCommandLine="a"))
+
+        assert not (tmp_path / "Kinetix_Fortinet.log").exists()
+
+    def test_fortinet_timestamp_comes_from_the_event(self):
+        """--sim-clock backdating has to survive into the vendor feed, the
+        same reason EVTX needs TimeCreated."""
+        from datetime import datetime, timezone
+        ev = self._fw(TimeGenerated=datetime(2026, 3, 4, 5, 6, 7, tzinfo=timezone.utc))
+        line = dict(ev.to_vendor_feeds())["Kinetix_Fortinet.log"]
+        assert "date=2026-03-04" in line
+        assert "time=05:06:07" in line
 
 
 class TestAuditdOutput:

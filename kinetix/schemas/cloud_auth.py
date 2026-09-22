@@ -1,5 +1,6 @@
-from typing import Optional, Literal
+from typing import Optional, Literal, List, Tuple
 import uuid
+import json
 from pydantic import Field, AliasChoices, computed_field
 from kinetix.schemas.base import BaseLogEvent, syslog_priority, format_syslog, format_evt_xml, evt_level
 
@@ -32,6 +33,57 @@ class AuthenticationEvent(BaseLogEvent):
     @property
     def location_details(self) -> dict:
         return {"countryOrRegion": self.location, "city": self.city}
+
+    def to_vendor_feeds(self) -> List[Tuple[str, str]]:
+        return [("Kinetix_Okta.json", self._to_okta_system_log())]
+
+    def _to_okta_system_log(self) -> str:
+        """One Okta System Log record, JSON, one line.
+
+        decoder/okta-system/0 gates on eventType, uuid and published all
+        existing, then reads outcome.result, outcome.reason, severity, actor
+        and client. Okta is the identity provider these sign-in scenarios are
+        really modelling, and unlike the Sentinel-shaped SigninLogs JSON it is
+        a shape an enabled 5.0 integration can claim.
+        """
+        success = self.result_type == "0"
+        record = {
+            "uuid": str(uuid.uuid4()),
+            "published": self.timestamp.strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z",
+            "eventType": "user.session.start",
+            "version": "0",
+            "displayMessage": "User login to Okta",
+            "severity": "INFO" if success else "WARN",
+            "legacyEventType": "core.user_auth.login_success" if success
+                               else "core.user_auth.login_failed",
+            "outcome": {
+                "result": "SUCCESS" if success else "FAILURE",
+                # result_description defaults to "Success" on the Sentinel
+                # schema, so a failure that never overrode it would otherwise
+                # report FAILURE with reason "Success".
+                "reason": (self.result_description or "Success") if success
+                          else (self.result_description
+                                if self.result_description not in (None, "Success")
+                                else "INVALID_CREDENTIALS"),
+            },
+            "actor": {
+                "id": f"00u{uuid.uuid5(uuid.NAMESPACE_DNS, self.user_principal_name).hex[:17]}",
+                "type": "User",
+                "alternateId": self.user_principal_name,
+                "displayName": self.user_principal_name.split("@")[0],
+            },
+            "client": {
+                "userAgent": {"rawUserAgent": self.user_agent, "browser": self.client_app_used},
+                "ipAddress": self.source_ip or "0.0.0.0",
+                "device": "Computer",
+                "geographicalContext": {"country": self.location, "city": self.city},
+            },
+            "authenticationContext": {"authenticationStep": 0},
+            "securityContext": {},
+            "target": [{"id": self.app_display_name, "type": "AppInstance",
+                        "displayName": self.app_display_name}],
+        }
+        return json.dumps(record, separators=(",", ":"))
 
     def to_syslog(self) -> str:
         result = "accepted" if self.result_type == "0" else "failed"

@@ -69,6 +69,17 @@ class FileOutput(OutputProvider):
                     self.loggers[key] = self._get_rotating_logger(key, full_filename)
         return self.loggers[key]
 
+    def _get_vendor_logger(self, feed_name: str) -> logging.Logger:
+        """Lazily create one rotating logger per vendor feed, double-checked
+        under the lock like the per-table loggers — LogWorkers emit
+        concurrently and two threads can reach a new vendor first."""
+        key = f"vendor:{feed_name}"
+        if key not in self.loggers:
+            with self._lock:
+                if key not in self.loggers:
+                    self.loggers[key] = self._get_rotating_logger(key, feed_name)
+        return self.loggers[key]
+
     def _map_to_table_name(self, event: BaseLogEvent) -> str:
         # If the event_type is already a recognized Sentinel table name, use it directly
         # For specialized models, event_type is forced via Literal (e.g. DeviceProcessEvents)
@@ -159,10 +170,21 @@ class FileOutput(OutputProvider):
         for auditd_entry in event.to_auditd():
             self.unified_auditd_logger.info(auditd_entry)
 
+        # 7. Write to any vendor-native feeds (FortiOS, Cisco ASA, Okta...).
+        # Self-gating the same way: to_vendor_feeds() is empty for events with
+        # no vendor equivalent. One file per vendor so a Wazuh agent can tail
+        # a stream whose every line the matching integration claims.
+        for feed_name, line in event.to_vendor_feeds():
+            self._get_vendor_logger(feed_name).info(line)
+
     # Sources backed by non-Windows appliances/services that never emit native
     # Windows Event Log entries in real life (network appliances, DNS servers,
     # web/proxy servers) — these should only appear in JSON/CEF/syslog output.
-    _NON_WINDOWS_SOURCES = {"linux", "macos", "firewall", "proxy", "dns", "web", "azure", "cloud app security"}
+    # "dns" is deliberately absent: a Microsoft DNS Server is a genuine
+    # Windows Event Log producer, and its analytical channel is the path
+    # Wazuh's microsoft-dnsserver decoders read. Excluding it was what kept
+    # DNS telemetry out of the index entirely.
+    _NON_WINDOWS_SOURCES = {"linux", "macos", "firewall", "proxy", "web", "azure", "cloud app security"}
 
     def _is_syslog_event(self, event: BaseLogEvent) -> bool:
         """Return True if event should only go to syslog/CEF/JSON, never fabricated EVTX."""
