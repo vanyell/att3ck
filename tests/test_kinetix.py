@@ -1361,12 +1361,17 @@ class TestSyslogFormat:
         set_syslog_format("rfc5424")
         assert "2025-01-05T14:30:00" in e.to_syslog()
 
-    def test_backdated_sim_start_under_rfc3164_warns(self):
+    def test_backdated_sim_start_under_rfc3164_warns(self, tmp_path):
+        """--output-dir is not optional here: without it this invokes a real
+        sim-clock generation into the repo's own logs/ directory, which on a
+        lab box is the directory a wazuh-agent tails — every test run then
+        injected ~12k events backdated to 2021 into the live SIEM."""
         from click.testing import CliRunner
         from main import main
 
         result = CliRunner().invoke(
-            main, ["--sim-clock", "--sim-start", "2021-01-05", "--sim-days", "1", "--duration", "5"]
+            main, ["--sim-clock", "--sim-start", "2021-01-05", "--sim-days", "1",
+                   "--duration", "5", "--output-dir", str(tmp_path)]
         )
 
         assert "rfc5424" in result.output.lower()
