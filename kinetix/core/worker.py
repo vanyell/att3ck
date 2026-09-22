@@ -17,6 +17,11 @@ logger = logging.getLogger(__name__)
 _SECONDARY_TIME_FIELDS = ("start_time", "end_time", "last_modified_time")
 
 class LogWorker(threading.Thread):
+    # How long a worker will wait to hand off a follow-up before shedding it.
+    # Long enough to ride out a brief drain stall, short enough that a
+    # saturated queue cannot stall shutdown.
+    FOLLOW_UP_PUT_TIMEOUT = 2.0
+
     def __init__(
         self,
         worker_id: int,
@@ -34,6 +39,40 @@ class LogWorker(threading.Thread):
         self.temporal_engine = temporal_engine
         self.sim_clock = sim_clock
         self.event_count = 0  # Track throughput
+        self.shed_follow_ups = 0  # Follow-ups dropped under backpressure
+
+    def _enqueue_follow_up(self, follow_up) -> bool:
+        """Queue a Markov follow-up, never blocking indefinitely.
+
+        A bare put() deadlocks the pool. The workers are this queue's only
+        consumers, so once it is full and every worker is parked in put(),
+        nothing can drain it — the workers wait on each other forever and
+        never look at stop_event again. The producer side hits this whenever
+        AttackChain fills the queue faster than the pool drains it, which is
+        the normal state under --baseline-ratio.
+
+        Follow-ups are derived noise rather than scenario content, so shedding
+        one under backpressure is strictly better than wedging the run.
+        Returns True if it was queued.
+        """
+        deadline = time.monotonic() + self.FOLLOW_UP_PUT_TIMEOUT
+        while not self.stop_event.is_set():
+            try:
+                # Short chunks rather than one long timeout, so a shutdown
+                # during backpressure is noticed promptly.
+                self.input_queue.put(follow_up, timeout=0.1)
+                return True
+            except queue.Full:
+                if time.monotonic() >= deadline:
+                    break
+
+        self.shed_follow_ups += 1
+        if self.shed_follow_ups == 1 or self.shed_follow_ups % 100 == 0:
+            logger.warning(
+                f"Worker {self.worker_id} shed a Markov follow-up under "
+                f"backpressure ({self.shed_follow_ups} total)."
+            )
+        return False
 
     def run(self):
         logger.info(f"Worker {self.worker_id} started.")
@@ -76,7 +115,7 @@ class LogWorker(threading.Thread):
                         follow_up = self.temporal_engine.create_follow_up(event, next_type)
                         if follow_up:
                             follow_up.depth = event.depth + 1
-                            self.input_queue.put(follow_up)
+                            self._enqueue_follow_up(follow_up)
                
                 for provider in self.output_providers:
                     try:

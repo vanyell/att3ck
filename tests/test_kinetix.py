@@ -1845,3 +1845,147 @@ class TestDurationDeadline:
 
         assert proc.returncode == 0, proc.stderr[-2000:]
         assert wall < 15, f"--duration 5 run took {wall:.0f}s"
+
+
+class TestFollowUpBackpressure:
+    """LogWorker enqueued Markov follow-ups with a bare, unbounded
+    input_queue.put(). The workers are the queue's only consumers, so a full
+    queue with every worker parked in put() can never drain: nothing
+    consumes, stop_event is never observed, and the run wedges permanently.
+    Follow-ups are derived noise, so shedding one under backpressure is
+    strictly better than deadlocking.
+    """
+
+    class AlwaysFollowUp:
+        """Temporal engine stub that always yields a follow-up, removing the
+        Markov coin flip from these tests."""
+
+        def __init__(self, factory):
+            self.factory = factory
+
+        def calculate_delay(self, _when):
+            return 0.0
+
+        def get_next_event_type(self, _event_type):
+            return "DeviceProcessEvents"
+
+        def create_follow_up(self, _parent, _next_type):
+            return self.factory()
+
+    def _event(self):
+        from kinetix.schemas.endpoint import ProcessEvent
+        return ProcessEvent(
+            FileName="cmd.exe", FolderPath="C:\\Windows\\System32",
+            ProcessId=1234, ProcessCommandLine="cmd.exe /c whoami",
+        )
+
+    def _worker(self, input_queue, stop_event=None):
+        import threading
+        from kinetix.core.worker import LogWorker
+        return LogWorker(
+            worker_id=0,
+            input_queue=input_queue,
+            output_providers=[],
+            stop_event=stop_event or threading.Event(),
+            temporal_engine=self.AlwaysFollowUp(self._event),
+        )
+
+    def test_follow_up_is_queued_when_there_is_room(self):
+        import queue
+
+        q = queue.Queue(maxsize=4)
+        worker = self._worker(q)
+        follow_up = self._event()
+
+        assert worker._enqueue_follow_up(follow_up) is True
+        assert q.get_nowait() is follow_up
+
+    def test_full_queue_sheds_the_follow_up_instead_of_blocking(self):
+        import queue
+        import time
+
+        # Nothing will ever drain this queue — the pre-fix unbounded put()
+        # would sit here forever.
+        q = queue.Queue(maxsize=1)
+        q.put_nowait(self._event())
+        worker = self._worker(q)
+
+        started = time.monotonic()
+        result = worker._enqueue_follow_up(self._event())
+        waited = time.monotonic() - started
+
+        assert result is False
+        assert waited < 5.0, f"blocked {waited:.1f}s on a full queue"
+        assert q.qsize() == 1
+
+    def test_shed_follow_ups_are_counted(self):
+        import queue
+
+        q = queue.Queue(maxsize=1)
+        q.put_nowait(self._event())
+        worker = self._worker(q)
+
+        assert worker.shed_follow_ups == 0
+        worker._enqueue_follow_up(self._event())
+        assert worker.shed_follow_ups == 1
+
+    def test_stop_event_aborts_the_put_without_waiting_out_the_timeout(self):
+        import queue
+        import threading
+        import time
+
+        q = queue.Queue(maxsize=1)
+        q.put_nowait(self._event())
+        stop = threading.Event()
+        stop.set()
+        worker = self._worker(q, stop_event=stop)
+
+        started = time.monotonic()
+        assert worker._enqueue_follow_up(self._event()) is False
+        assert time.monotonic() - started < 0.5
+
+    def test_worker_pool_terminates_with_a_saturated_queue(self):
+        """Pool-level guard reproducing the actual deadlock shape.
+
+        A producer thread holds the queue full, standing in for AttackChain
+        emitting faster than the pool drains — the normal state under
+        --baseline-ratio. Every worker then blocks handing off its follow-up,
+        and because the workers are the only consumers, the pre-fix unbounded
+        put() leaves them waiting on each other with no one left to drain.
+        Setting stop_event must still bring the pool down.
+        """
+        import queue
+        import threading
+
+        q = queue.Queue(maxsize=4)
+        stop = threading.Event()
+        producing = threading.Event()
+        producing.set()
+
+        def producer():
+            while producing.is_set():
+                try:
+                    q.put(self._event(), timeout=0.05)
+                except queue.Full:
+                    continue
+
+        filler = threading.Thread(target=producer, daemon=True)
+        filler.start()
+
+        workers = []
+        for i in range(2):
+            w = self._worker(q, stop_event=stop)
+            w.worker_id = i
+            w.daemon = True
+            workers.append(w)
+        for w in workers:
+            w.start()
+
+        # Let the producer saturate the queue and park the workers in put().
+        threading.Event().wait(2.0)
+        producing.clear()
+        stop.set()
+
+        for w in workers:
+            w.join(timeout=20)
+            assert not w.is_alive(), f"worker {w.worker_id} never exited"
