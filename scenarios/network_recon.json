@@ -5,6 +5,7 @@
     "events": [
       {
         "source": "firewall",
+        "vendor": "cisco",
         "event_type": "network_connection",
         "action": "blocked",
         "protocol": "TCP",

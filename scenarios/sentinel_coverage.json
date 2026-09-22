@@ -38,6 +38,7 @@
       },
       {
         "source": "firewall",
+        "vendor": "cisco",
         "event_type": "network_connection",
         "action": "allowed",
         "protocol": "TCP",

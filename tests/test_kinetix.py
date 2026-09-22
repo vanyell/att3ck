@@ -2312,3 +2312,53 @@ class TestFollowUpBackpressure:
         for w in workers:
             w.join(timeout=20)
             assert not w.is_alive(), f"worker {w.worker_id} never exited"
+
+
+class TestFirewallVendorTopology:
+    """Which appliance a flow crosses follows the topology, not a coin flip.
+
+    Every FirewallEvent defaulted to `fortigate`, and no scenario sets a
+    vendor, so Kinetix_CiscoASA.log was never written by a real run — the
+    enabled cisco-asa integration indexed nothing. The bulk of firewall
+    telemetry comes from TemporalEngine.create_follow_up(), not from the six
+    scenario events, so the split has to be decided there: egress to a public
+    address crosses the perimeter ASA, east-west traffic stays on a FortiGate.
+    """
+
+    def _parent(self, dest_ip, source_ip="10.20.30.40"):
+        from kinetix.schemas.endpoint import ProcessEvent
+        return ProcessEvent(FileName="a.exe", ProcessId=1, ProcessCommandLine="a",
+                            DestinationIP=dest_ip, source_ip=source_ip)
+
+    def _follow_up(self, dest_ip, source_ip="10.20.30.40"):
+        from kinetix.core.temporal import TemporalEngine
+        return TemporalEngine().create_follow_up(
+            self._parent(dest_ip, source_ip), "CommonSecurityLog")
+
+    def test_egress_to_a_public_address_crosses_the_perimeter_asa(self):
+        feeds = dict(self._follow_up("203.0.113.9").to_vendor_feeds())
+        assert list(feeds) == ["Kinetix_CiscoASA.log"]
+
+    def test_east_west_traffic_stays_on_a_fortigate(self):
+        feeds = dict(self._follow_up("10.0.0.5").to_vendor_feeds())
+        assert list(feeds) == ["Kinetix_Fortinet.log"]
+
+    def test_rfc1918_172_16_range_is_treated_as_internal(self):
+        feeds = dict(self._follow_up("172.16.4.9").to_vendor_feeds())
+        assert list(feeds) == ["Kinetix_Fortinet.log"]
+
+    def test_a_follow_up_with_no_destination_stays_internal(self):
+        feeds = dict(self._follow_up(None).to_vendor_feeds())
+        assert list(feeds) == ["Kinetix_Fortinet.log"]
+
+    def test_inbound_scanning_from_the_internet_also_crosses_the_asa(self):
+        """network_recon is 1.2.3.4 -> 10.0.0.5: the destination is internal,
+        but the flow still entered through the perimeter."""
+        feeds = dict(self._follow_up("10.0.0.5", source_ip="1.2.3.4").to_vendor_feeds())
+        assert list(feeds) == ["Kinetix_CiscoASA.log"]
+
+    def test_test_net_documentation_ranges_count_as_external(self):
+        """ipaddress marks 203.0.113.0/24 private; the scenarios use it as an
+        internet host, so the site's own prefixes decide instead."""
+        feeds = dict(self._follow_up("203.0.113.9").to_vendor_feeds())
+        assert list(feeds) == ["Kinetix_CiscoASA.log"]

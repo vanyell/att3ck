@@ -1,3 +1,4 @@
+import ipaddress
 import random
 import logging
 import uuid
@@ -7,6 +8,43 @@ from kinetix.schemas.base import BaseLogEvent
 from kinetix.schemas.temporal import TimingProfile, MarkovTransition
 
 logger = logging.getLogger(__name__)
+
+
+# The site's own address space. Anything outside it is egress and crosses the
+# perimeter. Deliberately not ipaddress.is_private/is_global: both classify the
+# TEST-NET documentation ranges (203.0.113.0/24, 198.51.100.0/24) that the
+# scenarios use to stand in for internet hosts as private, which would route
+# every flow back to the internal appliance.
+_INTERNAL_NETS = tuple(ipaddress.ip_network(n) for n in (
+    "10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16",
+    "127.0.0.0/8", "169.254.0.0/16", "fc00::/7", "::1/128",
+))
+
+
+def _is_internal(ip: Optional[str]) -> bool:
+    """True when the address is inside the site (or unknown)."""
+    if not ip:
+        return True
+    try:
+        addr = ipaddress.ip_address(ip)
+    except ValueError:
+        return True
+    return any(addr in net for net in _INTERNAL_NETS if net.version == addr.version)
+
+
+def _appliance_for(source_ip: Optional[str], dest_ip: Optional[str]) -> str:
+    """Pick the appliance a flow crosses from the endpoints it connects.
+
+    A perimeter ASA sees anything with one foot outside the site — egress to
+    the internet and inbound scanning alike; east-west traffic never leaves
+    the internal FortiGates. Routing on topology keeps both vendor feeds
+    populated without a magic ratio, and matches what each appliance would
+    really have logged. A flow whose endpoints are unknown has not been shown
+    to leave the site, so it stays internal.
+    """
+    if _is_internal(source_ip) and _is_internal(dest_ip):
+        return "fortigate"
+    return "cisco"
 
 class TemporalEngine:
     def __init__(self, profile: Optional[TimingProfile] = None):
@@ -129,6 +167,7 @@ class TemporalEngine:
             elif next_type == "CommonSecurityLog":
                 return FirewallEvent(
                     **context,
+                    vendor=_appliance_for(context["source_ip"], context["dest_ip"]),
                     action="allowed",
                     protocol="TCP",
                     source_port=random.randint(49152, 65535),
