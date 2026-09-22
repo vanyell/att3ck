@@ -7,6 +7,12 @@ class TimingProfile(BaseModel):
     jitter_percent: float = 0.2  # 20% variance
     working_hours_start: int = 9  # 09:00
     working_hours_end: int = 17   # 17:00
+    # Events are stamped in UTC, but working_hours_start/end describe the
+    # simulated organisation's local clock. Offset shifts a UTC timestamp into
+    # that local frame before the diurnal/weekend curve is applied; 0 keeps the
+    # generator UTC-native. main.py sets it to the host's offset for real-time
+    # runs, where "business hours" means the operator's own workday.
+    business_utc_offset_hours: float = 0.0
     after_hours_multiplier: float = 0.1  # 10% activity at night
     weekend_multiplier: float = 0.15  # 15% activity on Sat/Sun
     # Off by default: on the real-time path the weekend divisor compounds with

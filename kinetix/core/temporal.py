@@ -1,7 +1,7 @@
 import random
 import logging
 import uuid
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Optional, Dict
 from kinetix.schemas.base import BaseLogEvent
 from kinetix.schemas.temporal import TimingProfile, MarkovTransition
@@ -52,15 +52,22 @@ class TemporalEngine:
         """
         # 1. Base Delay
         base = self.profile.avg_delay_seconds
-        
+
+        # Events are UTC-stamped; working_hours_* describe the simulated
+        # organisation's local clock, so shift before shaping. Both the
+        # time-of-day and day-of-week tests must read the same frame,
+        # otherwise a local Friday evening counts as a UTC Saturday.
+        offset = self.profile.business_utc_offset_hours
+        local_time = current_time + timedelta(hours=offset) if offset else current_time
+
         # 2. Time-of-Day Multiplier
-        hour = current_time.hour
+        hour = local_time.hour
         if not (self.profile.working_hours_start <= hour < self.profile.working_hours_end):
             # Outside working hours
             base = base / self.profile.after_hours_multiplier
 
         # 2b. Day-of-Week Multiplier (Sat=5, Sun=6)
-        if self.profile.weekend_shaping and current_time.weekday() >= 5:
+        if self.profile.weekend_shaping and local_time.weekday() >= 5:
             base = base / self.profile.weekend_multiplier
 
         # 3. Gaussian Jitter

@@ -365,6 +365,62 @@ def _generate_baseline_noise(count: int, var_manager: VariableManager) -> list:
     return events
 
 
+def _build_timing_profile(delay: float, sim_clock: bool) -> TimingProfile:
+    """Build the timing profile for a run.
+
+    Weekend shaping only applies to the simulated timeline — on the real-time
+    path it would compound with the after-hours divisor and throttle a weekend
+    run to near silence.
+
+    The diurnal curve is evaluated in the simulated organisation's local time.
+    A real-time run models the operator's own workday, so it takes the host's
+    UTC offset; without it a UTC-8 operator running at 14:50 local is read as
+    06:50 "after hours" and every delay is multiplied by 1/after_hours (10x),
+    capping drain at ~1 event/sec and making --baseline-ratio undrainable.
+    Simulated-clock runs stay UTC-native, which is the frame their virtual
+    timeline is generated in.
+    """
+    from datetime import datetime
+
+    offset = 0.0
+    if not sim_clock:
+        local_offset = datetime.now().astimezone().utcoffset()
+        if local_offset is not None:
+            offset = local_offset.total_seconds() / 3600
+
+    return TimingProfile(
+        avg_delay_seconds=delay,
+        weekend_shaping=bool(sim_clock),
+        business_utc_offset_hours=offset,
+    )
+
+
+def _interleave_baseline_noise(all_stages: list, noise_events: list) -> list:
+    """Spread one cycle's benign noise batch across the attack chain.
+
+    The batch is split into contiguous slices, one per attack stage, so the
+    chain emits exactly `len(noise_events)` benign events per cycle. Appending
+    a single shared stage after every attack stage instead would replay the
+    whole batch once per stage and multiply the cycle's volume by the stage
+    count, overflowing the engine queue.
+    """
+    total = len(noise_events)
+    stage_count = len(all_stages)
+    if not total or not stage_count:
+        return list(all_stages)
+
+    interleaved = []
+    for i, stage in enumerate(all_stages):
+        interleaved.append(stage)
+        # Integer boundaries distribute the remainder without losing events.
+        start = i * total // stage_count
+        end = (i + 1) * total // stage_count
+        chunk = noise_events[start:end]
+        if chunk:
+            interleaved.append({"name": "Baseline Noise", "delay": 0.05, "events": chunk})
+    return interleaved
+
+
 @click.command()
 @click.option("--scenario", multiple=True, default=["scenarios/ransomware_v1.json"], help="Path(s) to scenario JSON files to execute.")
 @click.option("--output-dir", default="logs", help="Directory where JSON and CEF logs will be saved.")
@@ -417,11 +473,8 @@ def main(scenario, output_dir, temporal, stress, duration, baseline_ratio, syslo
     temporal_engine = None
     if temporal:
         delay = 0.01 if stress else 0.2
-        # Weekend shaping only applies to the simulated timeline — on the
-        # real-time path it would compound with the after-hours divisor and
-        # throttle a weekend run to near silence.
         temporal_engine = TemporalEngine(
-            profile=TimingProfile(avg_delay_seconds=delay, weekend_shaping=bool(sim_clock))
+            profile=_build_timing_profile(delay=delay, sim_clock=bool(sim_clock))
         )
 
     # 2b. Initialize Simulated Clock (multi-day baseline mode)
@@ -513,13 +566,8 @@ def main(scenario, output_dir, temporal, stress, duration, baseline_ratio, syslo
                 noise_count = int(malicious_count * (baseline_ratio / (1 - baseline_ratio))) if baseline_ratio < 1 else 0
                 if noise_count > 0:
                     noise_events = _generate_baseline_noise(noise_count, var_manager)
-                    noise_stage = {"name": "Baseline Noise", "delay": 0.05, "events": noise_events}
-                    interleave = []
-                    for s in all_stages:
-                        interleave.append(s)
-                        interleave.append(noise_stage)
-                    all_stages = interleave
-                    console.print(f"[dim]Injected {noise_count} benign noise events[/dim]")
+                    all_stages = _interleave_baseline_noise(all_stages, noise_events)
+                    console.print(f"[dim]Injected {len(noise_events)} benign noise events[/dim]")
 
             attack_chain = AttackChain(
                 scenario_id=var_manager.session_vars["SESSION_ID"][:8],

@@ -1374,3 +1374,140 @@ class TestSimDaysValidation:
             f"raw traceback escaped instead of a clean exit: {result.exception!r}"
         )
         assert "--sim-days" in result.output
+
+
+class TestBaselineNoiseInterleave:
+    """--baseline-ratio built a single noise stage holding the whole batch and
+    appended that same dict after every attack stage, so `noise_count` events
+    were emitted once per stage instead of once per cycle. With 23 stages a
+    512-event batch became 11,776 events, overflowing the 10,000-slot engine
+    queue inside a single cycle and starving the writer."""
+
+    def _stages(self, n):
+        return [{"name": f"stage-{i}", "delay": 0.1, "events": [f"attack-{i}"]}
+                for i in range(n)]
+
+    def test_noise_batch_is_emitted_once_per_cycle(self):
+        import main
+
+        stages = self._stages(23)
+        noise = [f"noise-{j}" for j in range(512)]
+
+        result = main._interleave_baseline_noise(stages, noise)
+        emitted = sum(len(s["events"]) for s in result if s["name"] == "Baseline Noise")
+
+        assert emitted == len(noise), (
+            f"noise batch replayed per stage: {emitted} events emitted for a "
+            f"{len(noise)}-event batch across {len(stages)} stages"
+        )
+
+    def test_every_noise_event_is_emitted_exactly_once(self):
+        import main
+
+        stages = self._stages(7)
+        noise = [f"noise-{j}" for j in range(30)]
+
+        result = main._interleave_baseline_noise(stages, noise)
+        emitted = [e for s in result if s["name"] == "Baseline Noise" for e in s["events"]]
+
+        assert sorted(emitted) == sorted(noise)
+
+    def test_noise_is_spread_across_the_chain_not_bunched_at_one_point(self):
+        import main
+
+        stages = self._stages(6)
+        noise = [f"noise-{j}" for j in range(60)]
+
+        result = main._interleave_baseline_noise(stages, noise)
+        noise_stages = [s for s in result if s["name"] == "Baseline Noise"]
+
+        assert len(noise_stages) > 1, "noise collapsed into a single burst"
+        assert max(len(s["events"]) for s in noise_stages) <= 15, (
+            "noise unevenly bunched into one stage"
+        )
+
+    def test_attack_stages_are_preserved_in_order(self):
+        import main
+
+        stages = self._stages(5)
+        result = main._interleave_baseline_noise(stages, ["n0", "n1", "n2"])
+        attack = [s["name"] for s in result if s["name"] != "Baseline Noise"]
+
+        assert attack == [s["name"] for s in stages]
+
+    def test_more_stages_than_noise_events_emits_each_event_once(self):
+        import main
+
+        stages = self._stages(10)
+        noise = ["n0", "n1", "n2"]
+
+        result = main._interleave_baseline_noise(stages, noise)
+        emitted = [e for s in result if s["name"] == "Baseline Noise" for e in s["events"]]
+
+        assert sorted(emitted) == sorted(noise)
+        assert all(s["events"] for s in result), "empty noise stage emitted"
+
+
+class TestBusinessHoursTimezone:
+    """calculate_delay() compared a UTC-stamped event against working_hours
+    9-17, which are business-local hours. For an operator in UTC-8 a 14:50
+    local workday run reads as 06:50 "after hours", so every event took the
+    after_hours divisor (0.1) and the 0.2s base became 2.0s. With 2 workers
+    that caps drain at ~1 event/sec and any --baseline-ratio run fills the
+    10,000-slot queue and starts dropping."""
+
+    def _profile(self, **kwargs):
+        from kinetix.schemas.temporal import TimingProfile
+        return TimingProfile(avg_delay_seconds=1.0, jitter_percent=0.0, **kwargs)
+
+    def test_offset_defaults_to_utc_so_existing_behaviour_is_unchanged(self):
+        from kinetix.schemas.temporal import TimingProfile
+        assert TimingProfile().business_utc_offset_hours == 0.0
+
+    def test_local_working_hours_are_not_throttled(self):
+        from datetime import datetime, timezone
+        from kinetix.core.temporal import TemporalEngine
+
+        # 14:50 in UTC-8 == 22:50 UTC. Business-local this is a workday
+        # afternoon, so it must not take the after-hours divisor.
+        te = TemporalEngine(profile=self._profile(business_utc_offset_hours=-8))
+        local_afternoon = datetime(2026, 9, 21, 22, 50, tzinfo=timezone.utc)
+
+        assert te.calculate_delay(local_afternoon) == pytest.approx(1.0)
+
+    def test_local_night_is_still_throttled(self):
+        from datetime import datetime, timezone
+        from kinetix.core.temporal import TemporalEngine
+
+        # 03:00 in UTC-8 == 11:00 UTC: daytime in UTC, night business-local.
+        te = TemporalEngine(profile=self._profile(business_utc_offset_hours=-8))
+        local_night = datetime(2026, 9, 21, 11, 0, tzinfo=timezone.utc)
+
+        assert te.calculate_delay(local_night) == pytest.approx(1.0 / 0.1)
+
+    def test_offset_shifts_the_weekend_boundary_too(self):
+        from datetime import datetime, timezone
+        from kinetix.core.temporal import TemporalEngine
+
+        # Sat 2026-09-19 02:00 UTC is still Friday 18:00 business-local.
+        te = TemporalEngine(profile=self._profile(
+            business_utc_offset_hours=-8, weekend_shaping=True))
+        still_friday = datetime(2026, 9, 19, 2, 0, tzinfo=timezone.utc)
+
+        assert te.calculate_delay(still_friday) == pytest.approx(
+            te.calculate_delay(datetime(2026, 9, 18, 2, 0, tzinfo=timezone.utc))
+        ), "weekend divisor applied to a business-local Friday"
+
+    def test_realtime_run_uses_the_host_local_offset(self):
+        """Without this the documented --baseline-ratio mode cannot drain."""
+        import main
+        profile = main._build_timing_profile(delay=0.2, sim_clock=False)
+
+        from datetime import datetime
+        expected = datetime.now().astimezone().utcoffset().total_seconds() / 3600
+        assert profile.business_utc_offset_hours == pytest.approx(expected)
+
+    def test_sim_clock_stays_utc_native(self):
+        import main
+        profile = main._build_timing_profile(delay=0.2, sim_clock=True)
+        assert profile.business_utc_offset_hours == 0.0
